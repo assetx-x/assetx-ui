@@ -40,7 +40,9 @@
   },
   "dependencies": {
     "@availity/block-ui": "^1.0.0",
+    "@headlessui/react": "^1.7.13",
     "@tanstack/react-query": "4.10.1",
+    "clsx": "^1.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "6.4.1"

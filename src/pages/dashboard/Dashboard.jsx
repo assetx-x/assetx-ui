@@ -10,7 +10,8 @@ import Table from "../../components/Table.jsx";
 const Dashboard = (props) => {
 
   const [isChecked, setIsChecked] = useState(false);
-  const [isEditableTableVisible, setIsEditableTableVisible] = useState(true);
+  const [isEditableTableVisible, setIsEditableTableVisible] = useState(false);
+  const [isDragAndDropVisible, setIsDragAndDropVisible] = useState(true);
   const [isUploadTableVisible, setIsUploadTableVisible] = useState(false);
   const [isFinalTableVisible, setIsFinalTableVisible] = useState(false);
   const [jsonData, setJsonData] = useState([
@@ -80,6 +81,7 @@ const Dashboard = (props) => {
 
   const handleOnChange = () => {
     setIsChecked(!isChecked);
+    setIsEditableTableVisible(!isChecked)
   };
 
   useEffect(() => {
@@ -90,6 +92,7 @@ const Dashboard = (props) => {
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
     setIsChecked(false);
+    setIsDragAndDropVisible(false);
     setIsUploadTableVisible(true);
     Papa.parse(selectedFile, {
       header: true,
@@ -97,15 +100,16 @@ const Dashboard = (props) => {
       complete: function(results) {
         console.log(results.data);
         setJsonData(results.data);
-        setIsEditableTableVisible(false);
       }
     });
   };
 
   const handleOptimize = () => {
+    setIsChecked(false);
+    setIsEditableTableVisible(false);
+    setIsDragAndDropVisible(false);
     setIsUploadTableVisible(false);
     setIsFinalTableVisible(true);
-    setIsEditableTableVisible(false);
   };
 
   const handleAddRow =()=>{
@@ -262,7 +266,7 @@ const Dashboard = (props) => {
                       className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
                     </div>
                     <span
-                      className="ml-3 text-sm font-normal dark:text-gray-300">Manual Upload (CSV)</span>
+                      className="ml-3 text-sm font-normal dark:text-gray-300">Manual Upload</span>
                   </label>
                 </div>
                 {/*End Toggle*/}
@@ -330,7 +334,7 @@ const Dashboard = (props) => {
             {/*End Selectable options*/}
 
             {/*Drag and drop*/}
-            {isChecked && (
+            {!isChecked && isDragAndDropVisible && (
               <div className="pt-5">
                 <form>
                   <div className="flex items-center justify-center w-full">
@@ -354,7 +358,7 @@ const Dashboard = (props) => {
               </div>
             )}
             {/*End Drag and drop*/}
-            {!isChecked && isEditableTableVisible && (
+            {isChecked && (
               <Table data={jsonData} columns={editableColumns} />
             )}
 

@@ -5,9 +5,9 @@ import { Container } from "../../components/Container.jsx";
 import usFlag from "../../assets/images/us.png";
 import { Button } from "../../components/Button.jsx";
 import Tabs from "../../components/Tabs.jsx";
-import Table from "../../components/Table.jsx";
+import Table, { StatusPill } from "../../components/Table.jsx";
 
-const Dashboard = (props) => {
+const PortfolioAnalysis = (props) => {
 
   const [isChecked, setIsChecked] = useState(false);
   const [isEditableTableVisible, setIsEditableTableVisible] = useState(false);
@@ -40,54 +40,49 @@ const Dashboard = (props) => {
       "weight": ""
     }
   ]);
-  const [jsonFinalData, setJsonFinalData] = useState([
-    {
-      ticker: "MSFT",
-      weight: 30.45,
-      status: "Online",
-      image:
-        "https://flowbite.com/docs/images/people/profile-picture-1.jpg",
-      name: "Microsoft",
-      exchange: "BCBA"
-    },
-    {
-      ticker: "GOOGL",
-      weight: 10.13,
-      status: "Online",
-      image:
-        "https://flowbite.com/docs/images/people/profile-picture-3.jpg",
-      name: "Alphabet",
-      exchange: "BCBA"
-    },
-    {
-      ticker: "AMZN",
-      weight: 15.56,
-      status: "Online",
-      image:
-        "https://flowbite.com/docs/images/people/profile-picture-2.jpg",
-      name: "Amazon",
-      exchange: "BCBA"
-    },
-    {
-      ticker: "AAPL",
-      weight: 44.76,
-      status: "Offline",
-      image:
-        "https://flowbite.com/docs/images/people/profile-picture-5.jpg",
-      name: "Apple",
-      exchange: ""
-    }
-  ]);
+  const [jsonFinalData, setJsonFinalData] = useState(
+    [
+      {
+        "ticker": "AAPL",
+        "company_name": "Apple Inc.",
+        "company_logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiHtmcXWWWDYHXOQHeNfPkdA2OJYBuDxGU0G4_6eaJcGWr6G-gNNmGSXczyBbgEnE&usqp=CAU&ec=48665698",
+        "weight": "30.45",
+        "status": "Active"
+      },
+      {
+        "ticker": "GOOG",
+        "company_name": "Alphabet Inc.",
+        "company_logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQDox4hPrVW6XsKsGSXE2iCxi_YZo3UtXD5BgVet7W-jtYhCedQU4Dkw8&usqp=CAU",
+        "weight": "52.00",
+        "status": "Active"
+      },
+      {
+        "ticker": "JUAN",
+        "company_name": "N/A",
+        "company_logo": "N/A",
+        "weight": "12.85",
+        "status": "Inactive"
+      }
+    ]);
+
+  const tabsConfig = {
+    type: "underline",
+    tabs: [
+      { name: "A.I. Driven insights" },
+      { name: "Regime Analysis" },
+      { name: "Portfolio Analysis", selected: true },
+    ]
+
+  };
+
+  useEffect(() => {
+    console.log(jsonData);
+  },[jsonData]);
 
   const handleOnChange = () => {
     setIsChecked(!isChecked);
     setIsEditableTableVisible(!isChecked)
   };
-
-  useEffect(() => {
-    console.log(jsonData);
-  }, [jsonData]);
-
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -193,11 +188,11 @@ const Dashboard = (props) => {
           <div className="flex items-center">
             <img
               className="w-10 h-10 rounded-full"
-              src={row.original.image}
-              alt={row.original.name + " image"}
+              src={row.original.company_logo}
+              alt={row.original.company_name + " image"}
             />
             <div className="pl-3">
-              <div className="text-base font-semibold">{row.original.name}</div>
+              <div className="text-base font-semibold">{row.original.company_name}</div>
               <div className="font-normal text-gray-500">BCBA: {row.original.ticker}</div>
             </div>
           </div>
@@ -210,13 +205,7 @@ const Dashboard = (props) => {
       {
         Header: "Status",
         accessor: "status",
-        Cell: ({ row }) => (
-          <div className="flex items-center">
-            <div
-              className={`h-2.5 w-2.5 rounded-full ${row.original.status === "Online" ? "bg-green-500" : "bg-red-500"} mr-2`}></div>
-            {row.original.status}
-          </div>
-        )
+        Cell: StatusPill,
       }
     ],
     []
@@ -238,7 +227,7 @@ const Dashboard = (props) => {
           </div>
           {/*End Title*/}
           {/*Tabs*/}
-          <Tabs />
+          <Tabs config={tabsConfig} />
           {/*End Tabs*/}
           {/*Section*/}
           <section className="mt-4">
@@ -381,7 +370,7 @@ const Dashboard = (props) => {
                 color="blue"
                 onClick={handleOptimize}
               >
-                Validate
+                {isFinalTableVisible && !isChecked && !isUploadTableVisible ? 'Optimize' : 'Validate'}
               </Button>
               {isEditableTableVisible && (<Button
                 color="blue"
@@ -403,4 +392,4 @@ const Dashboard = (props) => {
   );
 };
 
-export default Dashboard;
+export default PortfolioAnalysis;

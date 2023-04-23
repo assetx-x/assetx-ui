@@ -1,6 +1,40 @@
 import React  from 'react';
 import { useTable } from 'react-table';
+import { classNames } from "../utils/index.js";
 
+export function StatusPill({ value }) {
+  const status = value ? value.toLowerCase() : "unknown";
+
+  return (
+    <span
+      className={classNames(
+        "px-3 py-1 uppercase leading-wide font-bold text-xs rounded-full shadow-sm",
+        status.startsWith("active") ? "bg-green-100 text-green-700" : null,
+        status.startsWith("inactive") ? "bg-red-100 text-red-700" : null,
+        status.startsWith("offline") ? "bg-red-100 text-gray-700" : null
+      )}
+    >
+      {status}
+    </span>
+  );
+}
+
+export function RecommendationPill({ value }) {
+  const status = value ? value.toLowerCase() : "unknown";
+
+  return (
+    <span
+      className={classNames(
+        "px-1 py-1 uppercase leading-wide font-bold text-xs rounded-full shadow-sm",
+        status.startsWith("increase weight") ? "bg-green-100 text-green-700" : null,
+        status.startsWith("decrease weight") ? "bg-red-100 text-red-700" : null,
+        status.startsWith("none") ? "bg-gray-100 text-gray-700" : null
+      )}
+    >
+      {status}
+    </span>
+  );
+}
 const Table = ({ data, columns }) => {
 
 

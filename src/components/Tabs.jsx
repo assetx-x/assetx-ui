@@ -1,31 +1,52 @@
 import React from "react";
+import theme from "tailwindcss/defaultTheme.js";
 
 const Tabs = (props) => {
+  const { tabs, type } = props.config;
+
+  // TODO: create a selected function
+  const [isTabActive, setIsTabActive] = React.useState(0);
+
+  const activeCSS = "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500";
+  const normalCSS = "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300";
+
+  const themeSwitch = (type) => ({
+    "underline": {
+      container: "text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700",
+      active: "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500",
+      normal: "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+    },
+    "pills": {
+      container: "flex flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-400",
+      active: "inline-block px-4 py-3 text-blue-600 bg-gray-200 rounded-lg active",
+      normal: "inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white"
+    }
+  })[type] || themeSwitch("underline");
+
+
+  themeSwitch("border xxx");
+
 
   return (
     <>
-      <div
-        className="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
-        <ul className="flex flex-wrap -mb-px">
-          <li className="mr-2">
-            <a href="#"
-               className="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">A.I.
-              Driven insights</a>
-          </li>
 
-          <li className="mr-2">
-            <a href="#"
-               className="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">
-              Regime Analysis
-            </a>
-          </li>
-          <li className="mr-2">
-            <a href="#"
-               className="inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500"
-               aria-current="page">
-              Portfolio Analysis
-            </a>
-          </li>
+      <div
+        className={themeSwitch(type).container}>
+        <ul className="flex flex-wrap -mb-px">
+          {tabs.map((tab, index) => {
+              return (
+                <li className="mr-2" key={index}>
+                  <a href="#"
+                     key={index}
+                     className={(isTabActive || tab?.selected) ? themeSwitch(type).active : themeSwitch(type).normal}>
+                    {tab.name}
+                  </a>
+                </li>
+              );
+            }
+          )
+
+          }
         </ul>
       </div>
     </>

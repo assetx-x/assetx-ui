@@ -5,7 +5,7 @@ import clsx from 'clsx'
 
 import {Button} from "./Button.jsx";
 import {Container} from "./Container.jsx";
-import Logo from "../assets/images/corporate/logo_dark.png"
+import Logo from "../assets/images/corporate/logo.png"
 import {NavLink} from "./NavLink.jsx";
 function MobileNavLink({ href, children }) {
   return (

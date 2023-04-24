@@ -213,7 +213,7 @@ const PortfolioAnalysisResults = (props) => {
               <div>
                 {/*Table*/}
                 <div className={"overflow-x"}>
-                  <Table data={jsonResultData} columns={resultColumns} />
+                  <Table data={jsonResultData} columns={resultColumns} paginated={true}/>
                 </div>
                 {/*End Table*/}
 

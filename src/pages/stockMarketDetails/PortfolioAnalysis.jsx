@@ -73,7 +73,7 @@ const PortfolioAnalysis = (props) => {
     tabs: [
       { name: "A.I. Driven insights" },
       { name: "Regime Analysis" },
-      { name: "Portfolio Analysis", selected: true },
+      { name: "Portfolio Analysis", selected: true }
     ]
 
   };
@@ -81,7 +81,7 @@ const PortfolioAnalysis = (props) => {
 
   const handleOnChange = () => {
     setIsChecked(!isChecked);
-    setIsEditableTableVisible(!isChecked)
+    setIsEditableTableVisible(!isChecked);
   };
 
   const handleFileChange = (event) => {
@@ -108,15 +108,15 @@ const PortfolioAnalysis = (props) => {
   };
 
   const handleValidate = () => {
-    navigate('/us/portfolio-analysis/1', { replace: true });
+    navigate("/us/portfolio-analysis/1", { replace: true });
   };
 
-  const handleAddRow =()=>{
-    setJsonData([...jsonData,  {
+  const handleAddRow = () => {
+    setJsonData([...jsonData, {
       "ticker": "",
       "weight": ""
-    }])
-  }
+    }]);
+  };
 
   const uploadedColumns = useMemo(
     () => [
@@ -209,7 +209,7 @@ const PortfolioAnalysis = (props) => {
       {
         Header: "Status",
         accessor: "status",
-        Cell: StatusPill,
+        Cell: StatusPill
       }
     ],
     []
@@ -357,14 +357,14 @@ const PortfolioAnalysis = (props) => {
 
             {/*Upload Table*/}
             {jsonData && isUploadTableVisible && (
-              <Table data={jsonData} columns={uploadedColumns} />
+              <Table data={jsonData} columns={uploadedColumns} paginated={true} />
             )}
             {/*End Upload Table*/}
 
             {/*Final Table*/}
             {isFinalTableVisible && !isChecked && !isUploadTableVisible && (
               <div className="mt-10">
-                <Table data={jsonFinalData} columns={finalColumns} />
+                <Table data={jsonFinalData} columns={finalColumns} paginated={true} />
               </div>)}
             {/*End Fonal Table*/}
             {/*Button*/}
@@ -372,9 +372,9 @@ const PortfolioAnalysis = (props) => {
 
               <Button
                 color="blue"
-                onClick={isFinalTableVisible && !isChecked && !isUploadTableVisible? handleValidate :handleOptimize}
+                onClick={isFinalTableVisible && !isChecked && !isUploadTableVisible ? handleValidate : handleOptimize}
               >
-                {isFinalTableVisible && !isChecked && !isUploadTableVisible ? 'Optimize' : 'Validate'}
+                {isFinalTableVisible && !isChecked && !isUploadTableVisible ? "Optimize" : "Validate"}
               </Button>
               {isEditableTableVisible && (<Button
                 color="blue"

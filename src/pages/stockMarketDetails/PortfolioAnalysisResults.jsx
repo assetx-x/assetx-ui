@@ -3,12 +3,68 @@ import { Header } from "../../components/Header.jsx";
 import { Container } from "../../components/Container.jsx";
 import usFlag from "../../assets/images/us.png";
 import Tabs from "../../components/Tabs.jsx";
-import Table, { RecommendationPill, StatusPill } from "../../components/Table.jsx";
+import Table, { RecommendationPill } from "../../components/Table.jsx";
 import { LinearChart } from "../../components/LinearChart.jsx";
+import MiniChart from "../../assets/images/mini-chart.png"
+
 
 
 const PortfolioAnalysisResults = (props) => {
     const [jsonResultData, setJsonResultData] = useState([
+      {
+        "ticker": "AAPL",
+        "company_name": "Apple Inc.",
+        "company_logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiHtmcXWWWDYHXOQHeNfPkdA2OJYBuDxGU0G4_6eaJcGWr6G-gNNmGSXczyBbgEnE&usqp=CAU&ec=48665698",
+        "recommendation": "Increase weight",
+        "weight": "30.45",
+        "dmc_weight": "52.00",
+        "data":{}
+      },
+      {
+        "ticker": "GOOG",
+        "company_name": "Alphabet Inc.",
+        "recommendation": "Decrease weight",
+        "company_logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQDox4hPrVW6XsKsGSXE2iCxi_YZo3UtXD5BgVet7W-jtYhCedQU4Dkw8&usqp=CAU",
+        "weight": "52.00",
+        "dmc_weight": "30.45",
+        "data":{}
+      },
+      {
+        "ticker": "JUAN",
+        "company_name": "N/A",
+        "company_logo": "",
+        "recommendation": "None",
+        "weight": "0.00",
+        "dmc_weight": "0.00",
+        "data":{}
+      },
+      {
+        "ticker": "AAPL",
+        "company_name": "Apple Inc.",
+        "company_logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiHtmcXWWWDYHXOQHeNfPkdA2OJYBuDxGU0G4_6eaJcGWr6G-gNNmGSXczyBbgEnE&usqp=CAU&ec=48665698",
+        "recommendation": "Increase weight",
+        "weight": "30.45",
+        "dmc_weight": "52.00",
+        "data":{}
+      },
+      {
+        "ticker": "GOOG",
+        "company_name": "Alphabet Inc.",
+        "recommendation": "Decrease weight",
+        "company_logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQDox4hPrVW6XsKsGSXE2iCxi_YZo3UtXD5BgVet7W-jtYhCedQU4Dkw8&usqp=CAU",
+        "weight": "52.00",
+        "dmc_weight": "30.45",
+        "data":{}
+      },
+      {
+        "ticker": "JUAN",
+        "company_name": "N/A",
+        "company_logo": "",
+        "recommendation": "None",
+        "weight": "0.00",
+        "dmc_weight": "0.00",
+        "data":{}
+      },
       {
         "ticker": "AAPL",
         "company_name": "Apple Inc.",
@@ -84,7 +140,7 @@ const PortfolioAnalysisResults = (props) => {
             <div className="flex items-center">
               <img
                 className="min-w-[60px] w-[60px]"
-                src="https://plantingthetree.com/wp-content/uploads/2021/06/1BC64EA2-8CAA-4E6E-BCB7-4560912DD195.jpeg"
+                src={MiniChart}
               />
 
             </div>
@@ -138,36 +194,32 @@ const PortfolioAnalysisResults = (props) => {
               </div>
               {/*End Title*/}
               <div className="grid grid-cols-1 md:grid-cols-2">
-                {/*Table*/}
+
                 <div>
+                  <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">Your portfolio
+                    allocation</h5>
+                    <LinearChart />
+                </div>
+                <div>
+
+                  <div>
+                    <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">Risk
+                      Constrained Allocation</h5>
+                    <LinearChart />
+                  </div>
+                </div>
+
+              </div>
+              <div>
+                {/*Table*/}
+                <div className={"overflow-x"}>
                   <Table data={jsonResultData} columns={resultColumns} />
                 </div>
                 {/*End Table*/}
 
                 <div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2">
 
-                    <div>
-                      <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Your portfolio
-                        allocation</h5>
-                      <div
-                        className="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                        <LinearChart />
-
-                      </div>
-                    </div>
-                    <div>
-                      <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Risk
-                        Constrained Allocation</h5>
-                      <div
-                        className="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-
-                        <LinearChart />
-                      </div>
-                    </div>
-
-                  </div>
                 </div>
               </div>
             </section>

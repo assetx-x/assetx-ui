@@ -6,9 +6,11 @@ import usFlag from "../../assets/images/us.png";
 import { Button } from "../../components/Button.jsx";
 import Tabs from "../../components/Tabs.jsx";
 import Table, { StatusPill } from "../../components/Table.jsx";
+import { useNavigate } from "react-router-dom";
 
 const PortfolioAnalysis = (props) => {
 
+  const navigate = useNavigate();
   const [isChecked, setIsChecked] = useState(false);
   const [isEditableTableVisible, setIsEditableTableVisible] = useState(false);
   const [isDragAndDropVisible, setIsDragAndDropVisible] = useState(true);
@@ -65,6 +67,7 @@ const PortfolioAnalysis = (props) => {
       }
     ]);
 
+
   const tabsConfig = {
     type: "underline",
     tabs: [
@@ -75,9 +78,6 @@ const PortfolioAnalysis = (props) => {
 
   };
 
-  useEffect(() => {
-    console.log(jsonData);
-  },[jsonData]);
 
   const handleOnChange = () => {
     setIsChecked(!isChecked);
@@ -105,6 +105,10 @@ const PortfolioAnalysis = (props) => {
     setIsDragAndDropVisible(false);
     setIsUploadTableVisible(false);
     setIsFinalTableVisible(true);
+  };
+
+  const handleValidate = () => {
+    navigate('/us/portfolio-analysis/1', { replace: true });
   };
 
   const handleAddRow =()=>{
@@ -368,7 +372,7 @@ const PortfolioAnalysis = (props) => {
 
               <Button
                 color="blue"
-                onClick={handleOptimize}
+                onClick={isFinalTableVisible && !isChecked && !isUploadTableVisible? handleValidate :handleOptimize}
               >
                 {isFinalTableVisible && !isChecked && !isUploadTableVisible ? 'Optimize' : 'Validate'}
               </Button>

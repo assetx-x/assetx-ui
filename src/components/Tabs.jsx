@@ -1,14 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import theme from "tailwindcss/defaultTheme.js";
 
 const Tabs = (props) => {
   const { tabs, type } = props.config;
 
-  // TODO: create a selected function
-  const [isTabActive, setIsTabActive] = React.useState(0);
-
-  const activeCSS = "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500";
-  const normalCSS = "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300";
+  const [activeTab, setActiveTab] = useState(2);
+  const handleTabClick = (tabNumber) => {
+    setActiveTab(tabNumber);
+  };
 
   const themeSwitch = (type) => ({
     "underline": {
@@ -23,31 +22,32 @@ const Tabs = (props) => {
     }
   })[type] || themeSwitch("underline");
 
-
-  themeSwitch("border xxx");
-
-
   return (
     <>
-
       <div
         className={themeSwitch(type).container}>
         <ul className="flex flex-wrap -mb-px">
           {tabs.map((tab, index) => {
               return (
                 <li className="mr-2" key={index}>
-                  <a href="#"
-                     key={index}
-                     className={(isTabActive || tab?.selected) ? themeSwitch(type).active : themeSwitch(type).normal}>
+                  <div
+                    onClick={() => handleTabClick(index)}
+                    key={index}
+                    className={(activeTab === index || tab?.selected) ? themeSwitch(type).active : themeSwitch(type).normal}>
                     {tab.name}
-                  </a>
+                  </div>
                 </li>
               );
             }
           )
-
           }
         </ul>
+      </div>
+      <div className="tab-content">
+        {tabs.map((object, i)=>{
+          return activeTab === i && object.content
+        })}
+
       </div>
     </>
   );

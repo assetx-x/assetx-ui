@@ -107,6 +107,9 @@ const PortfolioAnalysisResults = (props) => {
           {
             name: "Your portfolio allocation",
             description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam cumque ducimus eius esse eveniet excepturi laboriosam nobis obcaecati perspiciatis sit sunt tempore, ut voluptatem? Culpa explicabo fugiat odio possimus sit.",
+              chartTitle: "Sharpe (1.7%)",
+              chartSubtitle: "AnnualizedRet (4,7%)",
+              chartLegend: "AnnualizedVol (4,7%)",
             data:
               [{'time': '2018-08-31', 'value': 0.99508},
                 {'time': '2018-09-04', 'value': 0.95316},
@@ -1112,6 +1115,9 @@ const PortfolioAnalysisResults = (props) => {
           {
             name: "Risk Constrained Allocation",
             description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam cumque ducimus eius esse eveniet excepturi laboriosam nobis obcaecati perspiciatis sit sunt tempore, ut voluptatem? Culpa explicabo fugiat odio possimus sit.",
+              chartTitle: "Sharpe (3.7%)",
+              chartSubtitle: "AnnualizedRet (5,7%)",
+              chartLegend: "AnnualizedVol (5,7%)",
             data:
               [{'time': '2018-08-31', 'value': 0.99508},
                 {'time': '2018-09-04', 'value': 0.95316},
@@ -2153,6 +2159,7 @@ const PortfolioAnalysisResults = (props) => {
               <img
                 className="min-w-[60px] w-[60px]"
                 src={MiniChart}
+                alt="Mini Chart"
               />
 
             </div>

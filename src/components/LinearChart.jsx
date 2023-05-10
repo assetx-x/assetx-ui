@@ -1,14 +1,8 @@
 import { createChart } from 'lightweight-charts';
 import React, { useEffect, useRef } from 'react';
 
-export const LinearChartComponent = props => {
-  const {
-    data,
-    placeholderData
-  } = props;
-
+export const LinearChartComponent = ({ data, placeholderData }) => {
   const {chartTitle, chartSubtitle, chartLegend} = placeholderData;
-
   const chartContainerRef = useRef();
 
   useEffect(

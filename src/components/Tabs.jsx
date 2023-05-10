@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import theme from "tailwindcss/defaultTheme.js";
 
 const Tabs = (props) => {
   const { tabs, type } = props.config;
@@ -47,7 +46,6 @@ const Tabs = (props) => {
         {tabs.map((object, i)=>{
           return activeTab === i && object.content
         })}
-
       </div>
     </>
   );

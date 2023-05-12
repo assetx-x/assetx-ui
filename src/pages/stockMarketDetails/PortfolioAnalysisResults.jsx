@@ -8,6 +8,8 @@ import MiniChart from "../../assets/images/mini-chart.png";
 import TwoColumnCharts from "./components/TwoColumnCharts.jsx";
 import ResultsTable from "./components/ResultsTable.jsx";
 import { MainContext } from "../../store/context/MainContext.jsx";
+import { Button } from "../../components/Button.jsx";
+import { useNavigate } from "react-router-dom";
 
 function formatPortfoliPnlData(obj) {
   const result = [];
@@ -55,7 +57,9 @@ function formatPercentage(num, decimals = 2) {
 }
 
 const PortfolioAnalysisResults = (props) => {
-    const context = useContext(MainContext);
+  const navigate = useNavigate();
+
+  const context = useContext(MainContext);
     const [jsonResultData, setJsonResultData] = useState([
       {
         "ticker": "AAPL",
@@ -172,7 +176,6 @@ const PortfolioAnalysisResults = (props) => {
         }
       ]
     };
-    // TODO: add the data to the chart
     const riskAllocationChartConfig = {
       charts: [
         {
@@ -342,7 +345,9 @@ const PortfolioAnalysisResults = (props) => {
       []
     );
 
-
+  const handleReset = () => {
+    navigate("/us/portfolio-analysis", { replace: true });
+  }
     return (
       <>
         <Header />
@@ -364,8 +369,15 @@ const PortfolioAnalysisResults = (props) => {
             {/*Results Table*/}
             <div className="mt-4">
               {/*Title*/}
-              <div>
+              <div style={{display: 'flex', justifyContent: 'space-between'}}>
                 <h3 className="text-3xl font-semibold">Portfolio Analysis Results</h3>
+                <Button
+                  variant="outline"
+                  color="blue"
+                  onClick={handleReset}
+                >
+                  Reset
+                </Button>
               </div>
               <div className={"mt-6"}>
                 <Tabs config={resultTabsConfig} />

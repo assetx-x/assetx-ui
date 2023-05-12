@@ -289,10 +289,10 @@ const PortfolioAnalysis = (props) => {
                            checked={isChecked}
                            onChange={handleOnChange} />
                     <div
-                      className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
+                      className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300  rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
                     </div>
                     <span
-                      className="ml-3 text-sm font-normal dark:text-gray-300">Manual Upload</span>
+                      className="ml-3 text-sm font-normal ">Manual Upload</span>
                   </label>
                 </div>
 
@@ -305,7 +305,7 @@ const PortfolioAnalysis = (props) => {
                       <input className="hidden" type="radio" id="minVariance" name="objectiveFunction"
                              value="minVariance" />
                       <label
-                        className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white"
+                        className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 "
                         htmlFor="minVariance">
                         Minimum Variance
                       </label>
@@ -315,7 +315,7 @@ const PortfolioAnalysis = (props) => {
                       <input className="hidden" type="radio" id="maxReturn" name="objectiveFunction"
                              value="maxReturn" />
                       <label
-                        className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white"
+                        className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
                         htmlFor="maxReturn">
                         Max Return
                       </label>
@@ -330,7 +330,7 @@ const PortfolioAnalysis = (props) => {
                     <button type="button">
                       <input className="hidden" type="radio" id="years" name="investingHorizons" value="years" />
                       <label
-                        className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white"
+                        className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
                         htmlFor="years">
                         Years
                       </label>
@@ -339,7 +339,7 @@ const PortfolioAnalysis = (props) => {
                             className="">
                       <input className="hidden" type="radio" id="months" name="investingHorizons" value="months" />
                       <label
-                        className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white"
+                        className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 "
                         htmlFor="months">
                         Months
                       </label>
@@ -348,7 +348,7 @@ const PortfolioAnalysis = (props) => {
                             className="">
                       <input className="hidden" type="radio" id="days" name="investingHorizons" value="days" />
                       <label
-                        className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white"
+                        className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 "
                         htmlFor="days">
                         Days
                       </label>
@@ -367,16 +367,16 @@ const PortfolioAnalysis = (props) => {
                 <form>
                   <div className="flex items-center justify-center w-full">
                     <label htmlFor="csv-file"
-                           className="flex flex-col items-center justify-center w-full h-[400px] border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                           className="flex flex-col items-center justify-center w-full h-[400px] border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 ">
                       <div className="flex flex-col items-center justify-center pt-5 pb-6">
                         <svg aria-hidden="true" className="w-10 h-10 mb-3 text-gray-400" fill="none"
                              stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
                                 d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
                         </svg>
-                        <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span
+                        <p className="mb-2 text-sm text-gray-500 "><span
                           className="font-semibold">Click to upload</span> or drag and drop</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">CSV (MAX.
+                        <p className="text-xs text-gray-500 ">CSV (MAX.
                           800KB)</p>
                       </div>
                       <input id="csv-file" type="file" accept=".csv" className="hidden" onChange={handleFileChange} />

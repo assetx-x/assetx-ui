@@ -10,14 +10,14 @@ const Tabs = (props) => {
 
   const themeSwitch = (type) => ({
     "underline": {
-      container: "text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700",
-      active: "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500",
-      normal: "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+      container: "text-sm font-medium text-center text-gray-500 border-b border-gray-200",
+      active: "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active ",
+      normal: "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 "
     },
     "pills": {
-      container: "flex flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-400",
+      container: "flex flex-wrap text-sm font-medium text-center text-gray-500",
       active: "inline-block px-4 py-3 text-blue-600 bg-gray-200 rounded-lg active",
-      normal: "inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white"
+      normal: "inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100"
     }
   })[type] || themeSwitch("underline");
 

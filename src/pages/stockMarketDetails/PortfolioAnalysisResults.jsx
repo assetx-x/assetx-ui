@@ -52,8 +52,8 @@ function formatBeta (obj, decimals=1) {
 
 }
 
-function formatPercentage(num, decimals = 2) {
-  return (num).toFixed(decimals) + "%";
+function formatPercentage(num, decimals = 2, isSharpe) {
+  return isSharpe ? (num).toFixed(decimals) : (num).toFixed(decimals) + "%";
 }
 
 const PortfolioAnalysisResults = (props) => {
@@ -157,9 +157,9 @@ const PortfolioAnalysisResults = (props) => {
           name: "Your portfolio allocation",
           type: "LinearChart",
           description: `${context.predictionData.client.sentences.portfolio_pnl}`,
-          chartTitle: `Sharpe (${formatPercentage(context.predictionData.client.optimizer_stats?.["Sharpe ratio"])})`,
-          chartLegend: `AnnualizedRet (${formatPercentage(context.predictionData.client.optimizer_stats?.["Annual return"])})`,
-          chartSubtitle: `AnnualizedVol (${formatPercentage(context.predictionData.client.optimizer_stats?.["Annual volatility"])})`,
+          chartSubtitle: `Sharpe (${formatPercentage(context.predictionData.client.optimizer_stats?.["Sharpe ratio"], 2, true)})`,
+          chartTitle: `AnnualizedRet (${formatPercentage(context.predictionData.client.optimizer_stats?.["Annual return"])})`,
+          chartLegend: `AnnualizedVol (${formatPercentage(context.predictionData.client.optimizer_stats?.["Annual volatility"])})`,
           data:
             formatPortfoliPnlData(context.predictionData.client?.portfolio_pnl)
         },
@@ -168,9 +168,9 @@ const PortfolioAnalysisResults = (props) => {
           type: "LinearChart",
           useLogo: true,
           description: `${context.predictionData.asset_x.sentences.portfolio_pnl}`,
-          chartTitle: `Sharpe (${formatPercentage(context.predictionData.asset_x.optimizer_stats?.["Sharpe ratio"])})`,
-          chartLegend: `AnnualizedRet (${formatPercentage(context.predictionData.asset_x.optimizer_stats?.["Annual return"])})`,
-          chartSubtitle: `AnnualizedVol (${formatPercentage(context.predictionData.asset_x.optimizer_stats?.["Annual volatility"])})`,
+          chartSubtitle: `Sharpe (${formatPercentage(context.predictionData.asset_x.optimizer_stats?.["Sharpe ratio"],2, true)})`,
+          chartTitle: `AnnualizedRet (${formatPercentage(context.predictionData.asset_x.optimizer_stats?.["Annual return"])})`,
+          chartLegend: `AnnualizedVol (${formatPercentage(context.predictionData.asset_x.optimizer_stats?.["Annual volatility"])})`,
           data:
             formatPortfoliPnlData(context.predictionData.asset_x?.portfolio_pnl)
         }

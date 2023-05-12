@@ -105,7 +105,6 @@ const PortfolioAnalysis = (props) => {
 
       const response = await fetch(`https://assetx-api2-2dywgqiasq-uk.a.run.app/api/v1/asset_x_service/port_opt/1D/max_sharpe/${tickers}/${weights}`);
       const data = await response.json();
-      // TODO: set in context
       context.setPredictionData(data);
       setOptimizeData(data);
       setIsOptimizeLoading(false);

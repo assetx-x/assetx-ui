@@ -1,8 +1,8 @@
-import { createChart } from 'lightweight-charts';
-import React, { useEffect, useRef } from 'react';
+import { createChart } from "lightweight-charts";
+import React, { useEffect, useRef } from "react";
 
 export const LinearChartComponent = ({ data, placeholderData }) => {
-  const {chartTitle, chartSubtitle, chartLegend} = placeholderData;
+  const { chartTitle, chartSubtitle, chartLegend } = placeholderData;
   const chartContainerRef = useRef();
 
   useEffect(
@@ -21,21 +21,21 @@ export const LinearChartComponent = ({ data, placeholderData }) => {
         rightPriceScale: {
           scaleMargins: {
             top: 0.35,
-            bottom: 0.2,
+            bottom: 0.2
           },
-          borderVisible: false,
+          borderVisible: false
         },
         timeScale: {
-          borderVisible: false,
+          borderVisible: false
         },
         grid: {
           horzLines: {
-            color: '#eee',
-            visible: false,
+            color: "#eee",
+            visible: false
           },
           vertLines: {
-            color: '#ffffff',
-          },
+            color: "#ffffff"
+          }
         },
         crosshair: {
           horzLine: {
@@ -46,26 +46,26 @@ export const LinearChartComponent = ({ data, placeholderData }) => {
             visible: true,
             style: 0,
             width: 2,
-            color: 'rgba(32, 38, 46, 0.1)',
-            labelVisible: false,
+            color: "rgba(32, 38, 46, 0.1)",
+            labelVisible: false
           }
-        },
+        }
       });
       chart.timeScale();
 
       const series = chart.addAreaSeries({
-        topColor: 'rgba(19, 68, 193, 0.4)',
-        bottomColor: 'rgba(0, 120, 255, 0.0)',
-        lineColor: 'rgb(83, 127, 160)',
+        topColor: "rgba(19, 68, 193, 0.4)",
+        bottomColor: "rgba(0, 120, 255, 0.0)",
+        lineColor: "rgb(83, 127, 160)",
         lineWidth: 3
       });
 
       series.setData(data);
 
-      window.addEventListener('resize', handleResize);
+      window.addEventListener("resize", handleResize);
 
       return () => {
-        window.removeEventListener('resize', handleResize);
+        window.removeEventListener("resize", handleResize);
 
         chart.remove();
       };
@@ -74,11 +74,11 @@ export const LinearChartComponent = ({ data, placeholderData }) => {
   );
 
   return (
-    <div style={{position:"relative"}}>
+    <div style={{ position: "relative" }}>
       <div className="three-line-legend">
-        <div style={{fontSize: 24, color: "#20262E"}}>{chartTitle}</div>
-        <div style={{fontSize: 22, color: "#20262E"}}>{chartSubtitle}</div>
-        <div>{chartLegend}</div>
+        <div style={{ fontSize: 24, color: "#20262E" }}>{chartTitle}</div>
+        <div style={{ fontSize: 22, color: "#20262E" }}>{chartSubtitle}</div>
+        <div style={{ paddingTop: 8 }}>{chartLegend}</div>
       </div>
       <div
         ref={chartContainerRef}

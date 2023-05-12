@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import Papa from "papaparse";
 import { Header } from "../../components/Header.jsx";
 import { Container } from "../../components/Container.jsx";
@@ -7,9 +7,10 @@ import { Button } from "../../components/Button.jsx";
 import Tabs from "../../components/Tabs.jsx";
 import Table, { StatusPill } from "../../components/Table.jsx";
 import { useNavigate } from "react-router-dom";
+import BlockUi from "@availity/block-ui";
+
 
 const PortfolioAnalysis = (props) => {
-
   const navigate = useNavigate();
   const [isChecked, setIsChecked] = useState(false);
   const [isEditableTableVisible, setIsEditableTableVisible] = useState(false);
@@ -42,32 +43,7 @@ const PortfolioAnalysis = (props) => {
       "weight": ""
     }
   ]);
-  const [jsonFinalData, setJsonFinalData] = useState(
-    [
-      {
-        "ticker": "AAPL",
-        "company_name": "Apple Inc.",
-        "company_logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiHtmcXWWWDYHXOQHeNfPkdA2OJYBuDxGU0G4_6eaJcGWr6G-gNNmGSXczyBbgEnE&usqp=CAU&ec=48665698",
-        "weight": "30.45",
-        "status": "Active"
-      },
-      {
-        "ticker": "GOOG",
-        "company_name": "Alphabet Inc.",
-        "company_logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQDox4hPrVW6XsKsGSXE2iCxi_YZo3UtXD5BgVet7W-jtYhCedQU4Dkw8&usqp=CAU",
-        "weight": "52.00",
-        "status": "Active"
-      },
-      {
-        "ticker": "JUAN",
-        "company_name": "N/A",
-        "company_logo": "N/A",
-        "weight": "12.85",
-        "status": "Inactive"
-      }
-    ]);
-
-
+  const [jsonFinalData, setJsonFinalData] = useState(null);
   const tabsConfig = {
     type: "underline",
     tabs: [
@@ -78,6 +54,65 @@ const PortfolioAnalysis = (props) => {
 
   };
 
+  // Validate data
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  // Optimize data
+  const [optimizeData, setOptimizeData] = useState(null);
+  const [isOptimizeLoading, setIsOptimizeLoading] = useState(false);
+  const [optimizeError, setOptimizeError] = useState(null);
+
+  const handleValidateButtonClick = async (json) => {
+    setIsLoading(true);
+    try {
+      const tickers = json.map(item => item.ticker).join("_");
+      const weights = json.map(item => item.weight).join("_");
+      const response = await fetch(`https://assetx-api2-2dywgqiasq-uk.a.run.app/api/v1/asset_x_service/port_validation/${tickers}/${weights}`);
+      const data = await response.json();
+      setJsonFinalData(data.validated_table);
+      setIsLoading(false);
+      // Table view
+      setIsChecked(false);
+      setIsEditableTableVisible(false);
+      setIsDragAndDropVisible(false);
+      setIsUploadTableVisible(false);
+      setIsFinalTableVisible(true);
+    } catch (error) {
+      setError(error);
+      setIsLoading(false);
+    }
+  };
+
+  const handleOptimizeButtonClick = async (json) => {
+    setIsOptimizeLoading(true);
+    try {
+
+      const tickersArray = []
+
+      for (let i = 0; i < json.length; i++) {
+        if (json[i].status !== "Inactive") {
+          tickersArray.push(json[i].ticker);
+        }
+      }
+        console.log({ tickersArray })
+      const tickers = tickersArray.join("_");
+      const weights = json.map(item => item.weight).join("_");
+
+      console.log(tickers);
+      console.log(weights);
+      const response = await fetch(`https://assetx-api2-2dywgqiasq-uk.a.run.app/api/v1/asset_x_service/port_opt/1D/max_sharpe/${tickers}/${weights}`);
+      const data = await response.json();
+      // TODO: set in context
+      setOptimizeData(data);
+      setIsOptimizeLoading(false);
+      navigate("/us/portfolio-analysis/1", { replace: true });
+    } catch (error) {
+      setOptimizeError(error);
+      setIsOptimizeLoading(false);
+    }
+  };
 
   const handleOnChange = () => {
     setIsChecked(!isChecked);
@@ -100,15 +135,13 @@ const PortfolioAnalysis = (props) => {
   };
 
   const handleOptimize = () => {
-    setIsChecked(false);
-    setIsEditableTableVisible(false);
-    setIsDragAndDropVisible(false);
-    setIsUploadTableVisible(false);
-    setIsFinalTableVisible(true);
+    console.log("optimize");
+    handleOptimizeButtonClick(jsonFinalData);
+    // navigate("/us/portfolio-analysis/1", { replace: true });
   };
 
   const handleValidate = () => {
-    navigate("/us/portfolio-analysis/1", { replace: true });
+    handleValidateButtonClick(jsonData);
   };
 
   const handleAddRow = () => {
@@ -208,7 +241,7 @@ const PortfolioAnalysis = (props) => {
       },
       {
         Header: "Status",
-        accessor: "status",
+        accessor: "Status",
         Cell: StatusPill
       }
     ],
@@ -262,6 +295,8 @@ const PortfolioAnalysis = (props) => {
                       className="ml-3 text-sm font-normal dark:text-gray-300">Manual Upload</span>
                   </label>
                 </div>
+
+
                 {/*End Toggle*/}
                 {/*Objective Function*/}
                 <div>
@@ -325,7 +360,9 @@ const PortfolioAnalysis = (props) => {
               </div>
             </div>
             {/*End Selectable options*/}
-
+            <pre>{JSON.stringify(optimizeData)}</pre>
+            <pre>{JSON.stringify(isOptimizeLoading)}</pre>
+            <pre>{JSON.stringify(optimizeError)}</pre>
             {/*Drag and drop*/}
             {!isChecked && isDragAndDropVisible && (
               <div className="pt-5">
@@ -357,25 +394,31 @@ const PortfolioAnalysis = (props) => {
 
             {/*Upload Table*/}
             {jsonData && isUploadTableVisible && (
-              <Table data={jsonData} columns={uploadedColumns} paginated={true} />
+              <BlockUi blocking={isLoading}>
+                <Table data={jsonData} columns={uploadedColumns} paginated={true} />
+              </BlockUi>
             )}
             {/*End Upload Table*/}
 
             {/*Final Table*/}
             {isFinalTableVisible && !isChecked && !isUploadTableVisible && (
-              <div className="mt-10">
-                <Table data={jsonFinalData} columns={finalColumns} paginated={true} />
-              </div>)}
+              <BlockUi blocking={isOptimizeLoading}>
+                <div className="mt-10">
+                  <Table data={jsonFinalData} columns={finalColumns} paginated={true} />
+                </div>
+              </BlockUi>)}
             {/*End Fonal Table*/}
             {/*Button*/}
             <div className="mt-10 flex flex-row-reverse">
 
               <Button
+                disabled={!isChecked && isDragAndDropVisible || isOptimizeLoading }
                 color="blue"
-                onClick={isFinalTableVisible && !isChecked && !isUploadTableVisible ? handleValidate : handleOptimize}
+                onClick={isFinalTableVisible && !isChecked && !isUploadTableVisible ? handleOptimize : handleValidate}
               >
                 {isFinalTableVisible && !isChecked && !isUploadTableVisible ? "Optimize" : "Validate"}
               </Button>
+
               {isEditableTableVisible && (<Button
                 color="blue"
                 variant="outline"

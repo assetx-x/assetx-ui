@@ -6,6 +6,7 @@ import TickerDetail from "./pages/tickerDetail/TickerDetail.jsx";
 import ErrorBoundary from "./components/ErrorBoundary.jsx";
 import PortfolioAnalysisResults from "./pages/stockMarketDetails/PortfolioAnalysisResults.jsx";
 
+
 function App() {
   return (
     <ErrorBoundary>

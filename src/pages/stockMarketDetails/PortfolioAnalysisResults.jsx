@@ -41,6 +41,14 @@ function formatRiskAllocationData(obj) {
   return result;
 }
 
+function formatBeta (obj, decimals=1) {
+  for(const [key, value] of Object.entries(obj)) {
+    obj[key] = value.toFixed(decimals);
+  }
+
+  return obj;
+
+}
 
 function formatPercentage(num, decimals = 2) {
   return (num).toFixed(decimals) + "%";
@@ -154,6 +162,7 @@ const PortfolioAnalysisResults = (props) => {
         {
           name: "Risk Constrained Allocation",
           type: "LinearChart",
+          useLogo: true,
           description: `${context.predictionData.asset_x.sentences.portfolio_pnl}`,
           chartTitle: `Sharpe (${formatPercentage(context.predictionData.asset_x.optimizer_stats?.["Sharpe ratio"])})`,
           chartLegend: `AnnualizedRet (${formatPercentage(context.predictionData.asset_x.optimizer_stats?.["Annual return"])})`,
@@ -175,6 +184,7 @@ const PortfolioAnalysisResults = (props) => {
         },
         {
           name: "Dynamic Rebalancing",
+          useLogo: true,
           type: "NormalizedStackedAreaChart",
           description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam cumque ducimus eius esse eveniet excepturi laboriosam nobis obcaecati perspiciatis sit sunt tempore, ut voluptatem? Culpa explicabo fugiat odio possimus sit.",
           data:
@@ -242,7 +252,7 @@ const PortfolioAnalysisResults = (props) => {
               },
               y: Object.keys(context.predictionData.client?.beta),
               x: Object.values(context.predictionData.client?.beta),
-              text: Object.values(context.predictionData.client?.beta),
+              text: formatBeta(Object.values(context.predictionData.client?.beta)),
               textposition: "auto",
               orientation: "h"
 
@@ -250,6 +260,7 @@ const PortfolioAnalysisResults = (props) => {
         },
         {
           name: "Dynamic Rebalancing",
+          useLogo: true,
           type: "BetaChart",
           description: `${context.predictionData.asset_x.sentences.beta}`,
           data:
@@ -261,10 +272,9 @@ const PortfolioAnalysisResults = (props) => {
               },
               y: Object.keys(context.predictionData.asset_x?.beta),
               x: Object.values(context.predictionData.asset_x?.beta),
-              text: Object.values(context.predictionData.asset_x?.beta),
+              text: formatBeta(Object.values(context.predictionData.asset_x?.beta)),
               textposition: "auto",
               orientation: "h"
-
             }]
         }
       ]
@@ -323,7 +333,7 @@ const PortfolioAnalysisResults = (props) => {
           Cell: props => (props.value * 100).toFixed(2) + "%"
         },
         {
-          Header: "Asset X Wheight %",
+          Header: "Asset X Weight %",
           accessor: "asset_x_weights",
           Cell: props => (props.value * 100).toFixed(2) + "%",
           width: 60

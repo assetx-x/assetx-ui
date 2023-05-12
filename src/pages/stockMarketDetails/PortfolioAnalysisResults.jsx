@@ -181,7 +181,7 @@ const PortfolioAnalysisResults = (props) => {
         {
           name: "Your portfolio allocation",
           type: "NormalizedStackedAreaChart",
-          description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam cumque ducimus eius esse eveniet excepturi laboriosam nobis obcaecati perspiciatis sit sunt tempore, ut voluptatem? Culpa explicabo fugiat odio possimus sit.",
+          description: `${context.predictionData.client.sentences.optimal_weights}`,
           data:
             formatRiskAllocationData(context.predictionData.client.optimal_weights_historical[0])
         },
@@ -189,7 +189,7 @@ const PortfolioAnalysisResults = (props) => {
           name: "Dynamic Rebalancing",
           useLogo: true,
           type: "NormalizedStackedAreaChart",
-          description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam cumque ducimus eius esse eveniet excepturi laboriosam nobis obcaecati perspiciatis sit sunt tempore, ut voluptatem? Culpa explicabo fugiat odio possimus sit.",
+          description: `${context.predictionData.asset_x.sentences.optimal_weights}`,
           data:
             formatRiskAllocationData(context.predictionData.asset_x.optimal_weights_historical[0])
         }

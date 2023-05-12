@@ -328,29 +328,29 @@ const PortfolioAnalysis = (props) => {
                 <div>
                   <div className="inline-flex rounded-md shadow-sm" role="group">
                     <button type="button">
-                      <input className="hidden" type="radio" id="years" name="investingHorizons" value="years" />
+                      <input className="hidden" type="radio" id="bi-monthly" name="investingHorizons" value="years" />
                       <label
                         className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
-                        htmlFor="years">
-                        Years
+                        htmlFor="bi-monthly">
+                        Bi-Monthly
                       </label>
                     </button>
                     <button type="button"
                             className="">
-                      <input className="hidden" type="radio" id="months" name="investingHorizons" value="months" />
+                      <input className="hidden" type="radio" id="monthly" name="investingHorizons" value="months" />
                       <label
                         className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 "
-                        htmlFor="months">
-                        Months
+                        htmlFor="monthly">
+                        Monthly
                       </label>
                     </button>
                     <button type="button"
                             className="">
-                      <input className="hidden" type="radio" id="days" name="investingHorizons" value="days" />
+                      <input className="hidden" type="radio" id="daily" name="investingHorizons" value="days" />
                       <label
                         className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 "
-                        htmlFor="days">
-                        Days
+                        htmlFor="daily">
+                        Daily
                       </label>
                     </button>
                   </div>

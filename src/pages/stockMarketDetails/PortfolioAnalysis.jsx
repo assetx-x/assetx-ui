@@ -8,6 +8,8 @@ import Tabs from "../../components/Tabs.jsx";
 import Table, { StatusPill } from "../../components/Table.jsx";
 import { useNavigate } from "react-router-dom";
 import BlockUi from "@availity/block-ui";
+import { Loader, Types } from 'react-loaders';
+import 'loaders.css/loaders.min.css';
 import { MainContext } from "../../store/context/MainContext.jsx";
 
 
@@ -392,7 +394,7 @@ const PortfolioAnalysis = (props) => {
 
             {/*Upload Table*/}
             {jsonData && isUploadTableVisible && (
-              <BlockUi blocking={isLoading}>
+              <BlockUi blocking={isLoading} message="Validating, please wait" loader={<Loader active type="ball-scale" color="#0248C7"/>}>
                 <Table data={jsonData} columns={uploadedColumns} paginated={true} />
               </BlockUi>
             )}
@@ -400,7 +402,7 @@ const PortfolioAnalysis = (props) => {
 
             {/*Final Table*/}
             {isFinalTableVisible && !isChecked && !isUploadTableVisible && (
-              <BlockUi blocking={isOptimizeLoading}>
+              <BlockUi blocking={isOptimizeLoading} message="Optimizing your portfolio, please wait" loader={<Loader active type="ball-scale" color="#0248C7"/>}>
                 <div className="mt-10">
                   <Table data={jsonFinalData} columns={finalColumns} paginated={true} />
                 </div>

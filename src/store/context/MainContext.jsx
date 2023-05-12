@@ -3,14 +3,14 @@ import React, { useState } from "react";
 const MainContext = React.createContext();
 
 function MainProvider(props) {
-  const [helloMessage, setHelloMessage] = useState('Hello world!');
+  const [predictionData, setPredictionData] = useState([]);
 
 
   return (
     <MainContext.Provider
       value={{
-        helloMessage,
-        setHelloMessage
+        predictionData,
+        setPredictionData
       }}
     >
       {props.children}

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import Papa from "papaparse";
 import { Header } from "../../components/Header.jsx";
 import { Container } from "../../components/Container.jsx";
@@ -8,10 +8,12 @@ import Tabs from "../../components/Tabs.jsx";
 import Table, { StatusPill } from "../../components/Table.jsx";
 import { useNavigate } from "react-router-dom";
 import BlockUi from "@availity/block-ui";
+import { MainContext } from "../../store/context/MainContext.jsx";
 
 
 const PortfolioAnalysis = (props) => {
   const navigate = useNavigate();
+  const context = useContext(MainContext);
   const [isChecked, setIsChecked] = useState(false);
   const [isEditableTableVisible, setIsEditableTableVisible] = useState(false);
   const [isDragAndDropVisible, setIsDragAndDropVisible] = useState(true);
@@ -96,15 +98,13 @@ const PortfolioAnalysis = (props) => {
           tickersArray.push(json[i].ticker);
         }
       }
-        console.log({ tickersArray })
       const tickers = tickersArray.join("_");
       const weights = json.map(item => item.weight).join("_");
 
-      console.log(tickers);
-      console.log(weights);
       const response = await fetch(`https://assetx-api2-2dywgqiasq-uk.a.run.app/api/v1/asset_x_service/port_opt/1D/max_sharpe/${tickers}/${weights}`);
       const data = await response.json();
       // TODO: set in context
+      context.setPredictionData(data);
       setOptimizeData(data);
       setIsOptimizeLoading(false);
       navigate("/us/portfolio-analysis/1", { replace: true });
@@ -360,9 +360,7 @@ const PortfolioAnalysis = (props) => {
               </div>
             </div>
             {/*End Selectable options*/}
-            <pre>{JSON.stringify(optimizeData)}</pre>
-            <pre>{JSON.stringify(isOptimizeLoading)}</pre>
-            <pre>{JSON.stringify(optimizeError)}</pre>
+
             {/*Drag and drop*/}
             {!isChecked && isDragAndDropVisible && (
               <div className="pt-5">

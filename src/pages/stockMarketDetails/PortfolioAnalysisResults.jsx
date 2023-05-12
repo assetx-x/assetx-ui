@@ -158,8 +158,8 @@ const PortfolioAnalysisResults = (props) => {
           type: "LinearChart",
           description: `${context.predictionData.client.sentences.portfolio_pnl}`,
           chartSubtitle: `Sharpe (${formatPercentage(context.predictionData.client.optimizer_stats?.["Sharpe ratio"], 2, true)})`,
-          chartTitle: `AnnualizedRet (${formatPercentage(context.predictionData.client.optimizer_stats?.["Annual return"])})`,
-          chartLegend: `AnnualizedVol (${formatPercentage(context.predictionData.client.optimizer_stats?.["Annual volatility"])})`,
+          chartTitle: `Annualized Ret (${formatPercentage(context.predictionData.client.optimizer_stats?.["Annual return"])})`,
+          chartLegend: `Annualized Vol (${formatPercentage(context.predictionData.client.optimizer_stats?.["Annual volatility"])})`,
           data:
             formatPortfoliPnlData(context.predictionData.client?.portfolio_pnl)
         },
@@ -169,8 +169,8 @@ const PortfolioAnalysisResults = (props) => {
           useLogo: true,
           description: `${context.predictionData.asset_x.sentences.portfolio_pnl}`,
           chartSubtitle: `Sharpe (${formatPercentage(context.predictionData.asset_x.optimizer_stats?.["Sharpe ratio"],2, true)})`,
-          chartTitle: `AnnualizedRet (${formatPercentage(context.predictionData.asset_x.optimizer_stats?.["Annual return"])})`,
-          chartLegend: `AnnualizedVol (${formatPercentage(context.predictionData.asset_x.optimizer_stats?.["Annual volatility"])})`,
+          chartTitle: `Annualized Ret (${formatPercentage(context.predictionData.asset_x.optimizer_stats?.["Annual return"])})`,
+          chartLegend: `Annualized Vol (${formatPercentage(context.predictionData.asset_x.optimizer_stats?.["Annual volatility"])})`,
           data:
             formatPortfoliPnlData(context.predictionData.asset_x?.portfolio_pnl)
         }
@@ -285,9 +285,9 @@ const PortfolioAnalysisResults = (props) => {
     const resultTabsConfig = {
       type: "pills",
       tabs: [
-        { name: "Portfolio Beta", "content": <TwoColumnCharts config={betaChartConfig} key={0} /> },
-        { name: "Last 5 Sell Offs", "content": <TwoColumnCharts config={last5SellOffsChartConfig} key={1} /> },
-        { name: "Performance", "content": <TwoColumnCharts config={performanceChartConfig} key={2} /> },
+        { name: "Performance", "content": <TwoColumnCharts config={performanceChartConfig} key={0} /> },
+        { name: "Portfolio Beta", "content": <TwoColumnCharts config={betaChartConfig} key={1} /> },
+        { name: "Last 5 Sell Offs", "content": <TwoColumnCharts config={last5SellOffsChartConfig} key={2} /> },
         { name: "Risk Allocation", "content": <TwoColumnCharts config={riskAllocationChartConfig} key={3} /> }
       ]
     };
@@ -305,7 +305,7 @@ const PortfolioAnalysisResults = (props) => {
               />
               <div className="pl-3">
                 <div className="text-base font-semibold">{row.original.company_name}</div>
-                <div className="font-normal text-gray-500">BCBA: {row.original.ticker}</div>
+                <div className="font-normal text-gray-500">{row.original.ticker}</div>
               </div>
             </div>
           )

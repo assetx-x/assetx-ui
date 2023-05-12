@@ -59,7 +59,6 @@ const PortfolioAnalysis = (props) => {
   };
 
   // Validate data
-  const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -136,9 +135,7 @@ const PortfolioAnalysis = (props) => {
   };
 
   const handleOptimize = () => {
-    console.log("optimize");
     handleOptimizeButtonClick(jsonFinalData);
-    // navigate("/us/portfolio-analysis/1", { replace: true });
   };
 
   const handleValidate = () => {
@@ -231,7 +228,7 @@ const PortfolioAnalysis = (props) => {
             />
             <div className="pl-3">
               <div className="text-base font-semibold">{row.original.company_name}</div>
-              <div className="font-normal text-gray-500">BCBA: {row.original.ticker}</div>
+              <div className="font-normal text-gray-500">{row.original.ticker}</div>
             </div>
           </div>
         )
@@ -248,6 +245,10 @@ const PortfolioAnalysis = (props) => {
     ],
     []
   );
+
+  const handleReset = () => {
+    navigate(0)
+  }
 
   return (
     <>
@@ -314,7 +315,7 @@ const PortfolioAnalysis = (props) => {
                     <button type="button"
                             className="">
                       <input className="hidden" type="radio" id="maxReturn" name="objectiveFunction"
-                             value="maxReturn" />
+                             value="maxReturn"  checked={true}/>
                       <label
                         className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
                         htmlFor="maxReturn">
@@ -329,16 +330,16 @@ const PortfolioAnalysis = (props) => {
                 <div>
                   <div className="inline-flex rounded-md shadow-sm" role="group">
                     <button type="button">
-                      <input className="hidden" type="radio" id="bi-monthly" name="investingHorizons" value="years" />
+                      <input className="hidden" type="radio" id="daily" name="investingHorizons" value="daily" checked={true}/>
                       <label
                         className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
-                        htmlFor="bi-monthly">
-                        Bi-Monthly
+                        htmlFor="daily">
+                        Daily
                       </label>
                     </button>
                     <button type="button"
                             className="">
-                      <input className="hidden" type="radio" id="monthly" name="investingHorizons" value="months" />
+                      <input className="hidden" type="radio" id="monthly" name="investingHorizons" value="monthly" />
                       <label
                         className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 "
                         htmlFor="monthly">
@@ -347,11 +348,11 @@ const PortfolioAnalysis = (props) => {
                     </button>
                     <button type="button"
                             className="">
-                      <input className="hidden" type="radio" id="daily" name="investingHorizons" value="days" />
+                      <input className="hidden" type="radio" id="bi-monthly" name="investingHorizons" value="bi-monthly"  />
                       <label
                         className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 "
-                        htmlFor="daily">
-                        Daily
+                        htmlFor="bi-monthly">
+                        Bi-Monthly
                       </label>
                     </button>
                   </div>
@@ -416,6 +417,14 @@ const PortfolioAnalysis = (props) => {
                 onClick={isFinalTableVisible && !isChecked && !isUploadTableVisible ? handleOptimize : handleValidate}
               >
                 {isFinalTableVisible && !isChecked && !isUploadTableVisible ? "Optimize" : "Validate"}
+              </Button>
+              <Button
+                onClick={handleReset}
+                variant="outline"
+                className="mr-4"
+                color="blue"
+              >
+                Cancel
               </Button>
 
               {isEditableTableVisible && (<Button

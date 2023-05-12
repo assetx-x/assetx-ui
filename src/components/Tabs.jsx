@@ -3,7 +3,7 @@ import React, { useState } from "react";
 const Tabs = (props) => {
   const { tabs, type } = props.config;
 
-  const [activeTab, setActiveTab] = useState(2);
+  const [activeTab, setActiveTab] = useState(0);
   const handleTabClick = (tabNumber) => {
     setActiveTab(tabNumber);
   };

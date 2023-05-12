@@ -23,18 +23,24 @@ function formatPortfoliPnlData(obj) {
 }
 
 
-function getBetaY(obj) {
+function formatRiskAllocationData(obj) {
   const result = [];
 
   for (const [key, value] of Object.entries(obj)) {
-    result.push({
-      "time": key,
-      "value": value
-    });
+    if (key !== "date") {
+      // Set groupnorm to 'percent' only for the first element
+      const groupnorm = result.length === 0 ? "percent" : undefined;
+
+      result.push(
+        { x: obj["date"], y: value, name: key, stackgroup: "one", groupnorm }
+      );
+    }
   }
+
 
   return result;
 }
+
 
 function formatPercentage(num, decimals = 2) {
   return (num).toFixed(decimals) + "%";
@@ -165,22 +171,14 @@ const PortfolioAnalysisResults = (props) => {
           type: "NormalizedStackedAreaChart",
           description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam cumque ducimus eius esse eveniet excepturi laboriosam nobis obcaecati perspiciatis sit sunt tempore, ut voluptatem? Culpa explicabo fugiat odio possimus sit.",
           data:
-            [
-              { x: [1, 2, 3], y: [2, 1, 4], stackgroup: "one", groupnorm: "percent", type: "scatter", fill: "tozeroy" },
-              { x: [1, 2, 3], y: [1, 1, 2], stackgroup: "one", type: "scatter", fill: "tonexty" },
-              { x: [1, 2, 3], y: [3, 0, 2], stackgroup: "one", type: "scatter", fill: "tonexty" }
-            ]
+            formatRiskAllocationData(context.predictionData.client.optimal_weights_historical[0])
         },
         {
           name: "Dynamic Rebalancing",
           type: "NormalizedStackedAreaChart",
           description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam cumque ducimus eius esse eveniet excepturi laboriosam nobis obcaecati perspiciatis sit sunt tempore, ut voluptatem? Culpa explicabo fugiat odio possimus sit.",
           data:
-            [
-              { x: [1, 2, 3], y: [2, 1, 4], stackgroup: "one", groupnorm: "percent", type: "scatter", fill: "tozeroy" },
-              { x: [1, 2, 3], y: [1, 1, 2], stackgroup: "one", type: "scatter", fill: "tonexty" },
-              { x: [1, 2, 3], y: [3, 0, 2], stackgroup: "one", type: "scatter", fill: "tonexty" }
-            ]
+            formatRiskAllocationData(context.predictionData.asset_x.optimal_weights_historical[0])
         }
       ]
     };

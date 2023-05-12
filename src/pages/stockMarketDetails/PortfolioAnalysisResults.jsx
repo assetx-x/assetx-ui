@@ -22,8 +22,22 @@ function formatPortfoliPnlData(obj) {
   return result;
 }
 
-function formatPercentage (num, decimals = 1) {
-  return (num * 100).toFixed(decimals) + "%";
+
+function getBetaY(obj) {
+  const result = [];
+
+  for (const [key, value] of Object.entries(obj)) {
+    result.push({
+      "time": key,
+      "value": value
+    });
+  }
+
+  return result;
+}
+
+function formatPercentage(num, decimals = 2) {
+  return (num).toFixed(decimals) + "%";
 }
 
 const PortfolioAnalysisResults = (props) => {
@@ -124,25 +138,26 @@ const PortfolioAnalysisResults = (props) => {
         {
           name: "Your portfolio allocation",
           type: "LinearChart",
-          description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam cumque ducimus eius esse eveniet excepturi laboriosam nobis obcaecati perspiciatis sit sunt tempore, ut voluptatem? Culpa explicabo fugiat odio possimus sit.",
-          chartTitle: `Sharpe (${formatPercentage(context.predictionData.client.optimizer_stats?.['Sharpe ratio'])})`,
-          chartSubtitle: `AnnualizedRet (${formatPercentage(context.predictionData.client.optimizer_stats?.['Annual return'])})`,
-          chartLegend: `AnnualizedVol (${formatPercentage(context.predictionData.client.optimizer_stats?.['Annual volatility'])})`,
+          description: `${context.predictionData.client.sentences.portfolio_pnl}`,
+          chartTitle: `Sharpe (${formatPercentage(context.predictionData.client.optimizer_stats?.["Sharpe ratio"])})`,
+          chartLegend: `AnnualizedRet (${formatPercentage(context.predictionData.client.optimizer_stats?.["Annual return"])})`,
+          chartSubtitle: `AnnualizedVol (${formatPercentage(context.predictionData.client.optimizer_stats?.["Annual volatility"])})`,
           data:
             formatPortfoliPnlData(context.predictionData.client?.portfolio_pnl)
         },
         {
           name: "Risk Constrained Allocation",
           type: "LinearChart",
-          description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam cumque ducimus eius esse eveniet excepturi laboriosam nobis obcaecati perspiciatis sit sunt tempore, ut voluptatem? Culpa explicabo fugiat odio possimus sit.",
-          chartTitle: `Sharpe (${formatPercentage(context.predictionData.asset_x.optimizer_stats?.['Sharpe ratio'])})`,
-          chartSubtitle: `AnnualizedRet (${formatPercentage(context.predictionData.asset_x.optimizer_stats?.['Annual return'])})`,
-          chartLegend: `AnnualizedVol (${formatPercentage(context.predictionData.asset_x.optimizer_stats?.['Annual volatility'])})`,
+          description: `${context.predictionData.asset_x.sentences.portfolio_pnl}`,
+          chartTitle: `Sharpe (${formatPercentage(context.predictionData.asset_x.optimizer_stats?.["Sharpe ratio"])})`,
+          chartLegend: `AnnualizedRet (${formatPercentage(context.predictionData.asset_x.optimizer_stats?.["Annual return"])})`,
+          chartSubtitle: `AnnualizedVol (${formatPercentage(context.predictionData.asset_x.optimizer_stats?.["Annual volatility"])})`,
           data:
             formatPortfoliPnlData(context.predictionData.asset_x?.portfolio_pnl)
         }
       ]
     };
+    // TODO: add the data to the chart
     const riskAllocationChartConfig = {
       charts: [
         {
@@ -174,20 +189,12 @@ const PortfolioAnalysisResults = (props) => {
         {
           name: "Your historical drawdowns",
           type: "BoxPlot",
-          description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam cumque ducimus eius esse eveniet excepturi laboriosam nobis obcaecati perspiciatis sit sunt tempore, ut voluptatem? Culpa explicabo fugiat odio possimus sit.",
+          description: `${context.predictionData.client.sentences.drawdown
+          }`,
           data:
             [
               {
-                y: [60.62653853820689,
-                  47.84395893206182,
-                  36.2465888938261,
-                  33.73535396533905,
-                  21.884744353970614,
-                  19.3562891675611,
-                  17.175839479278725,
-                  16.348752395475476,
-                  14.474449441597764,
-                  12.736190176939372],
+                y: context.predictionData.client?.drawdown_dates,
                 boxpoints: "all",
                 jitter: 0.3,
                 pointpos: -1.8,
@@ -203,20 +210,12 @@ const PortfolioAnalysisResults = (props) => {
           name: "AssetX",
           useLogo: true,
           type: "BoxPlot",
-          description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam cumque ducimus eius esse eveniet excepturi laboriosam nobis obcaecati perspiciatis sit sunt tempore, ut voluptatem? Culpa explicabo fugiat odio possimus sit.",
+          description: `${context.predictionData.asset_x.sentences.drawdown
+          }`,
           data:
             [
               {
-                y: [60.62653853820689,
-                  47.84395893206182,
-                  36.2465888938261,
-                  33.73535396533905,
-                  21.884744353970614,
-                  19.3562891675611,
-                  17.175839479278725,
-                  16.348752395475476,
-                  14.474449441597764,
-                  12.736190176939372],
+                y: context.predictionData.asset_x?.drawdown_dates,
                 boxpoints: "all",
                 jitter: 0.3,
                 pointpos: -1.8,
@@ -235,7 +234,7 @@ const PortfolioAnalysisResults = (props) => {
         {
           name: "Your portfolio allocation",
           type: "BetaChart",
-          description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam cumque ducimus eius esse eveniet excepturi laboriosam nobis obcaecati perspiciatis sit sunt tempore, ut voluptatem? Culpa explicabo fugiat odio possimus sit.",
+          description: `${context.predictionData.client.sentences.beta}`,
           data:
             [{
               type: "bar",
@@ -243,51 +242,9 @@ const PortfolioAnalysisResults = (props) => {
                 color: "#1E8FCC",
                 opacity: 0.7
               },
-              y: ["EEM",
-                "IWB",
-                "IWD",
-                "IWF",
-                "SPLV",
-                "SPY",
-                "VGK",
-                "XLB",
-                "XLF",
-                "XLI",
-                "XLK",
-                "XLP",
-                "XLU",
-                "XLV",
-                "XLY"],
-              x: [1.18,
-                1.38,
-                1.09,
-                1.35,
-                1.04,
-                1.38,
-                1.1,
-                0.92,
-                0.76,
-                0.90,
-                1.15,
-                0.9,
-                0.5,
-                1.08,
-                1.3],
-              text: [1.18,
-                1.38,
-                1.09,
-                1.35,
-                1.04,
-                1.38,
-                1.1,
-                0.92,
-                0.76,
-                0.90,
-                1.15,
-                0.9,
-                0.5,
-                1.08,
-                1.3],
+              y: Object.keys(context.predictionData.client?.beta),
+              x: Object.values(context.predictionData.client?.beta),
+              text: Object.values(context.predictionData.client?.beta),
               textposition: "auto",
               orientation: "h"
 
@@ -296,7 +253,7 @@ const PortfolioAnalysisResults = (props) => {
         {
           name: "Dynamic Rebalancing",
           type: "BetaChart",
-          description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam cumque ducimus eius esse eveniet excepturi laboriosam nobis obcaecati perspiciatis sit sunt tempore, ut voluptatem? Culpa explicabo fugiat odio possimus sit.",
+          description: `${context.predictionData.asset_x.sentences.beta}`,
           data:
             [{
               type: "bar",
@@ -304,51 +261,9 @@ const PortfolioAnalysisResults = (props) => {
                 color: "#1E8FCC",
                 opacity: 0.7
               },
-              y: ["EEM",
-                "IWB",
-                "IWD",
-                "IWF",
-                "SPLV",
-                "SPY",
-                "VGK",
-                "XLB",
-                "XLF",
-                "XLI",
-                "XLK",
-                "XLP",
-                "XLU",
-                "XLV",
-                "XLY"],
-              x: [1.18,
-                1.38,
-                1.09,
-                1.35,
-                1.04,
-                1.38,
-                1.1,
-                0.92,
-                0.76,
-                0.90,
-                1.15,
-                0.9,
-                0.5,
-                1.08,
-                1.3],
-              text: [1.18,
-                1.38,
-                1.09,
-                1.35,
-                1.04,
-                1.38,
-                1.1,
-                0.92,
-                0.76,
-                0.90,
-                1.15,
-                0.9,
-                0.5,
-                1.08,
-                1.3],
+              y: Object.keys(context.predictionData.asset_x?.beta),
+              x: Object.values(context.predictionData.asset_x?.beta),
+              text: Object.values(context.predictionData.asset_x?.beta),
               textposition: "auto",
               orientation: "h"
 
@@ -406,11 +321,13 @@ const PortfolioAnalysisResults = (props) => {
 
         {
           Header: "%",
-          accessor: "client_weights"
+          accessor: "client_weights",
+          Cell: props => (props.value * 100).toFixed(2) + "%"
         },
         {
           Header: "Asset X Wheight %",
           accessor: "asset_x_weights",
+          Cell: props => (props.value * 100).toFixed(2) + "%",
           width: 60
         }
       ],

@@ -11,6 +11,8 @@ import BlockUi from "@availity/block-ui";
 import { Loader, Types } from 'react-loaders';
 import 'loaders.css/loaders.min.css';
 import { MainContext } from "../../store/context/MainContext.jsx";
+import { getValidations } from "../../store/api/validation.jsx";
+import { getPredictions } from "../../store/api/prediction.jsx";
 
 
 const PortfolioAnalysis = (props) => {
@@ -72,8 +74,8 @@ const PortfolioAnalysis = (props) => {
     try {
       const tickers = json.map(item => item.ticker).join("_");
       const weights = json.map(item => item.weight).join("_");
-      const response = await fetch(`https://assetx-api2-2dywgqiasq-uk.a.run.app/api/v1/asset_x_service/port_validation/${tickers}/${weights}`);
-      const data = await response.json();
+      const response = await getValidations(tickers, weights)
+      const data = await response.data;
       setJsonFinalData(data.validated_table);
       setIsLoading(false);
       // Table view
@@ -102,8 +104,8 @@ const PortfolioAnalysis = (props) => {
       const tickers = tickersArray.join("_");
       const weights = json.map(item => item.weight).join("_");
 
-      const response = await fetch(`https://assetx-api2-2dywgqiasq-uk.a.run.app/api/v1/asset_x_service/port_opt/1D/max_sharpe/${tickers}/${weights}`);
-      const data = await response.json();
+      const response = await getPredictions(tickers, weights)
+      const data = await response.data;
       context.setPredictionData(data);
       setOptimizeData(data);
       setIsOptimizeLoading(false);
@@ -128,7 +130,6 @@ const PortfolioAnalysis = (props) => {
       header: true,
       skipEmptyLines: true,
       complete: function(results) {
-        console.log(results.data);
         setJsonData(results.data);
       }
     });

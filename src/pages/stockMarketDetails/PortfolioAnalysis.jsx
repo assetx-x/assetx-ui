@@ -8,7 +8,7 @@ import Tabs from "../../components/Tabs.jsx";
 import Table, { StatusPill } from "../../components/Table.jsx";
 import { useNavigate } from "react-router-dom";
 import BlockUi from "@availity/block-ui";
-import { Loader, Types } from 'react-loaders';
+import { Loader } from 'react-loaders';
 import 'loaders.css/loaders.min.css';
 import { MainContext } from "../../store/context/MainContext.jsx";
 import { getValidations } from "../../store/api/validation.jsx";
@@ -68,6 +68,8 @@ const PortfolioAnalysis = (props) => {
   const [optimizeData, setOptimizeData] = useState(null);
   const [isOptimizeLoading, setIsOptimizeLoading] = useState(false);
   const [optimizeError, setOptimizeError] = useState(null);
+  const [investingHorizonOption, setInvestingHorizonsOption] = useState('1D');
+  const [objectiveFunctionOption, setObjectiveFunctionOption] = useState('min_variance');
 
   const handleValidateButtonClick = async (json) => {
     setIsLoading(true);
@@ -90,6 +92,15 @@ const PortfolioAnalysis = (props) => {
     }
   };
 
+  const handleObjectiveFunctionChange = (event) => {
+    console.log(event.target.value)
+    setObjectiveFunctionOption(event.target.value);
+  }
+  const handleInvestingHorizonsChange = (event) => {
+    console.log(event.target.value)
+    setInvestingHorizonsOption(event.target.value);
+  };
+
   const handleOptimizeButtonClick = async (json) => {
     setIsOptimizeLoading(true);
     try {
@@ -103,8 +114,7 @@ const PortfolioAnalysis = (props) => {
       }
       const tickers = tickersArray.join("_");
       const weights = json.map(item => item.weight).join("_");
-
-      const response = await getPredictions(tickers, weights)
+      const response = await getPredictions(tickers, weights, investingHorizonOption, objectiveFunctionOption)
       const data = await response.data;
       context.setPredictionData(data);
       setOptimizeData(data);
@@ -305,21 +315,35 @@ const PortfolioAnalysis = (props) => {
                 <div>
                   <div className="inline-flex rounded-md shadow-sm" role="group">
                     <button type="button">
-                      <input className="hidden" type="radio" id="minVariance" name="objectiveFunction"
-                             value="minVariance" />
+                      <input
+                        className="hidden"
+                        type="radio"
+                        id="min_variance"
+                        name="objectiveFunction"
+                        value="min_variance"
+                        checked={objectiveFunctionOption === 'min_variance'}
+                        onChange={handleObjectiveFunctionChange}
+                      />
                       <label
                         className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 "
-                        htmlFor="minVariance">
+                        htmlFor="min_variance">
                         Minimum Variance
                       </label>
                     </button>
                     <button type="button"
                             className="">
-                      <input className="hidden" type="radio" id="maxReturn" name="objectiveFunction"
-                             value="maxReturn"  checked={true}/>
+                      <input
+                        className="hidden"
+                        type="radio"
+                        id="max_sharpe"
+                        name="objectiveFunction"
+                        value="max_sharpe"
+                        checked={objectiveFunctionOption === 'max_sharpe'}
+                        onChange={handleObjectiveFunctionChange}
+                      />
                       <label
                         className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
-                        htmlFor="maxReturn">
+                        htmlFor="max_sharpe">
                         Max Return
                       </label>
                     </button>
@@ -331,28 +355,50 @@ const PortfolioAnalysis = (props) => {
                 <div>
                   <div className="inline-flex rounded-md shadow-sm" role="group">
                     <button type="button">
-                      <input className="hidden" type="radio" id="daily" name="investingHorizons" value="daily" checked={true}/>
+                      <input
+                        className="hidden"
+                        type="radio"
+                        id="1D"
+                        name="investingHorizons"
+                        value="1D"
+                        checked={investingHorizonOption === '1D'}
+                        onChange={handleInvestingHorizonsChange}/>
                       <label
                         className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
-                        htmlFor="daily">
+                        htmlFor="1D">
                         Daily
                       </label>
                     </button>
-                    <button type="button"
-                            className="">
-                      <input className="hidden" type="radio" id="monthly" name="investingHorizons" value="monthly" />
+                    <button type="button">
+                      <input
+                        className="hidden"
+                        type="radio"
+                        id="21D"
+                        name="investingHorizons"
+                        value="21D"
+                        checked={investingHorizonOption === '21D'}
+                        onChange={handleInvestingHorizonsChange}
+                      />
                       <label
                         className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 "
-                        htmlFor="monthly">
+                        htmlFor="21D">
                         Monthly
                       </label>
                     </button>
                     <button type="button"
                             className="">
-                      <input className="hidden" type="radio" id="bi-monthly" name="investingHorizons" value="bi-monthly"  />
+                      <input
+                        className="hidden"
+                        type="radio"
+                        id="42D"
+                        name="investingHorizons"
+                        value="42D"
+                        checked={investingHorizonOption === '42D'}
+                        onChange={handleInvestingHorizonsChange}
+                      />
                       <label
                         className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 "
-                        htmlFor="bi-monthly">
+                        htmlFor="42D">
                         Bi-Monthly
                       </label>
                     </button>

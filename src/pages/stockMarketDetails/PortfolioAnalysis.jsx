@@ -8,8 +8,8 @@ import Tabs from "../../components/Tabs.jsx";
 import Table, { StatusPill } from "../../components/Table.jsx";
 import { useNavigate } from "react-router-dom";
 import BlockUi from "@availity/block-ui";
-import { Loader } from 'react-loaders';
-import 'loaders.css/loaders.min.css';
+import { Loader } from "react-loaders";
+import "loaders.css/loaders.min.css";
 import { MainContext } from "../../store/context/MainContext.jsx";
 import { getValidations } from "../../store/api/validation.jsx";
 import { getPredictions } from "../../store/api/prediction.jsx";
@@ -28,27 +28,8 @@ const PortfolioAnalysis = (props) => {
     {
       "ticker": "",
       "weight": ""
-    },
-    {
-      "ticker": "",
-      "weight": ""
-    },
-    {
-      "ticker": "",
-      "weight": ""
-    },
-    {
-      "ticker": "",
-      "weight": ""
-    },
-    {
-      "ticker": "",
-      "weight": ""
-    },
-    {
-      "ticker": "",
-      "weight": ""
     }
+
   ]);
   const [jsonFinalData, setJsonFinalData] = useState(null);
   const tabsConfig = {
@@ -69,15 +50,15 @@ const PortfolioAnalysis = (props) => {
   const [optimizeData, setOptimizeData] = useState(null);
   const [isOptimizeLoading, setIsOptimizeLoading] = useState(false);
   const [optimizeError, setOptimizeError] = useState(null);
-  const [investingHorizonOption, setInvestingHorizonsOption] = useState('1D');
-  const [objectiveFunctionOption, setObjectiveFunctionOption] = useState('min_variance');
+  const [investingHorizonOption, setInvestingHorizonsOption] = useState("1D");
+  const [objectiveFunctionOption, setObjectiveFunctionOption] = useState("min_variance");
 
   const handleValidateButtonClick = async (json) => {
     setIsLoading(true);
     try {
       const tickers = json.map(item => item.ticker).join("_");
       const weights = json.map(item => item.weight).join("_");
-      const response = await getValidations(tickers, weights)
+      const response = await getValidations(tickers, weights);
       const data = await response.data;
       setJsonFinalData(data.validated_table);
       setIsLoading(false);
@@ -94,11 +75,11 @@ const PortfolioAnalysis = (props) => {
   };
 
   const handleObjectiveFunctionChange = (event) => {
-    console.log(event.target.value)
+    console.log(event.target.value);
     setObjectiveFunctionOption(event.target.value);
-  }
+  };
   const handleInvestingHorizonsChange = (event) => {
-    console.log(event.target.value)
+    console.log(event.target.value);
     setInvestingHorizonsOption(event.target.value);
   };
 
@@ -106,7 +87,7 @@ const PortfolioAnalysis = (props) => {
     setIsOptimizeLoading(true);
     try {
 
-      const tickersArray = []
+      const tickersArray = [];
 
       for (let i = 0; i < json.length; i++) {
         if (json[i].status !== "Inactive") {
@@ -115,7 +96,7 @@ const PortfolioAnalysis = (props) => {
       }
       const tickers = tickersArray.join("_");
       const weights = json.map(item => item.weight).join("_");
-      const response = await getPredictions(tickers, weights, investingHorizonOption, objectiveFunctionOption)
+      const response = await getPredictions(tickers, weights, investingHorizonOption, objectiveFunctionOption);
       const data = await response.data;
       context.setPredictionData(data);
       setOptimizeData(data);
@@ -139,6 +120,9 @@ const PortfolioAnalysis = (props) => {
     setIsUploadTableVisible(true);
     Papa.parse(selectedFile, {
       header: true,
+      transformHeader: function(h) {
+        return h.toLowerCase();
+      },
       skipEmptyLines: true,
       complete: function(results) {
         setJsonData(results.data);
@@ -259,10 +243,10 @@ const PortfolioAnalysis = (props) => {
   );
 
   const handleReset = () => {
-    navigate(0)
-  }
+    navigate(0);
+  };
 
-  const {getRootProps, getInputProps} = useDropzone({accept: '.csv', onDrop: handleFileChange});
+  const { getRootProps, getInputProps } = useDropzone({ accept: ".csv", onDrop: handleFileChange });
 
 
   return (
@@ -325,7 +309,7 @@ const PortfolioAnalysis = (props) => {
                         id="min_variance"
                         name="objectiveFunction"
                         value="min_variance"
-                        checked={objectiveFunctionOption === 'min_variance'}
+                        checked={objectiveFunctionOption === "min_variance"}
                         onChange={handleObjectiveFunctionChange}
                       />
                       <label
@@ -342,7 +326,7 @@ const PortfolioAnalysis = (props) => {
                         id="max_sharpe"
                         name="objectiveFunction"
                         value="max_sharpe"
-                        checked={objectiveFunctionOption === 'max_sharpe'}
+                        checked={objectiveFunctionOption === "max_sharpe"}
                         onChange={handleObjectiveFunctionChange}
                       />
                       <label
@@ -365,8 +349,8 @@ const PortfolioAnalysis = (props) => {
                         id="1D"
                         name="investingHorizons"
                         value="1D"
-                        checked={investingHorizonOption === '1D'}
-                        onChange={handleInvestingHorizonsChange}/>
+                        checked={investingHorizonOption === "1D"}
+                        onChange={handleInvestingHorizonsChange} />
                       <label
                         className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
                         htmlFor="1D">
@@ -380,7 +364,7 @@ const PortfolioAnalysis = (props) => {
                         id="21D"
                         name="investingHorizons"
                         value="21D"
-                        checked={investingHorizonOption === '21D'}
+                        checked={investingHorizonOption === "21D"}
                         onChange={handleInvestingHorizonsChange}
                       />
                       <label
@@ -397,7 +381,7 @@ const PortfolioAnalysis = (props) => {
                         id="42D"
                         name="investingHorizons"
                         value="42D"
-                        checked={investingHorizonOption === '42D'}
+                        checked={investingHorizonOption === "42D"}
                         onChange={handleInvestingHorizonsChange}
                       />
                       <label
@@ -419,12 +403,16 @@ const PortfolioAnalysis = (props) => {
               <div className="pt-5">
                 <form>
                   <div className="flex items-center justify-center w-full">
-                    <div {...getRootProps()} className="flex flex-col items-center justify-center w-full h-[400px] border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50">
+                    <div {...getRootProps()}
+                         className="flex flex-col items-center justify-center w-full h-[400px] border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50">
                       <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                        <svg aria-hidden="true" className="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                        <svg aria-hidden="true" className="w-10 h-10 mb-3 text-gray-400" fill="none"
+                             stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+                                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
                         </svg>
-                        <p className="mb-2 text-sm text-gray-500"><span className="font-semibold">Click to upload</span> or drag and drop</p>
+                        <p className="mb-2 text-sm text-gray-500"><span
+                          className="font-semibold">Click to upload</span> or drag and drop</p>
                         <p className="text-xs text-gray-500">CSV (MAX. 800KB)</p>
                       </div>
                       <input {...getInputProps()} id="csv-file" type="file" accept=".csv" className="hidden" />
@@ -435,12 +423,16 @@ const PortfolioAnalysis = (props) => {
             )}
             {/*End Drag and drop*/}
             {isChecked && (
-              <Table data={jsonData} columns={editableColumns} />
+              <BlockUi blocking={isLoading} message="Validating, please wait"
+                       loader={<Loader active type="ball-scale" color="#0248C7" />}>
+                <Table data={jsonData} columns={editableColumns} />
+              </BlockUi>
             )}
 
             {/*Upload Table*/}
             {jsonData && isUploadTableVisible && (
-              <BlockUi blocking={isLoading} message="Validating, please wait" loader={<Loader active type="ball-scale" color="#0248C7"/>}>
+              <BlockUi blocking={isLoading} message="Validating, please wait"
+                       loader={<Loader active type="ball-scale" color="#0248C7" />}>
                 <Table data={jsonData} columns={uploadedColumns} paginated={true} />
               </BlockUi>
             )}
@@ -448,7 +440,8 @@ const PortfolioAnalysis = (props) => {
 
             {/*Final Table*/}
             {isFinalTableVisible && !isChecked && !isUploadTableVisible && (
-              <BlockUi blocking={isOptimizeLoading} message="Optimizing your portfolio, please wait" loader={<Loader active type="ball-scale" color="#0248C7"/>}>
+              <BlockUi blocking={isOptimizeLoading} message="Optimizing your portfolio, please wait"
+                       loader={<Loader active type="ball-scale" color="#0248C7" />}>
                 <div className="mt-10">
                   <Table data={jsonFinalData} columns={finalColumns} paginated={true} />
                 </div>
@@ -458,7 +451,7 @@ const PortfolioAnalysis = (props) => {
             <div className="mt-10 flex flex-row-reverse">
 
               <Button
-                disabled={!isChecked && isDragAndDropVisible || isOptimizeLoading }
+                disabled={!isChecked && isDragAndDropVisible || isOptimizeLoading}
                 color="blue"
                 onClick={isFinalTableVisible && !isChecked && !isUploadTableVisible ? handleOptimize : handleValidate}
               >

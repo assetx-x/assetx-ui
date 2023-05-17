@@ -4,13 +4,16 @@ const MainContext = React.createContext();
 
 function MainProvider(props) {
   const [predictionData, setPredictionData] = useState([]);
+  const [selectedRatingData, setSelectedRatingData] = useState('composite');
 
 
   return (
     <MainContext.Provider
       value={{
         predictionData,
-        setPredictionData
+        setPredictionData,
+        selectedRatingData,
+        setSelectedRatingData
       }}
     >
       {props.children}

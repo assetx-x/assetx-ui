@@ -43,8 +43,8 @@ function formatRiskAllocationData(obj) {
   return result;
 }
 
-function formatBeta (obj, decimals=1) {
-  for(const [key, value] of Object.entries(obj)) {
+function formatBeta(obj, decimals = 1) {
+  for (const [key, value] of Object.entries(obj)) {
     obj[key] = value.toFixed(decimals);
   }
 
@@ -57,9 +57,8 @@ function formatPercentage(num, decimals = 2, isSharpe) {
 }
 
 const PortfolioAnalysisResults = (props) => {
-  const navigate = useNavigate();
-
-  const context = useContext(MainContext);
+    const navigate = useNavigate();
+    const context = useContext(MainContext);
     const [jsonResultData, setJsonResultData] = useState([
       {
         "ticker": "AAPL",
@@ -168,7 +167,7 @@ const PortfolioAnalysisResults = (props) => {
           type: "LinearChart",
           useLogo: true,
           description: `${context.predictionData?.asset_x?.sentences?.portfolio_pnl}`,
-          chartSubtitle: `Sharpe (${formatPercentage(context.predictionData?.asset_x?.optimizer_stats?.["Sharpe ratio"],2, true)})`,
+          chartSubtitle: `Sharpe (${formatPercentage(context.predictionData?.asset_x?.optimizer_stats?.["Sharpe ratio"], 2, true)})`,
           chartTitle: `Annualized Ret (${formatPercentage(context.predictionData?.asset_x?.optimizer_stats?.["Annual return"])})`,
           chartLegend: `Annualized Vol (${formatPercentage(context.predictionData?.asset_x?.optimizer_stats?.["Annual volatility"])})`,
           data:
@@ -291,20 +290,24 @@ const PortfolioAnalysisResults = (props) => {
         { name: "Risk Allocation", "content": <TwoColumnCharts config={riskAllocationChartConfig} key={3} /> }
       ]
     };
+    const handleRowClick = (ticker) => {
+      window.open(`/us/ticker/${ticker}`, '_blank', 'noreferrer');
+    }
+
     const resultColumns = useMemo(
       () => [
         {
           Header: "Ticker",
           accessor: "ticker",
           Cell: ({ row }) => (
-            <div className="flex items-center">
+            <div className="flex items-center"  onClick={()=>handleRowClick(row.original.ticker)}>
               <img
                 className="w-10 h-10 rounded-full"
                 src={row.original.company_logo || "https://www.ortodonciasyv.cl/wp-content/uploads/2016/10/orionthemes-placeholder-image-2.png"}
                 alt={row.original.company_name + " image"}
               />
               <div className="pl-3">
-                <div className="text-base font-semibold">{row.original.company_name}</div>
+              <div className="text-base font-semibold">{row.original.company_name}</div>
                 <div className="font-normal text-gray-500">{row.original.ticker}</div>
               </div>
             </div>
@@ -333,21 +336,21 @@ const PortfolioAnalysisResults = (props) => {
         {
           Header: "%",
           accessor: "client_weights",
-          Cell: props => (props.value * 100).toFixed(2) + "%"
+          Cell: props => (props.value !== 'NaN') ? (props.value * 100).toFixed(2) + "%": 0.00 + "%"
         },
         {
           Header: "Asset X Weight %",
           accessor: "asset_x_weights",
-          Cell: props => (props.value * 100).toFixed(2) + "%",
+          Cell: props => (props.value !== 'NaN') ? (props.value * 100).toFixed(2) + "%": 0.00 + "%",
           width: 60
         }
       ],
       []
     );
 
-  const handleReset = () => {
-    navigate("/us/portfolio-analysis", { replace: true });
-  }
+    const handleReset = () => {
+      navigate("/us/portfolio-analysis", { replace: true });
+    };
     return (
       <>
         <Header />
@@ -369,7 +372,7 @@ const PortfolioAnalysisResults = (props) => {
             {/*Results Table*/}
             <div className="mt-4">
               {/*Title*/}
-              <div style={{display: 'flex', justifyContent: 'space-between'}}>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <h3 className="text-3xl font-semibold">Portfolio Analysis Results</h3>
                 <Button
                   variant="outline"

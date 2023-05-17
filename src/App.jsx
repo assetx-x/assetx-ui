@@ -11,7 +11,7 @@ function App() {
   return (
     <ErrorBoundary>
     <Routes>
-      <Route path="/:market/ticker/:bcba" element={<TickerDetail />} />
+      <Route path="/:market/ticker/:ticker" element={<TickerDetail />} />
       <Route path="/:market/portfolio-analysis" element={<PortfolioAnalysis />} />
       <Route path="/:market/portfolio-analysis/:id" element={<PortfolioAnalysisResults />} />
       <Route path="/login" element={<Login />} />

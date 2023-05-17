@@ -75,11 +75,9 @@ const PortfolioAnalysis = (props) => {
   };
 
   const handleObjectiveFunctionChange = (event) => {
-    console.log(event.target.value);
     setObjectiveFunctionOption(event.target.value);
   };
   const handleInvestingHorizonsChange = (event) => {
-    console.log(event.target.value);
     setInvestingHorizonsOption(event.target.value);
   };
 

@@ -6,7 +6,7 @@ import Logo from "../assets/images/corporate/logo.png";
 import { BetaChart } from "./BetaChart.jsx";
 
 const CardChart = ({ config }) => {
-  const {  description, data, chartTitle, chartSubtitle, chartLegend, type, useLogo } = config;
+  const { name, description, data, chartTitle, chartSubtitle, chartLegend, type, useLogo } = config;
 
   const chartSwitch = (type) => ({
     "LinearChart": <LinearChart

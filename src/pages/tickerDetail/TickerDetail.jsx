@@ -44,6 +44,10 @@ const TickerDetail = (props) => {
 
     function formatRates(obj) {
       return {
+        "composite": {
+          name: "All",
+          value: obj.graphing_data?.composite?.rating
+        },
         "fundamental_balance_sheet": {
           name: "Balance Sheet",
           value: obj.graphing_data?.fundamental_balance_sheet?.rating
@@ -59,13 +63,15 @@ const TickerDetail = (props) => {
     function formatHistoricalExplainingData(key= context.selectedRatingData) {
       const result = [];
       const obj= data.graphing_data?.[key]?.historical_importance;
+      const xAxis= data.graphing_data?.composite?.["historical_dates"];
 
       for (const [key, value] of Object.entries(obj)) {
+        console.log(data.graphing_data?.composite?.["historical_dates"])
         if (key !== "date") {
           // Set groupnorm to 'percent' only for the first element
           const groupnorm = result.length === 0 ? "percent" : undefined;
           result.push(
-            { x: obj["historical_dates"], y: value, name: key, stackgroup: "one", groupnorm }
+            { x: xAxis, y: value, name: key, stackgroup: "one", groupnorm }
           );
         }
       }

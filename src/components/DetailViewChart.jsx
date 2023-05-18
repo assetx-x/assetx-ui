@@ -43,7 +43,7 @@ const CardChart = ({ config }) => {
       <div className="px-5 pb-9">
         <p className="text-xl">{description}</p>
       </div>
-      <div className="grid grid-cols-6 gap-8 px-5">
+      <div className="grid grid-cols-7 gap-8 px-5">
         {Object.entries(rates).map(([key, rate]) => (
           <div key={key} onClick={()=>handleClick(key)}>
             <h3 className="font-bold">{rate.name}</h3>

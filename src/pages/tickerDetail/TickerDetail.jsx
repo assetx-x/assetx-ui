@@ -66,7 +66,6 @@ const TickerDetail = (props) => {
       const xAxis= data.graphing_data?.composite?.["historical_dates"];
 
       for (const [key, value] of Object.entries(obj)) {
-        console.log(data.graphing_data?.composite?.["historical_dates"])
         if (key !== "date") {
           // Set groupnorm to 'percent' only for the first element
           const groupnorm = result.length === 0 ? "percent" : undefined;

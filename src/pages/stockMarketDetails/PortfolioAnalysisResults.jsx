@@ -43,6 +43,25 @@ function formatRiskAllocationData(obj) {
   return result;
 }
 
+function formatFactorContributionData(obj) {
+  const result = [];
+
+  for (const [key, value] of Object.entries(obj.data)) {
+    if (key !== "dates") {
+      // Set groupnorm to 'percent' only for the first element
+      const groupnorm = result.length === 0 ? "percent" : undefined;
+
+      result.push(
+        { x: obj["dates"], y: value, name: key, stackgroup: "one", groupnorm }
+      );
+    }
+  }
+
+
+  return result;
+}
+
+
 function formatBeta(obj, decimals = 1) {
   for (const [key, value] of Object.entries(obj)) {
     obj[key] = value.toFixed(decimals);
@@ -53,8 +72,8 @@ function formatBeta(obj, decimals = 1) {
 }
 
 function formatPercentage(num, decimals = 2, type) {
-  if (type === "sharpe") return(num).toFixed(decimals)
-  if (type === "ret") return (num*100).toFixed(decimals) + "%";
+  if (type === "sharpe") return (num).toFixed(decimals);
+  if (type === "ret") return (num * 100).toFixed(decimals) + "%";
   return (num).toFixed(decimals) + "%";
 }
 
@@ -158,8 +177,8 @@ const PortfolioAnalysisResults = (props) => {
           name: "Your portfolio allocation",
           type: "LinearChart",
           description: `${context.predictionData?.client?.sentences?.portfolio_pnl}`,
-          chartSubtitle: `Sharpe (${formatPercentage(context.predictionData?.client?.optimizer_stats?.["Sharpe ratio"], 2, 'sharpe')})`,
-          chartTitle: `Annualized Ret (${formatPercentage(context.predictionData?.client?.optimizer_stats?.["Annual return"], 2, 'ret')})`,
+          chartSubtitle: `Sharpe (${formatPercentage(context.predictionData?.client?.optimizer_stats?.["Sharpe ratio"], 2, "sharpe")})`,
+          chartTitle: `Annualized Ret (${formatPercentage(context.predictionData?.client?.optimizer_stats?.["Annual return"], 2, "ret")})`,
           chartLegend: `Annualized Vol (${formatPercentage(context.predictionData?.client?.optimizer_stats?.["Annual volatility"])})`,
           data:
             formatPortfoliPnlData(context.predictionData.client?.portfolio_pnl)
@@ -169,8 +188,8 @@ const PortfolioAnalysisResults = (props) => {
           type: "LinearChart",
           useLogo: true,
           description: `${context.predictionData?.asset_x?.sentences?.portfolio_pnl}`,
-          chartSubtitle: `Sharpe (${formatPercentage(context.predictionData?.asset_x?.optimizer_stats?.["Sharpe ratio"], 2, 'sharpe')})`,
-          chartTitle: `Annualized Ret (${formatPercentage(context.predictionData?.asset_x?.optimizer_stats?.["Annual return"], 2, 'ret')})`,
+          chartSubtitle: `Sharpe (${formatPercentage(context.predictionData?.asset_x?.optimizer_stats?.["Sharpe ratio"], 2, "sharpe")})`,
+          chartTitle: `Annualized Ret (${formatPercentage(context.predictionData?.asset_x?.optimizer_stats?.["Annual return"], 2, "ret")})`,
           chartLegend: `Annualized Vol (${formatPercentage(context.predictionData?.asset_x?.optimizer_stats?.["Annual volatility"])})`,
           data:
             formatPortfoliPnlData(context.predictionData?.asset_x?.portfolio_pnl)
@@ -193,6 +212,25 @@ const PortfolioAnalysisResults = (props) => {
           description: `${context.predictionData?.asset_x?.sentences?.optimal_weights}`,
           data:
             formatRiskAllocationData(context.predictionData?.asset_x?.optimal_weights_historical?.[0])
+        }
+      ]
+    };
+    const factorContributionChartConfig = {
+      charts: [
+        {
+          name: "Your portfolio allocation",
+          type: "NormalizedStackedAreaChart",
+          description: `${context.predictionData?.client?.sentences.factor_contribution}`,
+          data:
+            formatFactorContributionData(context.predictionData?.client?.factor_contribution)
+        },
+        {
+          name: "Dynamic Rebalancing",
+          useLogo: true,
+          type: "NormalizedStackedAreaChart",
+          description: `${context.predictionData?.asset_x?.sentences?.factor_contribution}`,
+          data:
+            formatFactorContributionData(context.predictionData?.asset_x?.factor_contribution)
         }
       ]
     };
@@ -289,12 +327,13 @@ const PortfolioAnalysisResults = (props) => {
         { name: "Performance", "content": <TwoColumnCharts config={performanceChartConfig} key={0} /> },
         { name: "Portfolio Beta", "content": <TwoColumnCharts config={betaChartConfig} key={1} /> },
         { name: "Last 5 Sell Offs", "content": <TwoColumnCharts config={last5SellOffsChartConfig} key={2} /> },
-        { name: "Risk Allocation", "content": <TwoColumnCharts config={riskAllocationChartConfig} key={3} /> }
+        { name: "Risk Allocation", "content": <TwoColumnCharts config={riskAllocationChartConfig} key={3} /> },
+        { name: "Factor Contribution", "content": <TwoColumnCharts config={factorContributionChartConfig} key={4} /> }
       ]
     };
     const handleRowClick = (ticker) => {
-      window.open(`/us/ticker/${ticker}`, '_blank', 'noreferrer');
-    }
+      window.open(`/us/ticker/${ticker}`, "_blank", "noreferrer");
+    };
 
     const resultColumns = useMemo(
       () => [
@@ -302,14 +341,14 @@ const PortfolioAnalysisResults = (props) => {
           Header: "Ticker",
           accessor: "ticker",
           Cell: ({ row }) => (
-            <div className="flex items-center"  onClick={()=>handleRowClick(row.original.ticker)}>
+            <div className="flex items-center" onClick={() => handleRowClick(row.original.ticker)}>
               <img
                 className="w-10 h-10 rounded-full"
                 src={row.original.company_logo || "https://www.ortodonciasyv.cl/wp-content/uploads/2016/10/orionthemes-placeholder-image-2.png"}
                 alt={row.original.company_name + " image"}
               />
               <div className="pl-3">
-              <div className="text-base font-semibold">{row.original.company_name}</div>
+                <div className="text-base font-semibold">{row.original.company_name}</div>
                 <div className="font-normal text-gray-500">{row.original.ticker}</div>
               </div>
             </div>
@@ -338,12 +377,12 @@ const PortfolioAnalysisResults = (props) => {
         {
           Header: "%",
           accessor: "client_weights",
-          Cell: props => (props.value !== 'NaN') ? (props.value * 100).toFixed(2) + "%": 0.00 + "%"
+          Cell: props => (props.value !== "NaN") ? (props.value * 100).toFixed(2) + "%" : 0.00 + "%"
         },
         {
           Header: "Asset X Weight %",
           accessor: "asset_x_weights",
-          Cell: props => (props.value !== 'NaN') ? (props.value * 100).toFixed(2) + "%": 0.00 + "%",
+          Cell: props => (props.value !== "NaN") ? (props.value * 100).toFixed(2) + "%" : 0.00 + "%",
           width: 60
         }
       ],

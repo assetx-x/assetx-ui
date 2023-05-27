@@ -58,6 +58,7 @@
     "react-plotly.js": "^2.6.0",
     "react-query": "^3.39.3",
     "react-router-dom": "6.11.2",
+    "react-router-guards": "^1.0.2",
     "react-stars": "^2.2.5",
     "react-table": "^7.8.0",
     "yup": "^1.1.1"

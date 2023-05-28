@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import Papa from "papaparse";
 import { Header } from "../../components/Header.jsx";
 import { Container } from "../../components/Container.jsx";
@@ -11,9 +11,10 @@ import BlockUi from "@availity/block-ui";
 import { Loader } from "react-loaders";
 import "loaders.css/loaders.min.css";
 import { MainContext } from "../../store/context/MainContext.jsx";
-import { getValidations } from "../../store/api/validation.jsx";
-import { getPredictions } from "../../store/api/prediction.jsx";
 import { useDropzone } from "react-dropzone";
+import fetchValidations from "../../store/models/validations/fetchValidations.jsx";
+import { useQuery } from "react-query";
+import fetchPredictions from "../../store/models/predicton/fetchPredictions.jsx";
 
 
 const PortfolioAnalysis = (props) => {
@@ -42,36 +43,65 @@ const PortfolioAnalysis = (props) => {
 
   };
 
-  // Validate data
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
 
   // Optimize data
-  const [optimizeData, setOptimizeData] = useState(null);
-  const [isOptimizeLoading, setIsOptimizeLoading] = useState(false);
-  const [optimizeError, setOptimizeError] = useState(null);
   const [investingHorizonOption, setInvestingHorizonsOption] = useState("1D");
   const [objectiveFunctionOption, setObjectiveFunctionOption] = useState("min_variance");
 
-  const handleValidateButtonClick = async (json) => {
-    setIsLoading(true);
-    try {
-      const tickers = json.map(item => item.ticker).join("_");
-      const weights = json.map(item => item.weight).join("_");
-      const response = await getValidations(tickers, weights);
-      const data = await response.data;
-      setJsonFinalData(data.validated_table);
-      setIsLoading(false);
-      // Table view
-      setIsChecked(false);
-      setIsEditableTableVisible(false);
-      setIsDragAndDropVisible(false);
-      setIsUploadTableVisible(false);
-      setIsFinalTableVisible(true);
-    } catch (error) {
-      setError(error);
-      setIsLoading(false);
+
+  const [validationsParams, setValidationParams] = useState();
+  const {
+    data: validationData,
+    error: validationError,
+    isLoading: validationIsLoading,
+    refetch: validationRefetch
+  } = useQuery(["validations", validationsParams], fetchValidations, { enabled: false });
+
+
+  const [optimizationsParams, setOptimizationsParams] = useState();
+  const {
+    data: optimizationsData,
+    error: optimizationsError,
+    isLoading: optimizationsIsLoading,
+    refetch: optimizationsRefetch
+  } = useQuery(["optimizations", optimizationsParams], fetchPredictions, { enabled: false });
+
+
+  // Handle Optimizations
+  useEffect(() => {
+    if (optimizationsParams) {
+      optimizationsRefetch();
+      if (optimizationsData) {
+        const data = optimizationsData;
+        context.setPredictionData(data);
+        navigate("/us/portfolio-analysis/1", { replace: true });
+      }
+
     }
+  }, [optimizationsParams, optimizationsRefetch]);
+
+  // Handle Validations
+  useEffect(() => {
+    if (validationsParams) {
+      validationRefetch();
+    }
+  }, [validationsParams, validationRefetch]);
+
+
+  // Handle Errors
+  useEffect(() => {
+    if (validationError) {
+      console.log("validationError", validationError);
+    }
+    if (optimizationsError) {
+      console.log("optimizationError", optimizationsError);
+    }
+  }, [validationError, optimizationsError]);
+
+  const handleValidateButtonClick = async (json) => {
+    const tickers = json.map(item => item.ticker).join("_");
+    const weights = json.map(item => item.weight).join("_");
+    setValidationParams({ tickers, weights });
   };
 
   const handleObjectiveFunctionChange = (event) => {
@@ -80,11 +110,8 @@ const PortfolioAnalysis = (props) => {
   const handleInvestingHorizonsChange = (event) => {
     setInvestingHorizonsOption(event.target.value);
   };
-
   const handleOptimizeButtonClick = async (json) => {
-    setIsOptimizeLoading(true);
     try {
-
       const tickersArray = [];
 
       for (let i = 0; i < json.length; i++) {
@@ -94,23 +121,15 @@ const PortfolioAnalysis = (props) => {
       }
       const tickers = tickersArray.join("_");
       const weights = json.map(item => item.weight).join("_");
-      const response = await getPredictions(tickers, weights, investingHorizonOption, objectiveFunctionOption);
-      const data = await response.data;
-      context.setPredictionData(data);
-      setOptimizeData(data);
-      setIsOptimizeLoading(false);
-      navigate("/us/portfolio-analysis/1", { replace: true });
+      setOptimizationsParams({ tickers, weights, investingHorizonOption, objectiveFunctionOption });
     } catch (error) {
-      setOptimizeError(error);
-      setIsOptimizeLoading(false);
+      console.error(error);
     }
   };
-
   const handleOnChange = () => {
     setIsChecked(!isChecked);
     setIsEditableTableVisible(!isChecked);
   };
-
   const handleFileChange = (files) => {
     const selectedFile = files[0];
     setIsChecked(false);
@@ -127,15 +146,12 @@ const PortfolioAnalysis = (props) => {
       }
     });
   };
-
   const handleOptimize = () => {
     handleOptimizeButtonClick(jsonFinalData);
   };
-
   const handleValidate = () => {
     handleValidateButtonClick(jsonData);
   };
-
   const handleAddRow = () => {
     setJsonData([...jsonData, {
       "ticker": "",
@@ -246,7 +262,17 @@ const PortfolioAnalysis = (props) => {
 
   const { getRootProps, getInputProps } = useDropzone({ accept: ".csv", onDrop: handleFileChange });
 
-
+  useEffect(() => {
+    if (validationData) {
+      setJsonFinalData(validationData.validated_table);
+      // Table view
+      setIsChecked(false);
+      setIsEditableTableVisible(false);
+      setIsDragAndDropVisible(false);
+      setIsUploadTableVisible(false);
+      setIsFinalTableVisible(true);
+    }
+  }, [validationData]);
   return (
     <>
       <Header />
@@ -421,7 +447,7 @@ const PortfolioAnalysis = (props) => {
             )}
             {/*End Drag and drop*/}
             {isChecked && (
-              <BlockUi blocking={isLoading} message="Validating, please wait"
+              <BlockUi blocking={validationIsLoading} message="Validating, please wait"
                        loader={<Loader active type="ball-scale" color="#0248C7" />}>
                 <Table data={jsonData} columns={editableColumns} />
               </BlockUi>
@@ -429,7 +455,7 @@ const PortfolioAnalysis = (props) => {
 
             {/*Upload Table*/}
             {jsonData && isUploadTableVisible && (
-              <BlockUi blocking={isLoading} message="Validating, please wait"
+              <BlockUi blocking={validationIsLoading} message="Validating, please wait"
                        loader={<Loader active type="ball-scale" color="#0248C7" />}>
                 <Table data={jsonData} columns={uploadedColumns} paginated={true} />
               </BlockUi>
@@ -438,7 +464,7 @@ const PortfolioAnalysis = (props) => {
 
             {/*Final Table*/}
             {isFinalTableVisible && !isChecked && !isUploadTableVisible && (
-              <BlockUi blocking={isOptimizeLoading} message="Optimizing your portfolio, please wait"
+              <BlockUi blocking={optimizationsIsLoading} message="Optimizing your portfolio, please wait"
                        loader={<Loader active type="ball-scale" color="#0248C7" />}>
                 <div className="mt-10">
                   <Table data={jsonFinalData} columns={finalColumns} paginated={true} />
@@ -449,7 +475,7 @@ const PortfolioAnalysis = (props) => {
             <div className="mt-10 flex flex-row-reverse">
 
               <Button
-                disabled={!isChecked && isDragAndDropVisible || isOptimizeLoading}
+                disabled={!isChecked && isDragAndDropVisible || optimizationsIsLoading}
                 color="blue"
                 onClick={isFinalTableVisible && !isChecked && !isUploadTableVisible ? handleOptimize : handleValidate}
               >

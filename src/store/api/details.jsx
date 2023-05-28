@@ -1,5 +1,5 @@
-import { API_URL } from "../../constants/api"
-import { get } from "../../services/apiClient";
+import { API_URL } from "../../constants/api.jsx"
+import { get } from "../../services/apiClient.jsx";
 
 export const getDetails = async (ticker) =>
-  get(`${API_URL.DETAILS}/${ticker}`);
+  await get(`${API_URL.DETAILS}/${ticker}`);

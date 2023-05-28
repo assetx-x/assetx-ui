@@ -1,35 +1,30 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Header } from "../../components/Header.jsx";
 import { Container } from "../../components/Container.jsx";
 import Tabs from "../../components/Tabs.jsx";
-import TwoColumnCharts from "../stockMarketDetails/components/TwoColumnCharts.jsx";
 import DetailView from "../stockMarketDetails/components/DetailView.jsx";
-import { getDetails } from "../../store/api/details.jsx";
 import BlockUi from "@availity/block-ui";
 import { MainContext } from "../../store/context/MainContext.jsx";
+import { useQuery } from "react-query";
+import fetchTickerDetails from "../../store/models/details/fetchTickerDetails.jsx";
 
-const TickerDetail = (props) => {
-    const navigate = useNavigate();
+const TickerDetail = () => {
     const context = useContext(MainContext);
     const { ticker } = useParams();
-    const [isLoading, setIsLoading] = useState(false);
-    const [data, setData] = useState();
+    const {
+      data,
+      error,
+      isLoading
+    } = useQuery(["details", { ticker }], fetchTickerDetails);
 
+    // Handle Errors
     useEffect(() => {
-      const fetchData = async () => {
-        setIsLoading(true);
-        const response = await getDetails(ticker);
-        const data = await response.data;
-        setIsLoading(false);
-        setData(data);
-      };
+      if (error) {
+        console.log("details error ", error);
+      }
 
-      fetchData().catch((err) => {
-        console.error(err);
-      });
-
-    }, []);
+    }, [error]);
 
     // TODO: Add skeleton
     if (!data) return (
@@ -59,11 +54,10 @@ const TickerDetail = (props) => {
         "trend_following": { name: "Trend Following", value: obj.graphing_data?.trend_following?.rating }
       };
     }
-
-    function formatHistoricalExplainingData(key= context.selectedRatingData) {
+    function formatHistoricalExplainingData(key = context.selectedRatingData) {
       const result = [];
-      const obj= data.graphing_data?.[key]?.historical_importance;
-      const xAxis= data.graphing_data?.composite?.["historical_dates"];
+      const obj = data.graphing_data?.[key]?.historical_importance;
+      const xAxis = data.graphing_data?.composite?.["historical_dates"];
 
       for (const [key, value] of Object.entries(obj)) {
         if (key !== "date") {
@@ -77,7 +71,6 @@ const TickerDetail = (props) => {
 
       return result;
     }
-
 
     const historicalExplainerConfig = {
       chart:
@@ -151,8 +144,3 @@ const TickerDetail = (props) => {
 ;
 
 export default TickerDetail;
-;
-;
-;
-;
-;

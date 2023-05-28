@@ -3,16 +3,21 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import "@availity/block-ui/dist/index.css";
-import { MainProvider } from "./store/context/MainContext.jsx";
 import App from "./App";
+import { QueryClient, QueryClientProvider } from "react-query";
+import AppProviders from "./store/context/AppProviders.jsx";
+
+const queryClient = new QueryClient();
 
 
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
-      <MainProvider>
+      <AppProviders>
+        <QueryClientProvider client={queryClient}>
           <App />
-      </MainProvider>
+        </QueryClientProvider>
+      </AppProviders>
     </BrowserRouter>
   </React.StrictMode>
 );

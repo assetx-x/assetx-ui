@@ -13,8 +13,11 @@ class ErrorBoundary extends Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="h-screen w-full flex justify-center items-center text-3xl">
-          There was an error with this listing. <Link to="/">Click here</Link>{" "}
+        <div className="h-screen w-full flex justify-center items-center text-3xl flex-col">
+          There was an error with this listing.
+          <Link to="/us/portfolio-analysis" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Click here
+          </Link>{" "}
           to back to the home page.
         </div>
       );

@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { AuthLayout } from "../../components/AuthLayout.jsx";
 import Logo from "../../assets/images/corporate/logo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useAuth } from "../../store/context/AuthContext.jsx";
 
 
 
 const Login = () => {
+  const auth = useAuth();
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -21,9 +24,13 @@ const Login = () => {
     onSubmit: (values) => {
       // Handle form submission logic here
       console.log(values);
+      auth.login(values.email, values.password);
     },
   });
 
+  useEffect(() => {
+    if (auth.isAuthenticated()) navigate("/us/portfolio-analysis", { replace: true });
+  }, []);
 
   return (
     <AuthLayout>

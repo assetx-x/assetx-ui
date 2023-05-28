@@ -11,7 +11,8 @@
     "format": "prettier --write \"src/**/*.{js,jsx}\"",
     "lint": "eslint \"src/**/*.{js,jsx}\" --quiet",
     "test": "vitest",
-    "test:watch": "vitest --watch"
+    "test:watch": "vitest --watch",
+    "host": "vite --host"
   },
   "keywords": [],
   "author": "Juan Carlos Migliavacca",

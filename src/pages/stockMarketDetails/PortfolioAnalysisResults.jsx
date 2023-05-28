@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { Header } from "../../components/Header.jsx";
 import { Container } from "../../components/Container.jsx";
 import usFlag from "../../assets/images/us.png";
@@ -23,7 +23,6 @@ function formatPortfoliPnlData(obj) {
 
   return result;
 }
-
 
 function formatRiskAllocationData(obj) {
   const result = [];
@@ -60,7 +59,6 @@ function formatFactorContributionData(obj) {
 
   return result;
 }
-
 
 function formatBeta(obj, decimals = 1) {
   for (const [key, value] of Object.entries(obj)) {

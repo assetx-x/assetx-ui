@@ -78,7 +78,7 @@ const PortfolioAnalysis = (props) => {
       }
 
     }
-  }, [optimizationsParams, optimizationsRefetch]);
+  }, [optimizationsParams, optimizationsRefetch, optimizationsData]);
 
   // Handle Validations
   useEffect(() => {

@@ -6,10 +6,21 @@ function AuthProvider(props) {
 
   const navigate = useNavigate();
 
+  const [isInvalid, setIsInvalid] = React.useState(false);
+
+  const enabledUsers = [
+    {user: 'admini@assetx.com', password: 'admin15'},
+    {user: 'asingh@tenerecapital.com', password: 'w0rth1k'},
+  ]
+
   const login = (user, password) => {
-    if (user === 'admini@assetx.com' && password === 'admin15') {
+    if (enabledUsers.find(u => u.user === user && u.password === password)) {
       window.localStorage.setItem('token', JSON.stringify({isAuthenticated: true}));
+      setIsInvalid(false);
       navigate("/us/portfolio-analysis", { replace: true });
+
+    }else{
+      setIsInvalid(true);
     }
 
 
@@ -24,7 +35,7 @@ function AuthProvider(props) {
   }
 
   return (
-    <AuthContext.Provider value={{ login, logout, register, isAuthenticated}} {...props} >
+    <AuthContext.Provider value={{ login, logout, register, isAuthenticated, isInvalid}} {...props} >
       {props.children}
     </AuthContext.Provider>
   )

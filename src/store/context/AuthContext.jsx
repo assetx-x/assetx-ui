@@ -10,7 +10,7 @@ function AuthProvider(props) {
 
   const enabledUsers = [
     {user: 'admini@assetx.com', password: 'admin15'},
-    {user: 'asingh@tenerecapital.com', password: 'w0rth1k'},
+    {user: 'asingh@tenerecapital.com', password: 'a1pha23'},
   ]
 
   const login = (user, password) => {

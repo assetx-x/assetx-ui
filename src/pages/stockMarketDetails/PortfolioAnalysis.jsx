@@ -15,23 +15,20 @@ import { useDropzone } from "react-dropzone";
 import fetchValidations from "../../store/models/validations/fetchValidations.jsx";
 import { useQuery } from "react-query";
 import fetchPredictions from "../../store/models/predicton/fetchPredictions.jsx";
+import { position } from "plotly.js/src/plots/cartesian/layout_attributes.js";
+import Dropdown from "../../components/Dropdown.jsx";
+import { formatDateToDashFormat } from "../../utils/index.js";
 
 
-const PortfolioAnalysis = (props) => {
+const PortfolioAnalysis = () => {
   const navigate = useNavigate();
   const context = useContext(MainContext);
   const [isChecked, setIsChecked] = useState(false);
-  const [isEditableTableVisible, setIsEditableTableVisible] = useState(false);
   const [isDragAndDropVisible, setIsDragAndDropVisible] = useState(true);
   const [isUploadTableVisible, setIsUploadTableVisible] = useState(false);
   const [isFinalTableVisible, setIsFinalTableVisible] = useState(false);
-  const [jsonData, setJsonData] = useState([
-    {
-      "ticker": "",
-      "weight": ""
-    }
-
-  ]);
+  const [isSamplePortfolioVisible, setIsSamplePortfolioVisible ] = useState(true);
+  const [jsonData, setJsonData] = useState([]);
   const [jsonFinalData, setJsonFinalData] = useState(null);
   const tabsConfig = {
     type: "underline",
@@ -47,8 +44,6 @@ const PortfolioAnalysis = (props) => {
   // Optimize data
   const [investingHorizonOption, setInvestingHorizonsOption] = useState("1D");
   const [objectiveFunctionOption, setObjectiveFunctionOption] = useState("min_variance");
-
-
   const [validationsParams, setValidationParams] = useState();
   const {
     data: validationData,
@@ -100,7 +95,7 @@ const PortfolioAnalysis = (props) => {
 
   const handleValidateButtonClick = async (json) => {
     const tickers = json.map(item => item.ticker).join("_");
-    const weights = json.map(item => item.weight).join("_");
+    const weights = json.map(item => item.percentage).join("_");
     setValidationParams({ tickers, weights });
   };
 
@@ -128,7 +123,6 @@ const PortfolioAnalysis = (props) => {
   };
   const handleOnChange = () => {
     setIsChecked(!isChecked);
-    setIsEditableTableVisible(!isChecked);
   };
   const handleFileChange = (files) => {
     const selectedFile = files[0];
@@ -142,7 +136,16 @@ const PortfolioAnalysis = (props) => {
       },
       skipEmptyLines: true,
       complete: function(results) {
-        setJsonData(results.data);
+        console.log("results", results.data);
+
+        const finalData = results.data.map(obj => ({
+          date: obj.date,
+          ticker: obj.ticker,
+          percentage: obj.nmv ? (parseFloat(obj.nmv) / parseFloat(obj.nav))  : parseFloat(obj.percentage),
+        }));
+
+
+        setJsonData(finalData);
       }
     });
   };
@@ -151,12 +154,6 @@ const PortfolioAnalysis = (props) => {
   };
   const handleValidate = () => {
     handleValidateButtonClick(jsonData);
-  };
-  const handleAddRow = () => {
-    setJsonData([...jsonData, {
-      "ticker": "",
-      "weight": ""
-    }]);
   };
 
   const uploadedColumns = useMemo(
@@ -174,52 +171,8 @@ const PortfolioAnalysis = (props) => {
       },
       {
         Header: "Percentage %",
-        accessor: "weight"
-      }
-    ],
-    []
-  );
-
-  const editableColumns = useMemo(
-    () => [
-      {
-        Header: "Ticker",
-        accessor: "ticker",
-        Cell: ({ row }) => {
-          const [value, setValue] = useState(row.original.ticker);
-          const onChange = e => {
-            setValue(e.target.value);
-          };
-          return (
-            <input
-              type="text"
-              value={value}
-              onChange={onChange}
-              onBlur={() => row.original.ticker = value}
-              className="w-full p-1"
-            />
-          );
-        }
+        accessor: "percentage",
       },
-      {
-        Header: "Percentage %",
-        accessor: "weight",
-        Cell: ({ row }) => {
-          const [value, setValue] = useState(row.original.weight);
-          const onChange = e => {
-            setValue(e.target.value);
-          };
-          return (
-            <input
-              type="text"
-              value={value}
-              onChange={onChange}
-              onBlur={() => row.original.weight = value}
-              className="w-full p-1"
-            />
-          );
-        }
-      }
     ],
     []
   );
@@ -267,7 +220,6 @@ const PortfolioAnalysis = (props) => {
       setJsonFinalData(validationData.validated_table);
       // Table view
       setIsChecked(false);
-      setIsEditableTableVisible(false);
       setIsDragAndDropVisible(false);
       setIsUploadTableVisible(false);
       setIsFinalTableVisible(true);
@@ -303,26 +255,9 @@ const PortfolioAnalysis = (props) => {
             {/*Selectable options*/}
             <div className="pl-[100px] pr-[100px]">
               <div className="mt-10 flex justify-between ">
-                {/*Toggle*/}
-                <div>
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox"
-                           className="sr-only peer"
-                           id="manual"
-                           name="manual"
-                           value="manual"
-                           checked={isChecked}
-                           onChange={handleOnChange} />
-                    <div
-                      className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300  rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
-                    </div>
-                    <span
-                      className="ml-3 text-sm font-normal ">Manual Upload</span>
-                  </label>
-                </div>
-
-
-                {/*End Toggle*/}
+                {/*Sample portfolio*/}
+                  <Dropdown />
+                {/*End Sample Portfolio*/}
                 {/*Objective Function*/}
                 <div>
                   <div className="inline-flex rounded-md shadow-sm" role="group">
@@ -446,12 +381,6 @@ const PortfolioAnalysis = (props) => {
               </div>
             )}
             {/*End Drag and drop*/}
-            {isChecked && (
-              <BlockUi blocking={validationIsLoading} message="Validating, please wait"
-                       loader={<Loader active type="ball-scale" color="#0248C7" />}>
-                <Table data={jsonData} columns={editableColumns} />
-              </BlockUi>
-            )}
 
             {/*Upload Table*/}
             {jsonData && isUploadTableVisible && (
@@ -489,15 +418,6 @@ const PortfolioAnalysis = (props) => {
               >
                 Cancel
               </Button>
-
-              {isEditableTableVisible && (<Button
-                color="blue"
-                variant="outline"
-                className="mr-4"
-                onClick={handleAddRow}
-              >
-                Add row
-              </Button>)}
             </div>
             {/*End Button*/}
 

@@ -92,7 +92,7 @@ const Table = ({ data, columns, paginated, itemsPerPage }) => {
 
 
       </div>
-      {paginated && (<nav className="mt-5 flex flex-row-reverse">
+      {paginated && (<nav className="mt-5 flex flex-row-reverse pb-20">
         <ReactPaginate
           previousLabel={"Previous"}
           nextLabel={"Next"}

@@ -6,7 +6,7 @@ const ResultsTable = ({columns,data}) => {
     <section>
       {/*Table*/}
       <div className={"overflow-x"}>
-        <Table data={data} columns={columns} paginated={true} />
+        <Table data={data} columns={columns} paginated={true} itemsPerPage={10} />
       </div>
       {/*End Table*/}
     </section>

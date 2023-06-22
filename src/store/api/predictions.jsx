@@ -1,5 +1,5 @@
 import { API_URL } from "../../constants/api.jsx"
-import { get } from "../../services/apiClient.jsx";
+import { post } from "../../services/apiClient.jsx";
 
-export const getPredictions = async (tickers, values, timeScope = '1D', type='max_sharpe') =>
-  get(`${API_URL.PREDICTIONS}/${timeScope}/${type}/${tickers}/${values}`);
+export const getPredictions = async (data) =>
+  post(`${API_URL.PREDICTIONS}`,{ data });

@@ -17,7 +17,7 @@ import { useQuery } from "react-query";
 import fetchPredictions from "../../store/models/predicton/fetchPredictions.jsx";
 import { position } from "plotly.js/src/plots/cartesian/layout_attributes.js";
 import Dropdown from "../../components/Dropdown.jsx";
-import { formatDateToDashFormat } from "../../utils/index.js";
+import { formatDataForTickerTable, formatDataToSendOptimization, formatDateToDashFormat } from "../../utils/index.js";
 
 
 const PortfolioAnalysis = () => {
@@ -27,9 +27,9 @@ const PortfolioAnalysis = () => {
   const [isDragAndDropVisible, setIsDragAndDropVisible] = useState(true);
   const [isUploadTableVisible, setIsUploadTableVisible] = useState(false);
   const [isFinalTableVisible, setIsFinalTableVisible] = useState(false);
-  const [isSamplePortfolioVisible, setIsSamplePortfolioVisible ] = useState(true);
   const [jsonData, setJsonData] = useState([]);
-  const [jsonFinalData, setJsonFinalData] = useState(null);
+  const [jsonFinalData, setJsonFinalData] = useState([]);
+  const [validatedResponse, setValidatedResponse] = useState(null);
   const tabsConfig = {
     type: "underline",
     tabs: [
@@ -44,7 +44,8 @@ const PortfolioAnalysis = () => {
   // Optimize data
   const [investingHorizonOption, setInvestingHorizonsOption] = useState("1D");
   const [objectiveFunctionOption, setObjectiveFunctionOption] = useState("min_variance");
-  const [validationsParams, setValidationParams] = useState();
+  const [validationsParams, setValidationParams] = useState(null);
+
   const {
     data: validationData,
     error: validationError,
@@ -53,7 +54,7 @@ const PortfolioAnalysis = () => {
   } = useQuery(["validations", validationsParams], fetchValidations, { enabled: false });
 
 
-  const [optimizationsParams, setOptimizationsParams] = useState();
+  const [optimizationsParams, setOptimizationsParams] = useState(null);
   const {
     data: optimizationsData,
     error: optimizationsError,
@@ -94,9 +95,8 @@ const PortfolioAnalysis = () => {
   }, [validationError, optimizationsError]);
 
   const handleValidateButtonClick = async (json) => {
-    const tickers = json.map(item => item.ticker).join("_");
-    const weights = json.map(item => item.percentage).join("_");
-    setValidationParams({ tickers, weights });
+    const payloadData= formatDataToSendOptimization(json);
+    setValidationParams(payloadData);
   };
 
   const handleObjectiveFunctionChange = (event) => {
@@ -114,9 +114,8 @@ const PortfolioAnalysis = () => {
           tickersArray.push(json[i].ticker);
         }
       }
-      const tickers = tickersArray.join("_");
-      const weights = json.map(item => item.weight).join("_");
-      setOptimizationsParams({ tickers, weights, investingHorizonOption, objectiveFunctionOption });
+      console.log("validatedResponse", validatedResponse);
+      setOptimizationsParams({ data: [validatedResponse] });
     } catch (error) {
       console.error(error);
     }
@@ -136,15 +135,15 @@ const PortfolioAnalysis = () => {
       },
       skipEmptyLines: true,
       complete: function(results) {
-        console.log("results", results.data);
+
 
         const finalData = results.data.map(obj => ({
           date: obj.date,
           ticker: obj.ticker,
-          percentage: obj.nmv ? (parseFloat(obj.nmv) / parseFloat(obj.nav))  : parseFloat(obj.percentage),
+          percentage: obj.nmv ? parseFloat(obj.nmv / obj.nav).toFixed(2)  : parseFloat(obj.percentage).toFixed(2),
         }));
 
-
+        console.log("finalData", finalData);
         setJsonData(finalData);
       }
     });
@@ -173,6 +172,11 @@ const PortfolioAnalysis = () => {
         Header: "Percentage %",
         accessor: "percentage",
       },
+      {
+        Header: "Date",
+        accessor: "date",
+        Cell: ({ row }) => (formatDateToDashFormat(row.original.date))
+      }
     ],
     []
   );
@@ -202,8 +206,13 @@ const PortfolioAnalysis = () => {
       },
       {
         Header: "Status",
-        accessor: "Status",
+        accessor: "status",
         Cell: StatusPill
+      },
+      {
+        Header: "Date",
+        accessor: "date",
+        Cell: ({ row }) => (formatDateToDashFormat(row.original.date))
       }
     ],
     []
@@ -217,7 +226,10 @@ const PortfolioAnalysis = () => {
 
   useEffect(() => {
     if (validationData) {
-      setJsonFinalData(validationData.validated_table);
+      console.log("validationData", validationData)
+
+      setJsonFinalData(formatDataForTickerTable(validationData));
+      setValidatedResponse(validationData)
       // Table view
       setIsChecked(false);
       setIsDragAndDropVisible(false);
@@ -386,7 +398,7 @@ const PortfolioAnalysis = () => {
             {jsonData && isUploadTableVisible && (
               <BlockUi blocking={validationIsLoading} message="Validating, please wait"
                        loader={<Loader active type="ball-scale" color="#0248C7" />}>
-                <Table data={jsonData} columns={uploadedColumns} paginated={true} />
+                <Table data={jsonData} columns={uploadedColumns} paginated={true} itemsPerPage={10} />
               </BlockUi>
             )}
             {/*End Upload Table*/}
@@ -396,12 +408,12 @@ const PortfolioAnalysis = () => {
               <BlockUi blocking={optimizationsIsLoading} message="Optimizing your portfolio, please wait"
                        loader={<Loader active type="ball-scale" color="#0248C7" />}>
                 <div className="mt-10">
-                  <Table data={jsonFinalData} columns={finalColumns} paginated={true} />
+                  <Table data={jsonFinalData} columns={finalColumns} paginated={true} itemsPerPage={10} />
                 </div>
               </BlockUi>)}
             {/*End Fonal Table*/}
             {/*Button*/}
-            <div className="mt-10 flex flex-row-reverse">
+            <div className="mt-10 flex flex-row-reverse pb-20">
 
               <Button
                 disabled={!isChecked && isDragAndDropVisible || optimizationsIsLoading}

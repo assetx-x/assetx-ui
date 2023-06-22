@@ -38,10 +38,9 @@ export function RecommendationPill({ value }) {
   );
 }
 
-const Table = ({ data, columns, paginated }) => {
+const Table = ({ data, columns, paginated, itemsPerPage }) => {
 
   const [currentPage, setCurrentPage] = useState(0);
-  const [itemsPerPage, setItemsPerPage] = useState(5);
   const handlePageClick = ({ selected: selectedPage }) => {
     setCurrentPage(selectedPage);
   };
@@ -50,7 +49,7 @@ const Table = ({ data, columns, paginated }) => {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = tableInstance;
 
 
-  const currentItems = rows.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
+  const currentItems = rows.slice(currentPage * +itemsPerPage, (currentPage + 1) * +itemsPerPage);
 
   return (
     <>

@@ -16,3 +16,45 @@ export function formatDateToDashFormat(dateString) {
 
   return formattedDate;
 }
+
+export function formatDataForTickerTable(data) {
+  const finalData = [];
+
+  for (const date in data) {
+    for (const item of data[date]) {
+      finalData.push({
+        date: formatDateToDashFormat(date),
+        company_name: item.company_name,
+        company_logo: item.company_logo,
+        status: item.status,
+        weight: item.weight,
+        ticker: item.ticker
+      });
+    }
+  }
+  return finalData;
+
+}
+
+export function formatDataToSendOptimization(data) {
+  const payloadData = { "data": [] };
+  const newData = {};
+
+  data.forEach(({ date, ticker, percentage, weight }) => {
+    const formattedDate = formatDateToDashFormat(date);
+
+    if (!newData[formattedDate]) {
+      newData[formattedDate] = {};
+    }
+
+    if (!newData[formattedDate][ticker]) {
+      newData[formattedDate][ticker] = 0;
+    }
+
+    newData[formattedDate][ticker] += percentage ? +percentage.toString() : +weight.toString() ;
+  });
+
+  payloadData.data.push(newData);
+
+  return payloadData;
+}

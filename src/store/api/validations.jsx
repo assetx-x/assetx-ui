@@ -1,5 +1,5 @@
 import { API_URL } from "../../constants/api.jsx"
-import { get } from "../../services/apiClient.jsx";
+import { post } from "../../services/apiClient.jsx";
 
-export const getValidations = async (tickers, values) =>
-  get(`${API_URL.VALIDATIONS}/${tickers}/${values}`);
+export const getValidations = async (data) =>
+  post(`${API_URL.VALIDATIONS}`, { data });

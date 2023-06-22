@@ -398,6 +398,42 @@ const PortfolioAnalysisResults = (props) => {
     const handleReset = () => {
       navigate("/us/portfolio-analysis", { replace: true });
     };
+
+  function downloadCSV(data, filename) {
+    const csvContent = 'data:text/csv;charset=utf-8,' + encodeURIComponent(convertToCSV(data));
+    const link = document.createElement('a');
+    link.setAttribute('href', csvContent);
+    link.setAttribute('download', filename);
+    link.click();
+  }
+
+  function convertToCSV(data) {
+    let csv = '';
+
+    // Extracting the dates from the data object
+    const dates = Object.keys(data);
+
+    // Constructing the CSV header row
+    csv += 'Date,Client Weight,AssetX Recommendation\n';
+
+    // Constructing the CSV rows for each date
+    dates.forEach(date => {
+      const rowData = data[date];
+      const clientWeight = rowData['Client Weight'];
+      const assetXRecommendation = rowData['AssetX Recommendation'];
+
+      Object.keys(clientWeight).forEach(stock => {
+        csv += `${date},${clientWeight[stock]},${assetXRecommendation[stock]}\n`;
+      });
+    });
+
+    return csv;
+  }
+
+    const handleDownloadCSV = () => {
+      downloadCSV(context.predictionData.csv_data, 'AssetX_recommendations.csv');
+    };
+
     return (
       <>
         <Header />
@@ -421,16 +457,27 @@ const PortfolioAnalysisResults = (props) => {
               {/*Title*/}
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <h3 className="text-3xl font-semibold">Portfolio Analysis Results</h3>
-                <Button
-                  variant="outline"
-                  color="blue"
-                  onClick={handleReset}
-                >
-                  Reset
-                </Button>
+                <div>
+                  <Button
+                    variant="outline"
+                    color="blue"
+                    onClick={handleDownloadCSV}
+                    className={"mr-4"}
+                  >
+                  Download CSV
+                  </Button>
+                  <Button
+                    variant="outline"
+                    color="blue"
+                    onClick={handleReset}
+                  >
+                    Reset
+                  </Button></div>
+
               </div>
               <div className={"mt-6"}>
                 <Tabs config={resultTabsConfig} />
+                v
               </div>
               {/*End Title*/}
               {/*Second Row (charts)*/}

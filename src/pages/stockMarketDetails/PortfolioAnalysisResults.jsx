@@ -46,7 +46,7 @@ function formatRiskAllocationData(obj) {
 function formatFactorContributionData(obj) {
   const result = [];
 
-  for (const [key, value] of Object.entries(obj.data)) {
+  for (const [key, value] of Object.entries(obj)) {
     if (key !== "dates") {
       // Set groupnorm to 'percent' only for the first element
       const groupnorm = result.length === 0 ? "percent" : undefined;
@@ -214,25 +214,27 @@ const PortfolioAnalysisResults = (props) => {
         }
       ]
     };
-    // const factorContributionChartConfig = {
-    //   charts: [
-    //     {
-    //       name: "Your portfolio allocation",
-    //       type: "NormalizedStackedAreaChart",
-    //       description: `${context.predictionData?.client?.sentences.factor_contribution}`,
-    //       data:
-    //         formatFactorContributionData(context.predictionData?.client?.factor_contribution)
-    //     },
-    //     {
-    //       name: "Dynamic Rebalancing",
-    //       useLogo: true,
-    //       type: "NormalizedStackedAreaChart",
-    //       description: `${context.predictionData?.asset_x?.sentences?.factor_contribution}`,
-    //       data:
-    //         formatFactorContributionData(context.predictionData?.asset_x?.factor_contribution)
-    //     }
-    //   ]
-    // };
+
+    console.log("context.predictionData?.client?.factor_contribution", context.predictionData?.client?.factor_contribution)
+    const factorContributionChartConfig = {
+      charts: [
+        {
+          name: "Your portfolio allocation",
+          type: "NormalizedStackedAreaChart",
+          description: `${context.predictionData?.client?.sentences.factor_contribution}`,
+          data:
+            formatFactorContributionData(context.predictionData?.client?.factor_contribution)
+        },
+        {
+          name: "Dynamic Rebalancing",
+          useLogo: true,
+          type: "NormalizedStackedAreaChart",
+          description: `${context.predictionData?.asset_x?.sentences?.factor_contribution}`,
+          data:
+            formatFactorContributionData(context.predictionData?.asset_x?.factor_contribution)
+        }
+      ]
+    };
     const last5SellOffsChartConfig = {
       charts: [
         {
@@ -327,7 +329,7 @@ const PortfolioAnalysisResults = (props) => {
         { name: "Portfolio Beta", "content": <TwoColumnCharts config={betaChartConfig} key={1} /> },
         { name: "Last 5 Sell Offs", "content": <TwoColumnCharts config={last5SellOffsChartConfig} key={2} /> },
         { name: "Risk Allocation", "content": <TwoColumnCharts config={riskAllocationChartConfig} key={3} /> },
-        // { name: "Factor Contribution", "content": <TwoColumnCharts config={factorContributionChartConfig} key={4} /> }
+        { name: "Factor Contribution", "content": <TwoColumnCharts config={factorContributionChartConfig} key={4} /> }
       ]
     };
     const handleRowClick = (ticker) => {

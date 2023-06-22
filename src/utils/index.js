@@ -36,6 +36,26 @@ export function formatDataForTickerTable(data) {
 
 }
 
+export function formatDataForResultsTable(data) {
+  const finalData = [];
+
+  for (const date in data) {
+    for (const item of data[date]) {
+      finalData.push({
+        date: formatDateToDashFormat(date),
+        asset_x_weights: item.asset_x_weights,
+        client_weights: item.client_weights,
+        company_logo: item.company_logo,
+        company_name: item.company_name,
+        difference: item.difference,
+        ticker: item.ticker
+      });
+    }
+  }
+  return finalData;
+
+}
+
 export function formatDataToSendOptimization(data) {
   const payloadData = { "data": [] };
   const newData = {};

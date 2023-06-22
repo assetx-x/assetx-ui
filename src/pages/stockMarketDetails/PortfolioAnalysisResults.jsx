@@ -10,6 +10,7 @@ import ResultsTable from "./components/ResultsTable.jsx";
 import { MainContext } from "../../store/context/MainContext.jsx";
 import { Button } from "../../components/Button.jsx";
 import { useNavigate } from "react-router-dom";
+import { formatDataForResultsTable, formatDataForTickerTable, formatDateToDashFormat } from "../../utils/index.js";
 
 function formatPortfoliPnlData(obj) {
   const result = [];
@@ -382,6 +383,11 @@ const PortfolioAnalysisResults = (props) => {
           accessor: "asset_x_weights",
           Cell: props => (props.value !== "NaN") ? (props.value * 100).toFixed(2) + "%" : 0.00 + "%",
           width: 60
+        },
+        {
+          Header: "Date",
+          accessor: "date",
+          Cell: ({ row }) => (formatDateToDashFormat(row.original.date))
         }
       ],
       []
@@ -426,7 +432,7 @@ const PortfolioAnalysisResults = (props) => {
               </div>
               {/*End Title*/}
               {/*Second Row (charts)*/}
-              <ResultsTable columns={resultColumns} data={context.predictionData.summary_table} />
+              <ResultsTable columns={resultColumns} data={formatDataForResultsTable(context.predictionData.summary_table)} />
               {/*End Second Row (charts)*/}
             </div>
             {/*End Results Table*/}

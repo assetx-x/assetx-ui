@@ -6,16 +6,16 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Dropdown() {
+export default function Dropdown({demoButtonEnable, demoButtonHandler}) {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <button
+        {demoButtonEnable && (<button
           className="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-1.5 -mt-3 text-center inline-flex items-center mr-4"
-          onClick={() => window.open("/demo_portfolio.csv")}
+          onClick={demoButtonHandler}
         >
           Demo
-        </button>
+        </button>)}
         <Menu.Button className="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-1.5 -mt-3 text-center inline-flex items-center">
           Download Sample Portfolio
           <ChevronDownIcon className="-mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />

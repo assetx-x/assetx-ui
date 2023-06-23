@@ -477,7 +477,6 @@ const PortfolioAnalysisResults = (props) => {
               </div>
               <div className={"mt-6"}>
                 <Tabs config={resultTabsConfig} />
-                v
               </div>
               {/*End Title*/}
               {/*Second Row (charts)*/}

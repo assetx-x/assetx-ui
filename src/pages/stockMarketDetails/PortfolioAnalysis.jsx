@@ -43,7 +43,7 @@ const PortfolioAnalysis = () => {
 
   // Optimize data
   const [investingHorizonOption, setInvestingHorizonsOption] = useState("1D");
-  const [objectiveFunctionOption, setObjectiveFunctionOption] = useState("min_variance");
+  const [objectiveFunctionOption, setObjectiveFunctionOption] = useState("max_sharpe");
   const [validationsParams, setValidationParams] = useState(null);
 
   const {

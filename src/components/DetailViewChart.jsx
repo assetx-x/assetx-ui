@@ -1,12 +1,12 @@
-import React, { useContext } from "react";
+import React from "react";
 import { CombinedLinearChart } from "./CombinatedLinearChart.jsx";
 import ReactStars from "react-stars/dist/react-stars.js";
 import { NormalizedStackedAreaChart } from "./NormalizedStackedAreaChart.jsx";
-import { MainContext } from "../store/context/MainContext.jsx";
+import { useMain } from "../store/context/MainContext.jsx";
 
 const CardChart = ({ config }) => {
   const { description, data, type, rates } = config;
-  const context = useContext(MainContext)
+  const context = useMain()
 
   const chartSwitch = (type) => ({
     "CombinedLinearChart": <CombinedLinearChart

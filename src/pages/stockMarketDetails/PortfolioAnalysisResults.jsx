@@ -7,7 +7,7 @@ import { RecommendationPill } from "../../components/Table.jsx";
 import MiniChart from "../../assets/images/mini-chart.png";
 import TwoColumnCharts from "./components/TwoColumnCharts.jsx";
 import ResultsTable from "./components/ResultsTable.jsx";
-import { MainContext } from "../../store/context/MainContext.jsx";
+import { useMain } from "../../store/context/MainContext.jsx";
 import { Button } from "../../components/Button.jsx";
 import { useNavigate } from "react-router-dom";
 import { formatDataForResultsTable, formatDataForTickerTable, formatDateToDashFormat } from "../../utils/index.js";
@@ -78,7 +78,7 @@ function formatPercentage(num, decimals = 2, type) {
 
 const PortfolioAnalysisResults = (props) => {
     const navigate = useNavigate();
-    const context = useContext(MainContext);
+    const context = useMain();
     const [jsonResultData, setJsonResultData] = useState([
       {
         "ticker": "AAPL",
@@ -163,11 +163,12 @@ const PortfolioAnalysisResults = (props) => {
       }
     ]);
     const tabsConfig = {
+      isMain: true,
       type: "underline",
       tabs: [
-        { name: "A.I. Driven insights" },
+        { name: "A.I. Driven insights" , onClickHandler: () => navigate("/us/ai-driven-insights") },
         { name: "Regime Analysis" },
-        { name: "Portfolio Analysis", selected: true }
+        { name: "Portfolio Analysis", onClickHandler: () => navigate("/us/portfolio-analysis/portfolio-analysis") },
       ]
     };
     const performanceChartConfig = {

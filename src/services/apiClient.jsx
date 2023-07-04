@@ -16,6 +16,8 @@ axios.interceptors.response.use(
   async function (error) {
     if (error && error.response && error.response.status === 401) {
       // Logout
+      await localStorage.clear()
+      window.location.href = '/login'
     }
     // eslint-disable-next-line no-undef
     return Promise.reject(error)

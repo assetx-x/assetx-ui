@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { setAccessToken } from "../../services/apiClient.jsx";
 
 const AuthContext = React.createContext()
 function AuthProvider(props) {
@@ -8,32 +9,26 @@ function AuthProvider(props) {
 
   const [isInvalid, setIsInvalid] = React.useState(false);
 
-  const enabledUsers = [
-    {user: 'admini@assetx.com', password: 'admin15'},
-    {user: 'asingh@tenerecapital.com', password: 'b3ta4'},
-    {user: 'jsarrett@tenerecapital.com', password: 'b3ta14'},
-  ]
-
-  const login = (user, password) => {
-    if (enabledUsers.find(u => u.user === user && u.password === password)) {
-      window.localStorage.setItem('token', JSON.stringify({isAuthenticated: true}));
+  const login = (data) => {
+      window.localStorage.setItem('token', JSON.stringify({...data, isAuthenticated: true}));
+      setAccessToken(data.access);
       setIsInvalid(false);
       navigate("/us/portfolio-analysis", { replace: true });
-
-    }else{
-      setIsInvalid(true);
-    }
-
-
-  } // make a login request
+  }
   const register = () => {} // register the user
-  const logout = () => {} // clear the token in localStorage and the user data
+  const logout = () => {
+    // clear the token in localStorage and the user data
+    window.localStorage.removeItem('token');
+    navigate("/login", { replace: true });
+  }
 
   const isAuthenticated = () => {
     const localToken = window.localStorage.getItem('token');
     const token = JSON.parse(localToken);
     return token && token.isAuthenticated;
   }
+
+
 
   return (
     <AuthContext.Provider value={{ login, logout, register, isAuthenticated, isInvalid}} {...props} >

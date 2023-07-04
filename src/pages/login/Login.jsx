@@ -1,9 +1,11 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AuthLayout } from "../../components/AuthLayout.jsx";
 import Logo from "../../assets/images/corporate/logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useQuery } from "react-query";
+import fetchLogin from "../../store/models/predicton/fetchLogin.jsx";
 import { useAuth } from "../../store/context/AuthContext.jsx";
 
 
@@ -11,20 +13,42 @@ import { useAuth } from "../../store/context/AuthContext.jsx";
 const Login = () => {
   const auth = useAuth();
   const navigate = useNavigate();
+
+  const [loginParams, setLoginParams] = useState();
+
+  const {
+    data,
+    error,
+    isLoading,
+    refetch
+  } = useQuery(["login", loginParams], fetchLogin, { enabled: false });
+
+  useEffect(() => {
+    if (data) {
+      auth.login(data);
+    }
+  }
+  , [data, auth]);
+
+  useEffect(() => {
+    refetch();
+  }, [ loginParams]);
+
+
   const formik = useFormik({
     initialValues: {
-      email: '',
+      username: '',
       password: '',
     },
     validationSchema: Yup.object({
-      email: Yup.string().email('Invalid email address').required('Email is required'),
+      username: Yup.string().required('User is required'),
       password: Yup.string().required('Password is required'),
     }),
 
     onSubmit: (values) => {
       // Handle form submission logic here
       console.log(values);
-      auth.login(values.email, values.password);
+      setLoginParams(values);
     },
   });
 
@@ -47,20 +71,20 @@ const Login = () => {
           </div>
           <form onSubmit={formik.handleSubmit} className="mt-10 grid grid-cols-1 gap-y-8">
             <div>
-              <label htmlFor="email" className="mb-3 block text-sm font-medium text-gray-700">
-                Email address
+              <label htmlFor="user" className="mb-3 block text-sm font-medium text-gray-700">
+                Username
               </label>
               <input
-                id="email"
-                type="email"
-                name="email"
-                autoComplete="email"
+                id="username"
+                type="username"
+                name="username"
+                autoComplete="username"
                 required
-                {...formik.getFieldProps('email')} // Bind input to formik values and handleChange
+                {...formik.getFieldProps('username')} // Bind input to formik values and handleChange
                 className="block w-full appearance-none rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-blue-500 sm:text-sm"
               />
-              {formik.errors.email && formik.touched.email && (
-                <div className="text-red-500">{formik.errors.email}</div>
+              {formik.errors.username && formik.touched.username && (
+                <div className="text-red-500">{formik.errors.username}</div>
               )}
             </div>
             <div>

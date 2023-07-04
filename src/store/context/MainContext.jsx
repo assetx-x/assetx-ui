@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 
 const MainContext = React.createContext();
 
 function MainProvider(props) {
-  const [predictionData, setPredictionData] = useState([]);
+  const [predictionData, setPredictionData] = useState(null);
+  const [selectedTab, setSelectedTab] = useState(0);
   const [selectedRatingData, setSelectedRatingData] = useState('composite');
 
 
@@ -13,11 +14,16 @@ function MainProvider(props) {
         predictionData,
         setPredictionData,
         selectedRatingData,
-        setSelectedRatingData
+        setSelectedRatingData,
+        selectedTab,
+        setSelectedTab
       }}
     >
       {props.children}
     </MainContext.Provider>
   );
 }
-export { MainProvider, MainContext };
+const useMain = () => useContext(MainContext)
+
+
+export { MainProvider, useMain };

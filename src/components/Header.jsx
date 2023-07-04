@@ -1,18 +1,21 @@
-import { Fragment } from 'react'
-import {Link} from "react-router-dom";
-import { Popover, Transition } from '@headlessui/react'
-import clsx from 'clsx'
+import { Fragment, useContext } from "react";
+import { Link } from "react-router-dom";
+import { Popover, Transition } from "@headlessui/react";
+import clsx from "clsx";
 
-import {Button} from "./Button.jsx";
-import {Container} from "./Container.jsx";
-import Logo from "../assets/images/corporate/logo.png"
-import {NavLink} from "./NavLink.jsx";
+import { Button } from "./Button.jsx";
+import { Container } from "./Container.jsx";
+import Logo from "../assets/images/corporate/logo.png";
+import { NavLink } from "./NavLink.jsx";
+import LoggedHeader from "./LoggedHeader.jsx";
+import { useAuth } from "../store/context/AuthContext.jsx";
+
 function MobileNavLink({ href, children }) {
   return (
     <Popover.Button as={Link} href={href} className="block w-full p-2">
       {children}
     </Popover.Button>
-  )
+  );
 }
 
 function MobileNavIcon({ open }) {
@@ -27,19 +30,19 @@ function MobileNavIcon({ open }) {
       <path
         d="M0 1H14M0 7H14M0 13H14"
         className={clsx(
-          'origin-center transition',
-          open && 'scale-90 opacity-0'
+          "origin-center transition",
+          open && "scale-90 opacity-0"
         )}
       />
       <path
         d="M2 2L12 12M12 2L2 12"
         className={clsx(
-          'origin-center transition',
-          !open && 'scale-90 opacity-0'
+          "origin-center transition",
+          !open && "scale-90 opacity-0"
         )}
       />
     </svg>
-  )
+  );
 }
 
 function MobileNavigation() {
@@ -85,40 +88,54 @@ function MobileNavigation() {
         </Transition.Child>
       </Transition.Root>
     </Popover>
-  )
+  );
 }
 
 export function Header() {
+  const auth = useAuth();
+
   return (
-    <header className="py-10">
-      <Container>
-        <nav className="relative z-50 flex justify-between">
-          <div className="flex items-center md:gap-x-12">
-            <Link href="#" aria-label="Home">
-              <img src={Logo} className="h-10 w-auto"  alt="Logo"/>
-            </Link>
-            <div className="hidden md:flex md:gap-x-6">
-              <NavLink href="#features">Solutions</NavLink>
-              <NavLink href="#pricing">Pricing</NavLink>
-              <NavLink href="#testimonials">Docs</NavLink>
-              <NavLink href="#testimonials">More</NavLink>
-            </div>
-          </div>
-          <div className="flex items-center gap-x-5 md:gap-x-8">
-            <div className="hidden md:block">
-              <NavLink href="/login">Sign in</NavLink>
-            </div>
-            <Button href="/register" color="blue">
+    <>
+      {auth.isAuthenticated ? (
+          <header className="mb-10">
+            <LoggedHeader logoutAction={auth.logout} />
+          </header>
+        ) :
+        (
+          <header className="py-10">
+            <Container>
+              <nav className="relative z-50 flex justify-between">
+                <div className="flex items-center md:gap-x-12">
+                  <Link href="#" aria-label="Home">
+                    <img src={Logo} className="h-10 w-auto" alt="Logo" />
+                  </Link>
+                  <div className="hidden md:flex md:gap-x-6">
+                    <NavLink href="#features">Solutions</NavLink>
+                    <NavLink href="#pricing">Pricing</NavLink>
+                    <NavLink href="#testimonials">Docs</NavLink>
+                    <NavLink href="#testimonials">More</NavLink>
+                  </div>
+                </div>
+                <div className="flex items-center gap-x-5 md:gap-x-8">
+                  <div className="hidden md:block">
+                    <NavLink href="/login">Sign in</NavLink>
+                  </div>
+                  <Button href="/register" color="blue">
               <span>
                 Sign up
               </span>
-            </Button>
-            <div className="-mr-1 md:hidden">
-              <MobileNavigation />
-            </div>
-          </div>
-        </nav>
-      </Container>
-    </header>
-  )
+                  </Button>
+                  <div className="-mr-1 md:hidden">
+                    <MobileNavigation />
+                  </div>
+                </div>
+              </nav>
+            </Container>
+          </header>
+        )
+
+      }
+    </>
+
+  );
 }

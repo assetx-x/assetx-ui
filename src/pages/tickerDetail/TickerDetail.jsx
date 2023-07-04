@@ -1,16 +1,16 @@
-import React, { useContext, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useEffect } from "react";
+import {  useParams } from "react-router-dom";
 import { Header } from "../../components/Header.jsx";
 import { Container } from "../../components/Container.jsx";
 import Tabs from "../../components/Tabs.jsx";
 import DetailView from "../stockMarketDetails/components/DetailView.jsx";
 import BlockUi from "@availity/block-ui";
-import { MainContext } from "../../store/context/MainContext.jsx";
+import { useMain } from "../../store/context/MainContext.jsx";
 import { useQuery } from "react-query";
 import fetchTickerDetails from "../../store/models/details/fetchTickerDetails.jsx";
 
 const TickerDetail = () => {
-    const context = useContext(MainContext);
+    const context = useMain();
     const { ticker } = useParams();
     const {
       data,

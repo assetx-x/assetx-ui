@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, {  useEffect, useMemo, useState } from "react";
 import Papa from "papaparse";
 import { Header } from "../../components/Header.jsx";
 import { Container } from "../../components/Container.jsx";
@@ -10,34 +10,34 @@ import { useNavigate } from "react-router-dom";
 import BlockUi from "@availity/block-ui";
 import { Loader } from "react-loaders";
 import "loaders.css/loaders.min.css";
-import { MainContext } from "../../store/context/MainContext.jsx";
+import { useMain } from "../../store/context/MainContext.jsx";
 import { useDropzone } from "react-dropzone";
 import fetchValidations from "../../store/models/validations/fetchValidations.jsx";
 import { useQuery } from "react-query";
-import fetchPredictions from "../../store/models/predicton/fetchPredictions.jsx";
-import { position } from "plotly.js/src/plots/cartesian/layout_attributes.js";
 import Dropdown from "../../components/Dropdown.jsx";
 import { formatDataForTickerTable, formatDataToSendOptimization, formatDateToDashFormat } from "../../utils/index.js";
+import fetchPredictions from "../../store/models/auth/fetchPredictions.jsx";
 
 
 const PortfolioAnalysis = () => {
   const navigate = useNavigate();
-  const context = useContext(MainContext);
+  const context = useMain();
   const [isChecked, setIsChecked] = useState(false);
   const [isDragAndDropVisible, setIsDragAndDropVisible] = useState(true);
   const [isUploadTableVisible, setIsUploadTableVisible] = useState(false);
   const [isFinalTableVisible, setIsFinalTableVisible] = useState(false);
   const [jsonData, setJsonData] = useState([]);
   const [jsonFinalData, setJsonFinalData] = useState([]);
+  const [listPortfoliosData, setListPortfoliosData] = useState([]);
   const [validatedResponse, setValidatedResponse] = useState(null);
   const tabsConfig = {
+    isMain: true,
     type: "underline",
     tabs: [
-      { name: "A.I. Driven insights" },
+      { name: "A.I. Driven insights" , onClickHandler: () => navigate("/us/ai-driven-insights") },
       { name: "Regime Analysis" },
-      { name: "Portfolio Analysis", selected: true }
+      { name: "Portfolio Analysis", onClickHandler: () => {} },
     ]
-
   };
 
 

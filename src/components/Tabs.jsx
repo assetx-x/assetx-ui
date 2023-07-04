@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, {  useState } from "react";
+import { useMain } from "../store/context/MainContext.jsx";
 
 const Tabs = (props) => {
-  const { tabs, type } = props.config;
+  const context = useMain();
+  const { tabs, type, isMain } = props.config;
 
   const [activeTab, setActiveTab] = useState(0);
   const handleTabClick = (tabNumber) => {
-    setActiveTab(tabNumber);
+    isMain ? context.setSelectedTab(tabNumber) :setActiveTab(tabNumber);
   };
 
   const themeSwitch = (type) => ({
@@ -30,9 +32,9 @@ const Tabs = (props) => {
               return (
                 <li className="mr-2" key={index}>
                   <div
-                    onClick={() => handleTabClick(index)}
+                    onClick={() => tab.onClickHandler?.() || handleTabClick(index)}
                     key={index}
-                    className={(activeTab === index || tab?.selected) ? themeSwitch(type).active : themeSwitch(type).normal}>
+                    className={(isMain ? context.selectedTab === index : activeTab === index || tab?.selected) ? themeSwitch(type).active : themeSwitch(type).normal}>
                     {tab.name}
                   </div>
                 </li>
@@ -44,7 +46,7 @@ const Tabs = (props) => {
       </div>
       <div className="tab-content">
         {tabs.map((object, i)=>{
-          return activeTab === i && object.content
+          return isMain ? context.selectedTab === i && object.content : activeTab === i && object.content
         })}
       </div>
     </>

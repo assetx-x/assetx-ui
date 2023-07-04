@@ -71,128 +71,47 @@ function formatBeta(obj, decimals = 1) {
 }
 
 function formatPercentage(num, decimals = 2, type) {
+  if (!num) return (0).toFixed(decimals) + "%";
   if (type === "sharpe") return (num).toFixed(decimals);
   if (type === "ret") return (num * 100).toFixed(decimals) + "%";
   return (num).toFixed(decimals) + "%";
 }
 
-const PortfolioAnalysisResults = (props) => {
+const PortfolioAnalysisResults = ({portfolio}) => {
     const navigate = useNavigate();
-    const context = useMain();
-    const [jsonResultData, setJsonResultData] = useState([
-      {
-        "ticker": "AAPL",
-        "company_name": "Apple Inc.",
-        "company_logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiHtmcXWWWDYHXOQHeNfPkdA2OJYBuDxGU0G4_6eaJcGWr6G-gNNmGSXczyBbgEnE&usqp=CAU&ec=48665698",
-        "recommendation": "Increase weight",
-        "weight": "30.45",
-        "dmc_weight": "52.00",
-        "data": {}
-      },
-      {
-        "ticker": "GOOG",
-        "company_name": "Alphabet Inc.",
-        "recommendation": "Decrease weight",
-        "company_logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQDox4hPrVW6XsKsGSXE2iCxi_YZo3UtXD5BgVet7W-jtYhCedQU4Dkw8&usqp=CAU",
-        "weight": "52.00",
-        "dmc_weight": "30.45",
-        "data": {}
-      },
-      {
-        "ticker": "JUAN",
-        "company_name": "N/A",
-        "company_logo": "",
-        "recommendation": "None",
-        "weight": "0.00",
-        "dmc_weight": "0.00",
-        "data": {}
-      },
-      {
-        "ticker": "AAPL",
-        "company_name": "Apple Inc.",
-        "company_logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiHtmcXWWWDYHXOQHeNfPkdA2OJYBuDxGU0G4_6eaJcGWr6G-gNNmGSXczyBbgEnE&usqp=CAU&ec=48665698",
-        "recommendation": "Increase weight",
-        "weight": "30.45",
-        "dmc_weight": "52.00",
-        "data": {}
-      },
-      {
-        "ticker": "GOOG",
-        "company_name": "Alphabet Inc.",
-        "recommendation": "Decrease weight",
-        "company_logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQDox4hPrVW6XsKsGSXE2iCxi_YZo3UtXD5BgVet7W-jtYhCedQU4Dkw8&usqp=CAU",
-        "weight": "52.00",
-        "dmc_weight": "30.45",
-        "data": {}
-      },
-      {
-        "ticker": "JUAN",
-        "company_name": "N/A",
-        "company_logo": "",
-        "recommendation": "None",
-        "weight": "0.00",
-        "dmc_weight": "0.00",
-        "data": {}
-      },
-      {
-        "ticker": "AAPL",
-        "company_name": "Apple Inc.",
-        "company_logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiHtmcXWWWDYHXOQHeNfPkdA2OJYBuDxGU0G4_6eaJcGWr6G-gNNmGSXczyBbgEnE&usqp=CAU&ec=48665698",
-        "recommendation": "Increase weight",
-        "weight": "30.45",
-        "dmc_weight": "52.00",
-        "data": {}
-      },
-      {
-        "ticker": "GOOG",
-        "company_name": "Alphabet Inc.",
-        "recommendation": "Decrease weight",
-        "company_logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQDox4hPrVW6XsKsGSXE2iCxi_YZo3UtXD5BgVet7W-jtYhCedQU4Dkw8&usqp=CAU",
-        "weight": "52.00",
-        "dmc_weight": "30.45",
-        "data": {}
-      },
-      {
-        "ticker": "JUAN",
-        "company_name": "N/A",
-        "company_logo": "",
-        "recommendation": "None",
-        "weight": "0.00",
-        "dmc_weight": "0.00",
-        "data": {}
-      }
-    ]);
     const tabsConfig = {
       isMain: true,
       type: "underline",
       tabs: [
-        { name: "A.I. Driven insights" , onClickHandler: () => navigate("/us/ai-driven-insights") },
+        { name: "A.I. Driven insights" ,
+          // onClickHandler: () => navigate("/us/ai-driven-insights")
+        },
         { name: "Regime Analysis" },
-        { name: "Portfolio Analysis", onClickHandler: () => navigate("/us/portfolio-analysis/portfolio-analysis") },
+        { name: "Portfolio Analysis", onClickHandler: () => {} },
       ]
     };
     const performanceChartConfig = {
       charts: [
         {
           name: "Your portfolio allocation",
+          description: `${portfolio?.[0]?.holdings?.client?.sentences?.portfolio_pnl}`,
           type: "LinearChart",
-          description: `${context.predictionData?.client?.sentences?.portfolio_pnl}`,
-          chartSubtitle: `Sharpe (${formatPercentage(context.predictionData?.client?.optimizer_stats?.["Sharpe ratio"], 2, "sharpe")})`,
-          chartTitle: `Annualized Ret (${formatPercentage(context.predictionData?.client?.optimizer_stats?.["Annual return"], 2, "ret")})`,
-          chartLegend: `Annualized Vol (${formatPercentage(context.predictionData?.client?.optimizer_stats?.["Annual volatility"])})`,
+          chartSubtitle: `Sharpe (${formatPercentage(portfolio?.[0]?.holdings?.client?.optimizer_stats?.["Sharpe ratio"], 2, "sharpe")})`,
+          chartTitle: `Annualized Ret (${formatPercentage(portfolio?.[0]?.holdings?.client?.optimizer_stats?.["Annual return"], 2, "ret")})`,
+          chartLegend: `Annualized Vol (${formatPercentage(portfolio?.[0]?.holdings?.client?.optimizer_stats?.["Annual volatility"])})`,
           data:
-            formatPortfoliPnlData(context.predictionData.client?.portfolio_pnl)
+            formatPortfoliPnlData(portfolio?.[0]?.holdings?.client?.portfolio_pnl)
         },
         {
           name: "Risk Constrained Allocation",
           type: "LinearChart",
           useLogo: true,
-          description: `${context.predictionData?.asset_x?.sentences?.portfolio_pnl}`,
-          chartSubtitle: `Sharpe (${formatPercentage(context.predictionData?.asset_x?.optimizer_stats?.["Sharpe ratio"], 2, "sharpe")})`,
-          chartTitle: `Annualized Ret (${formatPercentage(context.predictionData?.asset_x?.optimizer_stats?.["Annual return"], 2, "ret")})`,
-          chartLegend: `Annualized Vol (${formatPercentage(context.predictionData?.asset_x?.optimizer_stats?.["Annual volatility"])})`,
+          description: `${portfolio?.[0]?.holdings?.asset_x?.sentences?.portfolio_pnl}`,
+          chartSubtitle: `Sharpe (${formatPercentage(portfolio?.[0]?.holdings?.asset_x?.optimizer_stats?.["Sharpe ratio"], 2, "sharpe")})`,
+          chartTitle: `Annualized Ret (${formatPercentage(portfolio?.[0]?.holdings?.asset_x?.optimizer_stats?.["Annual return"], 2, "ret")})`,
+          chartLegend: `Annualized Vol (${formatPercentage(portfolio?.[0]?.holdings?.asset_x?.optimizer_stats?.["Annual volatility"])})`,
           data:
-            formatPortfoliPnlData(context.predictionData?.asset_x?.portfolio_pnl)
+            formatPortfoliPnlData(portfolio?.[0]?.holdings?.asset_x?.portfolio_pnl)
         }
       ]
     };
@@ -201,38 +120,38 @@ const PortfolioAnalysisResults = (props) => {
         {
           name: "Your portfolio allocation",
           type: "NormalizedStackedAreaChart",
-          description: `${context.predictionData?.client?.sentences.optimal_weights}`,
+          description: `${portfolio?.[0]?.holdings?.client?.sentences.optimal_weights}`,
           data:
-            formatRiskAllocationData(context.predictionData?.client?.optimal_weights_historical[0])
+            formatRiskAllocationData(portfolio?.[0]?.holdings?.client?.optimal_weights_historical[0])
         },
         {
           name: "Dynamic Rebalancing",
           useLogo: true,
           type: "NormalizedStackedAreaChart",
-          description: `${context.predictionData?.asset_x?.sentences?.optimal_weights}`,
+          description: `${portfolio?.[0]?.holdings?.asset_x?.sentences?.optimal_weights}`,
           data:
-            formatRiskAllocationData(context.predictionData?.asset_x?.optimal_weights_historical?.[0])
+            formatRiskAllocationData(portfolio?.[0]?.holdings?.asset_x?.optimal_weights_historical?.[0])
         }
       ]
     };
 
-    console.log("context.predictionData?.client?.factor_contribution", context.predictionData?.client?.factor_contribution)
+    console.log("portfolio?.[0]?.holdings?.client?.factor_contribution", portfolio?.[0]?.holdings?.client?.factor_contribution)
     const factorContributionChartConfig = {
       charts: [
         {
           name: "Your portfolio allocation",
           type: "NormalizedStackedAreaChart",
-          description: `${context.predictionData?.client?.sentences.factor_contribution}`,
+          description: `${portfolio?.[0]?.holdings?.client?.sentences.factor_contribution}`,
           data:
-            formatFactorContributionData(context.predictionData?.client?.factor_contribution)
+            formatFactorContributionData(portfolio?.[0]?.holdings?.client?.factor_contribution)
         },
         {
           name: "Dynamic Rebalancing",
           useLogo: true,
           type: "NormalizedStackedAreaChart",
-          description: `${context.predictionData?.asset_x?.sentences?.factor_contribution}`,
+          description: `${portfolio?.[0]?.holdings?.asset_x?.sentences?.factor_contribution}`,
           data:
-            formatFactorContributionData(context.predictionData?.asset_x?.factor_contribution)
+            formatFactorContributionData(portfolio?.[0]?.holdings?.asset_x?.factor_contribution)
         }
       ]
     };
@@ -241,12 +160,12 @@ const PortfolioAnalysisResults = (props) => {
         {
           name: "Your historical drawdowns",
           type: "BoxPlot",
-          description: `${context.predictionData?.client?.sentences?.drawdown
+          description: `${portfolio?.[0]?.holdings?.client?.sentences?.drawdown
           }`,
           data:
             [
               {
-                y: context.predictionData?.client?.drawdown_dates,
+                y: portfolio?.[0]?.holdings?.client?.drawdown_dates,
                 boxpoints: "all",
                 jitter: 0.3,
                 pointpos: -1.8,
@@ -262,12 +181,12 @@ const PortfolioAnalysisResults = (props) => {
           name: "AssetX",
           useLogo: true,
           type: "BoxPlot",
-          description: `${context.predictionData?.asset_x?.sentences?.drawdown
+          description: `${portfolio?.[0]?.holdings?.asset_x?.sentences?.drawdown
           }`,
           data:
             [
               {
-                y: context.predictionData?.asset_x?.drawdown_dates,
+                y: portfolio?.[0]?.holdings?.asset_x?.drawdown_dates,
                 boxpoints: "all",
                 jitter: 0.3,
                 pointpos: -1.8,
@@ -286,7 +205,7 @@ const PortfolioAnalysisResults = (props) => {
         {
           name: "Your portfolio allocation",
           type: "BetaChart",
-          description: `${context.predictionData?.client?.sentences?.beta}`,
+          description: `${portfolio?.[0]?.holdings?.client?.sentences?.beta}`,
           data:
             [{
               type: "bar",
@@ -294,9 +213,9 @@ const PortfolioAnalysisResults = (props) => {
                 color: "#1E8FCC",
                 opacity: 0.7
               },
-              y: Object.keys(context.predictionData?.client?.beta),
-              x: Object.values(context.predictionData?.client?.beta),
-              text: formatBeta(Object.values(context.predictionData?.client?.beta)),
+              y: Object.keys(portfolio?.[0]?.holdings?.client?.beta),
+              x: Object.values(portfolio?.[0]?.holdings?.client?.beta),
+              text: formatBeta(Object.values(portfolio?.[0]?.holdings?.client?.beta)),
               textposition: "auto",
               orientation: "h"
 
@@ -306,7 +225,7 @@ const PortfolioAnalysisResults = (props) => {
           name: "Dynamic Rebalancing",
           useLogo: true,
           type: "BetaChart",
-          description: `${context.predictionData?.asset_x?.sentences?.beta}`,
+          description: `${portfolio?.[0]?.holdings?.asset_x?.sentences?.beta}`,
           data:
             [{
               type: "bar",
@@ -314,9 +233,9 @@ const PortfolioAnalysisResults = (props) => {
                 color: "#1E8FCC",
                 opacity: 0.7
               },
-              y: Object.keys(context.predictionData?.asset_x?.beta),
-              x: Object.values(context.predictionData?.asset_x?.beta),
-              text: formatBeta(Object.values(context.predictionData?.asset_x?.beta)),
+              y: Object.keys(portfolio?.[0]?.holdings?.asset_x?.beta),
+              x: Object.values(portfolio?.[0]?.holdings?.asset_x?.beta),
+              text: formatBeta(Object.values(portfolio?.[0]?.holdings?.asset_x?.beta)),
               textposition: "auto",
               orientation: "h"
             }]
@@ -432,7 +351,7 @@ const PortfolioAnalysisResults = (props) => {
   }
 
     const handleDownloadCSV = () => {
-      downloadCSV(context.predictionData.csv_data, 'AssetX_recommendations.csv');
+      downloadCSV(portfolio?.[0]?.holdings?.csv_data, 'AssetX_recommendations.csv');
     };
 
     return (
@@ -481,7 +400,7 @@ const PortfolioAnalysisResults = (props) => {
               </div>
               {/*End Title*/}
               {/*Second Row (charts)*/}
-              <ResultsTable columns={resultColumns} data={formatDataForResultsTable(context.predictionData.summary_table)} />
+              <ResultsTable columns={resultColumns} data={formatDataForResultsTable(portfolio?.[0]?.holdings?.summary_table)} />
               {/*End Second Row (charts)*/}
             </div>
             {/*End Results Table*/}

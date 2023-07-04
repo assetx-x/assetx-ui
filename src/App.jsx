@@ -4,9 +4,9 @@ import Home from "./pages/home/Home.jsx";
 import Login from "./pages/login/Login.jsx";
 import TickerDetail from "./pages/tickerDetail/TickerDetail.jsx";
 import ErrorBoundary from "./components/ErrorBoundary.jsx";
-import PortfolioAnalysisResults from "./pages/stockMarketDetails/PortfolioAnalysisResults.jsx";
 import PrivateRoute from "../src/routes/PrivateRoute";
 import PortfolioAnalysis from "./pages/stockMarketDetails/PortfolioAnalysis.jsx";
+import PortfolioAnalysisResultsContainer from "./pages/stockMarketDetails/PortfolioAnalysisResultsContainer.jsx";
 // import AiDrivenInsights from "./pages/aiDrivenInsights/AIDrivenInsights.jsx";
 
 function App() {
@@ -20,7 +20,7 @@ function App() {
           {/*<Route path="/:market/ai-driven-insights" element={<AiDrivenInsights />} />*/}
           <Route path="/:market/portfolio-analysis" element={<PortfolioAnalysis  />} />
           <Route path="/:market/portfolio-analysis/:id"
-                 element={<PortfolioAnalysisResults selected={"portfolio-analysis"} />}
+                 element={<PortfolioAnalysisResultsContainer selected={"portfolio-analysis"} />}
           />
         </Route>
         <Route exact path="/login" element={<Login />} />

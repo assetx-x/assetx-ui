@@ -19,6 +19,12 @@ axios.interceptors.response.use(
       await localStorage.clear()
       window.location.href = '/login'
     }
+    // const originalRequest = error.config;
+    // if (error.response.status === 403 && !originalRequest._retry) {
+    //   originalRequest._retry = true;
+    //   const access_token = await refreshAccessToken();
+    //   axios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token;
+    //   return axiosApiInstance(originalRequest);
     // eslint-disable-next-line no-undef
     return Promise.reject(error)
   },

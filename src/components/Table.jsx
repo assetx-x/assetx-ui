@@ -38,7 +38,7 @@ export function RecommendationPill({ value }) {
   );
 }
 
-const Table = ({ data, columns, paginated, itemsPerPage }) => {
+const Table = ({ data, columns, paginated, itemsPerPage, handleRowClick }) => {
 
   const [currentPage, setCurrentPage] = useState(0);
   const handlePageClick = ({ selected: selectedPage }) => {
@@ -78,7 +78,7 @@ const Table = ({ data, columns, paginated, itemsPerPage }) => {
                 >
                   {row.cells.map((cell, i) => {
                     return (
-                      <td {...cell.getCellProps()} className="px-6 py-4" key={i}>
+                      <td {...cell.getCellProps()} className="px-6 py-4" key={i} onClick={()=>handleRowClick?.(cell.row?.original?.id)}>
                         {cell.render("Cell")}
                       </td>
                     );

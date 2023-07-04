@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { setAccessToken } from "../../services/apiClient.jsx";
 
@@ -18,7 +18,7 @@ function AuthProvider(props) {
   const register = () => {} // register the user
   const logout = () => {
     // clear the token in localStorage and the user data
-    window.localStorage.removeItem('token');
+    window.localStorage.clear()
     navigate("/login", { replace: true });
   }
 

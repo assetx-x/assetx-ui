@@ -135,7 +135,6 @@ const PortfolioAnalysisResults = ({portfolio}) => {
       ]
     };
 
-    console.log("portfolio?.[0]?.holdings?.client?.factor_contribution", portfolio?.[0]?.holdings?.client?.factor_contribution)
     const factorContributionChartConfig = {
       charts: [
         {

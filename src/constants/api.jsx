@@ -1,7 +1,10 @@
+// const BASE_URL = 'https://assetx-djngo-2dywgqiasq-uk.a.run.app';
+const BASE_URL = 'https://development-2dywgqiasq-uk.a.run.app';
+
 export const API_URL = {
-  VALIDATIONS: 'https://assetx-djngo-2dywgqiasq-uk.a.run.app/portfolio_validation/data/',
-  PREDICTIONS: 'https://assetx-djngo-2dywgqiasq-uk.a.run.app/holdings/data/',
-  DETAILS: 'https://assetx-api2-2dywgqiasq-uk.a.run.app/api/v1/asset_x_service/forecast',
-  LOGIN: 'https://assetx-djngo-2dywgqiasq-uk.a.run.app/auth/token/',
-  HOLDINGS: 'https://assetx-djngo-2dywgqiasq-uk.a.run.app/holdings/',
+  VALIDATIONS: `${BASE_URL}/portfolio_validation/data/`,
+  PREDICTIONS: `${BASE_URL}/holdings/data/`,
+  DETAILS: `${BASE_URL}/prediction`,
+  LOGIN: `${BASE_URL}/auth/token/`,
+  HOLDINGS: `${BASE_URL}/holdings/`,
 }

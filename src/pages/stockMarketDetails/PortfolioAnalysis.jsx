@@ -8,7 +8,6 @@ import Tabs from "../../components/Tabs.jsx";
 import Table, { StatusPill } from "../../components/Table.jsx";
 import { useNavigate } from "react-router-dom";
 import BlockUi from "@availity/block-ui";
-import { Loader } from "react-loaders";
 import "loaders.css/loaders.min.css";
 import { useMain } from "../../store/context/MainContext.jsx";
 import { useDropzone } from "react-dropzone";
@@ -132,7 +131,6 @@ const PortfolioAnalysis = () => {
           tickersArray.push(json[i].ticker);
         }
       }
-      console.log("validatedResponse", validatedResponse);
       setOptimizationsParams({ data: [validatedResponse] });
     } catch (error) {
       console.error(error);
@@ -160,7 +158,6 @@ const PortfolioAnalysis = () => {
           percentage: obj.nmv ? parseFloat(obj.nmv / obj.nav).toFixed(2) : parseFloat(obj.percentage).toFixed(2)
         }));
 
-        console.log("finalData", finalData);
         setJsonData(finalData);
       }
     });

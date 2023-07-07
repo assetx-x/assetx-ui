@@ -47,7 +47,6 @@ const Login = () => {
 
     onSubmit: (values) => {
       // Handle form submission logic here
-      console.log(values);
       setLoginParams(values);
     },
   });

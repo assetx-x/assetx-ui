@@ -16,8 +16,8 @@ axios.interceptors.response.use(
   async function (error) {
     if (error && error.response && error.response.status === 401) {
       // Logout
-      // await localStorage.clear()
-      // window.location.href = '/login'
+      await localStorage.clear()
+      window.location.href = '/login'
     }
     // const originalRequest = error.config;
     // if (error.response.status === 403 && !originalRequest._retry) {

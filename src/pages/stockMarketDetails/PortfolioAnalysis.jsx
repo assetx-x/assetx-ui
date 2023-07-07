@@ -240,16 +240,24 @@ const PortfolioAnalysis = () => {
         accessor: "id"
       },
       {
-        Header: "Sharpe Ratio (Recommendations) %",
-        accessor: "sharpe_ratio"
+        Header: "Sharpe Ratio (Recommendations)",
+        accessor: "sharpe_ratio",
+        Cell: props => (props.value !== "NaN") ? (props.value * 1).toFixed(2): 0.00
+
+
       },
       {
         Header: "Annualized Return",
-        accessor: "annual_return"
+        accessor: "annual_return",
+        Cell: props => (props.value !== "NaN") ? (props.value * 100).toFixed(2) + "%" : 0.00 + "%"
+
+
       },
       {
         Header: "Annualized Vol.",
-        accessor: "annual_volatility"
+        accessor: "annual_volatility",
+        Cell: props => (props.value !== "NaN") ? (props.value * 1).toFixed(2): 0.00
+
       }
     ],
     []

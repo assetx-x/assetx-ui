@@ -137,6 +137,10 @@ const TickerDetail = () => {
       ]
     };
 
+  function isNegativeNumber(number) {
+    return number < 0;
+  }
+
     return (
       <>
         <Header />
@@ -256,7 +260,7 @@ const TickerDetail = () => {
                         className="ml-1 text-l">USD</span>
                       <span className="ml-4 text-xl text-green-600">{data?.header_information?.percent_change} </span>
                       {/*TODO: color should change based on the value*/}
-                      <span className="text-xl text-red-600">%</span>
+                      <span className={isNegativeNumber(data?.header_information?.percent_change)? 'text-xl text-red-600 ': 'text-xl text-green-600 '}>%</span>
                     </h2>
                     {/*<h3 className="text-sm text-gray-400 pl-6">Last update at Apr 27, 11:16 EDT</h3>*/}
                   </div>

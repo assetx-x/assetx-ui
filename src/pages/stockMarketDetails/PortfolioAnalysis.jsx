@@ -51,6 +51,7 @@ const PortfolioAnalysis = () => {
   const [investingHorizonOption, setInvestingHorizonsOption] = useState("1D");
   const [objectiveFunctionOption, setObjectiveFunctionOption] = useState("max_sharpe");
   const [validationsParams, setValidationParams] = useState(null);
+  const [showUploader, setShowUploader] = useState(false);
 
   const {
     data: validationData,
@@ -342,6 +343,10 @@ const PortfolioAnalysis = () => {
     handleFileChange([file]);
   };
 
+  const handleNewPotfolioButtonClick = () => {
+    setShowUploader(true);
+  }
+
   if (holdingsIsLoading) return null;
   return (
     <>
@@ -362,7 +367,7 @@ const PortfolioAnalysis = () => {
           <Tabs config={tabsConfig} />
           {/*End Tabs*/}
 
-          {!holdingsData?.length ? (
+          {!holdingsData?.length || showUploader  ? (
             <>
 
               {/*Section*/}
@@ -553,6 +558,14 @@ const PortfolioAnalysis = () => {
                 {/*<BlockUi blocking={optimizationsIsLoading} message="Optimizing your portfolio, please wait"*/}
                 {/*         loader={<Loader active type="ball-scale" color="#0248C7" />}>*/}
                 <div className="mt-10">
+                  <div className="flex flex-row-reverse">
+                  <Button
+                    variant="outline"
+                    onClick={handleNewPotfolioButtonClick}
+                  >
+                    New Portfolio
+                  </Button>
+                  </div>
                   <Table data={holdingsData} columns={listPortfolioColumns} paginated={true} itemsPerPage={10}
                          handleRowClick={((id) => navigate(`/us/portfolio-analysis/${id}`, { replace: true }))} />
                 </div>

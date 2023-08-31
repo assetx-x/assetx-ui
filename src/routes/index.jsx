@@ -1,8 +1,9 @@
 import PortfolioAnalysis from "../pages/stockMarketDetails/PortfolioAnalysis.jsx";
-import PortfolioAnalysisResults from "../pages/stockMarketDetails/PortfolioAnalysisResults.jsx";
+// import PortfolioAnalysisResults from "../pages/stockMarketDetails/PortfolioAnalysisResults.jsx";
 import TickerDetail from "../pages/tickerDetail/TickerDetail.jsx";
 import Login from "../pages/login/Login.jsx";
 import Home from "../pages/home/Home.jsx";
+import NewPortfolioAnalysisResults from "../pages/stockMarketDetails/NewPortfolioAnalysisResults.jsx";
 
 
 const routes = [
@@ -18,8 +19,8 @@ const routes = [
     isPrivate: true,
   },
   {
-    path: '/:market/portfolio-analysis/:id',
-    component: PortfolioAnalysisResults,
+    path: '/:market/portfolio-analysis/results',
+    component: NewPortfolioAnalysisResults,
     isPrivate: true,
   },
   // Public Routes

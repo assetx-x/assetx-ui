@@ -36,6 +36,7 @@
     "prettier": "^2.8.7",
     "tailwindcss": "^3.3.1",
     "vite": "^4.2.0",
+    "vite-plugin-mkcert": "^1.16.0",
     "vitest": "0.24.3",
     "vitest-fetch-mock": "0.2.1"
   },

@@ -86,7 +86,10 @@ const PortfolioAnalysis = () => {
     if (optimizationsData) {
       const data = optimizationsData;
       context.setPredictionData(data);
-      navigate(`/us/portfolio-analysis/${data.id}`, { replace: true });
+
+      console.log({ optimizationsData })
+      // navigate(`/us/portfolio-analysis/${data.id}`, { replace: true });
+      navigate(`/us/portfolio-analysis/results`, { replace: true });
     }
   }, [optimizationsData]);
 
@@ -259,6 +262,27 @@ const PortfolioAnalysis = () => {
         accessor: "annual_volatility",
         Cell: props => (props.value !== "NaN") ? (props.value * 1).toFixed(2): 0.00
 
+      },
+      {
+        Header: "Actions",
+        Cell: (props) => (
+          <div>
+            <button
+              onClick={(e) => {
+                 e.stopPropagation()
+                console.log("clicked", props.row.original.id);
+              }}
+            >
+              <svg className="h-8 w-8 text-blue-700" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                   fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" />
+                <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />
+                <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />
+                <line x1="16" y1="5" x2="19" y2="8" />
+              </svg>
+            </button>
+          </div>
+        )
       }
     ],
     []
@@ -343,7 +367,7 @@ const PortfolioAnalysis = () => {
     handleFileChange([file]);
   };
 
-  const handleNewPotfolioButtonClick = () => {
+  const handleNewPorfolioButtonClick = (id) => {
     setShowUploader(true);
   }
 
@@ -561,7 +585,7 @@ const PortfolioAnalysis = () => {
                   <div className="flex flex-row-reverse">
                   <Button
                     variant="outline"
-                    onClick={handleNewPotfolioButtonClick}
+                    onClick={handleNewPorfolioButtonClick}
                   >
                     New Portfolio
                   </Button>

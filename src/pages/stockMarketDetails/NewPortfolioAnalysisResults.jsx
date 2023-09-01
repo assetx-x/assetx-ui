@@ -352,66 +352,67 @@ const NewPortfolioAnalysisResults = ({ portfolio }) => {
     const [selectedKey, setSelectedKey] = useState(keys[0]);
 
 
-  const data = {
-    "current_attribution": [
-      -0.1,
-      -0.04,
-      -0.01,
-      0,
-      0.18,
-      0.21,
-      1.06,
-      -0.12
-    ],
-    "average_attribution": [
-      -0.03,
-      -0.05,
-      0,
-      -0.02,
-      0.06,
-      0.07,
-      0.34,
-      -0.2
-    ],
-    "current_contribution": {
-      "Growth": "19.97%",
-      "Quality": "11.3%",
-      "Macro": "100.0%",
-      "Momentum Fast": "12.61%",
-      "Momentum Slow": "13.8%",
-      "Trend Following": "16.58%",
-      "Value": "26.44%",
-      "Other Factors": "14.43%"
-    },
-    "average_contribution": {
-      "Growth": "16.67%",
-      "Quality": "16.67%",
-      "Macro": "16.67%",
-      "Momentum Fast": "16.67%",
-      "Momentum Slow": "16.67%",
-      "Trend Following": "16.67%",
-      "Value": "16.67%",
-      "Other Factors": "16.67%"
-    }
-  };
+    const data = {
+      "current_attribution": [
+        -0.1,
+        -0.04,
+        -0.01,
+        0,
+        0.18,
+        0.21,
+        1.06,
+        -0.12
+      ],
+      "average_attribution": [
+        -0.03,
+        -0.05,
+        0,
+        -0.02,
+        0.06,
+        0.07,
+        0.34,
+        -0.2
+      ],
+      "current_contribution": {
+        "Growth": "19.97%",
+        "Quality": "11.3%",
+        "Macro": "100.0%",
+        "Momentum Fast": "12.61%",
+        "Momentum Slow": "13.8%",
+        "Trend Following": "16.58%",
+        "Value": "26.44%",
+        "Other Factors": "14.43%"
+      },
+      "average_contribution": {
+        "Growth": "16.67%",
+        "Quality": "16.67%",
+        "Macro": "16.67%",
+        "Momentum Fast": "16.67%",
+        "Momentum Slow": "16.67%",
+        "Trend Following": "16.67%",
+        "Value": "16.67%",
+        "Other Factors": "16.67%"
+      }
+    };
 
-  const renderTableHeader = () => {
-    const headers = ['Attribution', 'Current', 'Average'];
-    return headers.map((header, index) => <th key={index} className="px-6 py-4" >{header}</th>);
-  };
+    const renderTableHeader = () => {
+      const headers = ["Attribution", "Current", "Average"];
+      return headers.map((header, index) => <th key={index} className="px-6 py-4">{header}</th>);
+    };
 
-  const renderTableRows = () => {
-    const { current_attribution, average_attribution, current_contribution, average_contribution } = data;
-    const keys = Object.keys(current_contribution);
+    const renderTableRows = () => {
+      const { current_attribution, average_attribution, current_contribution, average_contribution } = data;
+      const keys = Object.keys(current_contribution);
 
-    return keys.map((key, index) => (
-      <tr key={index}  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-        <td className="px-6 py-4">{key}</td>
-        <td className="px-6 py-4">{current_contribution[key]}</td>
-        <td className="px-6 py-4">{average_contribution[key]}</td>
-      </tr>
-    ));
-  };
+      return keys.map((key, index) => (
+        <tr key={index}
+            className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+          <td className="px-6 py-4">{key}</td>
+          <td className="px-6 py-4">{current_contribution[key]}</td>
+          <td className="px-6 py-4">{average_contribution[key]}</td>
+        </tr>
+      ));
+    };
 
     return (
       <>
@@ -530,30 +531,45 @@ const NewPortfolioAnalysisResults = ({ portfolio }) => {
                     data={context.predictionData?.current_trading_book}
                   />
                 </section>
-                <section>
+                <section className="mb-20">
                   <h3 className="text-3xl font-semibold">AI Selected Comparables</h3>
-                  <div className="relative overflow-x-auto">
-                    <hr />
-                    <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                      <thead className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
-                      </thead>
-                      <tbody>
-                      {context.predictionData?.["1M"].ai_alternatives.map(([symbol, company]) => (
-                        <tr className="bg-white dark:bg-gray-800" key={symbol}>
-                          <th scope="row"
-                              className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            <p>{symbol}</p>
-                            <p>{company.company_name}</p>
-                            <p>{company.sector}</p>
-                            <img src={company.company_logo} alt="Company Logo" />
-                          </th>
-                          {/*<td className="px-6 py-4">*/}
-                          {/*  {company.ticker}*/}
-                          {/*</td>*/}
-                        </tr>
-                      ))}
-                      </tbody>
-                    </table>
+                  <div className="mt-10">
+                  <div className="relative overflow-x">
+                    <div className="relative overflow-x-auto shadow-md sm:rounded-lg p-3 h-{600}">
+                      <table className="w-full text-sm text-left text-gray-500">
+                        <thead className=" sticky  text-xs text-gray-700 uppercase bg-gray-50 ">
+                        </thead>
+                        <tbody>
+                        {context.predictionData?.["1M"].ai_alternatives.map(([symbol, company]) => (
+                          <tr key={symbol}  className="bg-white border-b  hover:bg-gray-50 ">
+                            <td className="px-6 py-4">
+                            <div className="flex items-center" onClick={console.log}>
+                              <img
+                                className="w-10 h-10 rounded-full"
+                                src={company.company_logo || "https://www.ortodonciasyv.cl/wp-content/uploads/2016/10/orionthemes-placeholder-image-2.png"}
+                                alt={company.company_name + " image"}
+                              />
+                              <div className="pl-3">
+                                <div className="text-base font-semibold">{company.company_name}</div>
+                                <div className="font-normal text-gray-500">{company.sector}</div>
+                              </div>
+                            </div>
+                            {/*<th  scope="col" className="px-6 py-4">*/}
+                            {/*  <p>{symbol}</p>*/}
+                            {/*  <p>{company.company_name}</p>*/}
+                            {/*  <p>{company.sector}</p>*/}
+                            {/*  <img src={company.company_logo} alt="Company Logo" />*/}
+                            {/*</th>*/}
+                            {/*<td className="px-6 py-4">*/}
+                            {/*  {company.ticker}*/}
+                            {/*</td>*/}
+                            </td>
+                          </tr>
+                        ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
                   </div>
                 </section>
                 <section>
@@ -562,7 +578,7 @@ const NewPortfolioAnalysisResults = ({ portfolio }) => {
                   <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                       <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                        {renderTableHeader()}
+                      {renderTableHeader()}
                       </thead>
                       <tbody>
                       {renderTableRows()}

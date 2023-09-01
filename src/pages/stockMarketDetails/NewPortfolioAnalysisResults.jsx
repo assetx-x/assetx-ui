@@ -297,41 +297,121 @@ const NewPortfolioAnalysisResults = ({ portfolio }) => {
       []
     );
 
-  const subCategoriesColumns = useMemo(
-    () => [
-      {
-        Header: "Ticker",
-        accessor: "ticker",
-        Cell: ({ row }) => (
-          <div className="flex items-center" onClick={() => handleRowClick(row.original.ticker)}>
-            <img
-              className="w-10 h-10 rounded-full"
-              src={row.original.company_logo || "https://www.ortodonciasyv.cl/wp-content/uploads/2016/10/orionthemes-placeholder-image-2.png"}
-              alt={row.original.company_name + " image"}
-            />
-            <div className="pl-3">
-              <div className="text-base font-semibold">{row.original.company_name}</div>
-              <div className="font-normal text-gray-500">{row.original.ticker}</div>
+    const subCategoriesColumns = useMemo(
+      () => [
+        {
+          Header: "Ticker",
+          accessor: "ticker",
+          Cell: ({ row }) => (
+            <div className="flex items-center" onClick={() => handleRowClick(row.original.ticker)}>
+              <img
+                className="w-10 h-10 rounded-full"
+                src={row.original.company_logo || "https://www.ortodonciasyv.cl/wp-content/uploads/2016/10/orionthemes-placeholder-image-2.png"}
+                alt={row.original.company_name + " image"}
+              />
+              <div className="pl-3">
+                <div className="text-base font-semibold">{row.original.company_name}</div>
+                <div className="font-normal text-gray-500">{row.original.ticker}</div>
+              </div>
             </div>
-          </div>
-        )
-      },
-      {
-        Header: "Weigh",
-        accessor: "weight"
-      },
-
-      {
-        Header: "AssetX Signal",
-        accessor: "AssetX Signal"
-      }
-    ],
-    []
-  );
+          )
+        },
+        {
+          Header: "Growth",
+          accessor: "Growth"
+        },
+        {
+          Header: "Macro",
+          accessor: "Macro"
+        },
+        {
+          Header: "Momentum Fast",
+          accessor: "Momentum Fast"
+        },
+        {
+          Header: "Momentum Slow",
+          accessor: "Momentum Slow"
+        },
+        {
+          Header: "Quality",
+          accessor: "Quality"
+        },
+        {
+          Header: "Trend Following",
+          accessor: "Trend Following"
+        },
+        {
+          Header: "Value",
+          accessor: "Value"
+        }
+      ],
+      []
+    );
 
     const keys = ["Growth", "Quality", "Macro", "Momentum Fast", "Momentum Slow", "Trend Following", "Value", "Other Factors", "Overall"];
     const [selectedKey, setSelectedKey] = useState(keys[0]);
 
+
+  const data = {
+    "current_attribution": [
+      -0.1,
+      -0.04,
+      -0.01,
+      0,
+      0.18,
+      0.21,
+      1.06,
+      -0.12
+    ],
+    "average_attribution": [
+      -0.03,
+      -0.05,
+      0,
+      -0.02,
+      0.06,
+      0.07,
+      0.34,
+      -0.2
+    ],
+    "current_contribution": {
+      "Growth": "19.97%",
+      "Quality": "11.3%",
+      "Macro": "100.0%",
+      "Momentum Fast": "12.61%",
+      "Momentum Slow": "13.8%",
+      "Trend Following": "16.58%",
+      "Value": "26.44%",
+      "Other Factors": "14.43%"
+    },
+    "average_contribution": {
+      "Growth": "16.67%",
+      "Quality": "16.67%",
+      "Macro": "16.67%",
+      "Momentum Fast": "16.67%",
+      "Momentum Slow": "16.67%",
+      "Trend Following": "16.67%",
+      "Value": "16.67%",
+      "Other Factors": "16.67%"
+    }
+  };
+
+  const renderTableHeader = () => {
+    const headers = ['Attribution', 'Current', 'Average'];
+    return headers.map((header, index) => <th key={index} className="px-6 py-4" >{header}</th>);
+  };
+
+  const renderTableRows = () => {
+    const { current_attribution, average_attribution, current_contribution, average_contribution } = data;
+    const keys = Object.keys(current_contribution);
+
+    return keys.map((key, index) => (
+      <tr key={index}  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+        <td className="px-6 py-4">{key}</td>
+        <td className="px-6 py-4">{current_contribution[key]}</td>
+        <td className="px-6 py-4">{average_contribution[key]}</td>
+      </tr>
+    ));
+  };
 
     return (
       <>
@@ -352,7 +432,7 @@ const NewPortfolioAnalysisResults = ({ portfolio }) => {
                     justifyContent: "space-between",
                     alignItems: "center"
                   }}>
-                    <div >
+                    <div>
                       <h3 className="text-3xl font-semibold">Historical Price Performance</h3>
                     </div>
                     <div>
@@ -385,7 +465,7 @@ const NewPortfolioAnalysisResults = ({ portfolio }) => {
                       justifyContent: "space-between",
                       alignItems: "center"
                     }}>
-                      <div >
+                      <div>
                         <h3 className="text-3xl font-semibold">Details</h3>
                       </div>
                       <div>
@@ -407,7 +487,8 @@ const NewPortfolioAnalysisResults = ({ portfolio }) => {
                     <div className="mt-10" style={{
                       display: "flex",
                       justifyContent: "flex-start",
-                      alignItems: "center"
+                      alignItems: "center",
+                      flexDirection: "row-reverse"
                     }}>
                       {/*Investment Horizon*/}
                       <div>
@@ -425,78 +506,185 @@ const NewPortfolioAnalysisResults = ({ portfolio }) => {
                     </div>
                   </div>
                   {/*End Selectable options*/}
-                  <BasicWaterfallChart data={context.predictionData?.["1M"]?.feature_importance?.[selectedKey]} key={selectedKey} />
+                  <BasicWaterfallChart
+                    data={context.predictionData?.["1M"]?.feature_importance?.[selectedKey]}
+                    key={selectedKey}
+                  />
                 </section>
-                <section>
-                  <h3 className="text-3xl font-semibold">Fundamental Sub Catgories</h3>
-                  <ResultsTable columns={resultColumns} data={context.predictionData?.current_trading_book} />
 
+                <section>
+                  <h3 className="text-3xl font-semibold">Fundamental Sub Categories</h3>
+                  <ResultsTable
+                    columns={subCategoriesColumns}
+                    data={context.predictionData?.["1M"]?.ticker_contribution}
+                  />
                 </section>
+
+
               </div>
               <div className="col-span-6 md:col-span-3 lg:grid-cols-6 xl:col-span-2">
-                <h3 className="text-3xl font-semibold">Current Trading Book</h3>
-                <ResultsTable columns={subCategoriesColumns} data={context.predictionData?.current_trading_book} />
+                <section>
+                  <h3 className="text-3xl font-semibold">Current Trading Book</h3>
+                  <ResultsTable
+                    columns={resultColumns}
+                    data={context.predictionData?.current_trading_book}
+                  />
+                </section>
+                <section>
+                  <h3 className="text-3xl font-semibold">AI Selected Comparables</h3>
+                  <div className="relative overflow-x-auto">
+                    <hr />
+                    <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                      <thead className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
+                      </thead>
+                      <tbody>
+                      {context.predictionData?.["1M"].ai_alternatives.map(([symbol, company]) => (
+                        <tr className="bg-white dark:bg-gray-800" key={symbol}>
+                          <th scope="row"
+                              className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            <p>{symbol}</p>
+                            <p>{company.company_name}</p>
+                            <p>{company.sector}</p>
+                            <img src={company.company_logo} alt="Company Logo" />
+                          </th>
+                          {/*<td className="px-6 py-4">*/}
+                          {/*  {company.ticker}*/}
+                          {/*</td>*/}
+                        </tr>
+                      ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </section>
+                <section>
+                  <h3 className="text-3xl font-semibold">Performance Attribution</h3>
+
+                  <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+                    <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                      <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        {renderTableHeader()}
+                      </thead>
+                      <tbody>
+                      {renderTableRows()}
+                      </tbody>
+                    </table>
+                  </div>
+                </section>
               </div>
             </div>
 
-
-            <footer className='flex'>
+            <section className="flex">
               {/*card*/}
-              <div className="m-5 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+              <div
+                className="m-5 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                 <a href="#">
-                  <img className="rounded-t-lg" src="https://e3.365dm.com/23/08/2048x1152/skynews-apple-logo_6267788.jpg?20230830122917" alt="" />
+                  <img className="rounded-t-lg"
+                       src="https://e3.365dm.com/23/08/2048x1152/skynews-apple-logo_6267788.jpg?20230830122917"
+                       alt="" />
                 </a>
                 <div className="p-5">
                   <a href="#">
-                    <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy technology acquisitions 2021</h5>
+                    <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy
+                      technology acquisitions 2021</h5>
                   </a>
-                  <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
+                  <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise
+                    technology acquisitions of 2021 so far, in reverse chronological order.</p>
                 </div>
               </div>
               {/*End card*/}
               {/*card*/}
-              <div className="m-5 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+              <div
+                className="m-5 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                 <a href="#">
-                  <img className="rounded-t-lg" src="https://e3.365dm.com/23/08/2048x1152/skynews-apple-logo_6267788.jpg?20230830122917" alt="" />
+                  <img className="rounded-t-lg"
+                       src="https://e3.365dm.com/23/08/2048x1152/skynews-apple-logo_6267788.jpg?20230830122917"
+                       alt="" />
                 </a>
                 <div className="p-5">
                   <a href="#">
-                    <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy technology acquisitions 2021</h5>
+                    <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy
+                      technology acquisitions 2021</h5>
                   </a>
-                  <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
+                  <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise
+                    technology acquisitions of 2021 so far, in reverse chronological order.</p>
                 </div>
               </div>
               {/*End card*/}
               {/*card*/}
-              <div className="m-5 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+              <div
+                className="m-5 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                 <a href="#">
-                  <img className="rounded-t-lg" src="https://e3.365dm.com/23/08/2048x1152/skynews-apple-logo_6267788.jpg?20230830122917" alt="" />
+                  <img className="rounded-t-lg"
+                       src="https://e3.365dm.com/23/08/2048x1152/skynews-apple-logo_6267788.jpg?20230830122917"
+                       alt="" />
                 </a>
                 <div className="p-5">
                   <a href="#">
-                    <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy technology acquisitions 2021</h5>
+                    <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy
+                      technology acquisitions 2021</h5>
                   </a>
-                  <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
+                  <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise
+                    technology acquisitions of 2021 so far, in reverse chronological order.</p>
                 </div>
               </div>
               {/*End card*/}
               {/*card*/}
-              <div className="m-5 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+              <div
+                className="m-5 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                 <a href="#">
-                  <img className="rounded-t-lg" src="https://e3.365dm.com/23/08/2048x1152/skynews-apple-logo_6267788.jpg?20230830122917" alt="" />
+                  <img className="rounded-t-lg"
+                       src="https://e3.365dm.com/23/08/2048x1152/skynews-apple-logo_6267788.jpg?20230830122917"
+                       alt="" />
                 </a>
                 <div className="p-5">
                   <a href="#">
-                    <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy technology acquisitions 2021</h5>
+                    <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy
+                      technology acquisitions 2021</h5>
                   </a>
-                  <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
+                  <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise
+                    technology acquisitions of 2021 so far, in reverse chronological order.</p>
+                </div>
+              </div>
+              {/*End card*/}
+              {/*card*/}
+              <div
+                className="m-5 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                <a href="#">
+                  <img className="rounded-t-lg"
+                       src="https://e3.365dm.com/23/08/2048x1152/skynews-apple-logo_6267788.jpg?20230830122917"
+                       alt="" />
+                </a>
+                <div className="p-5">
+                  <a href="#">
+                    <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy
+                      technology acquisitions 2021</h5>
+                  </a>
+                  <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise
+                    technology acquisitions of 2021 so far, in reverse chronological order.</p>
+                </div>
+              </div>
+              {/*End card*/}
+              {/*card*/}
+              <div
+                className="m-5 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                <a href="#">
+                  <img className="rounded-t-lg"
+                       src="https://e3.365dm.com/23/08/2048x1152/skynews-apple-logo_6267788.jpg?20230830122917"
+                       alt="" />
+                </a>
+                <div className="p-5">
+                  <a href="#">
+                    <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy
+                      technology acquisitions 2021</h5>
+                  </a>
+                  <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise
+                    technology acquisitions of 2021 so far, in reverse chronological order.</p>
                 </div>
               </div>
               {/*End card*/}
 
 
-
-            </footer>
+            </section>
           </Container>
         </main>
       </>

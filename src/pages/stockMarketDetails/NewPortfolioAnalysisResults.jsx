@@ -88,190 +88,13 @@ const NewPortfolioAnalysisResults = ({ portfolio }) => {
     const navigate = useNavigate();
     console.log("-> context", context.predictionData);
 
-    // const tabsConfig = {
-    //   isMain: true,
-    //   type: "underline",
-    //   tabs: [
-    //     { name: "A.I. Driven insights" ,
-    //       // onClickHandler: () => navigate("/us/ai-driven-insights")
-    //     },
-    //     { name: "Regime Analysis" },
-    //     { name: "Portfolio Analysis", onClickHandler: () => {} },
-    //   ]
-    // };
-    // const performanceChartConfig = {
-    //   charts: [
-    //     {
-    //       name: "Your portfolio allocation",
-    //       description: `${portfolio?.[0]?.holdings?.client?.sentences?.portfolio_pnl}`,
-    //       type: "LinearChart",
-    //       chartSubtitle: `Sharpe (${formatPercentage(portfolio?.[0]?.holdings?.client?.optimizer_stats?.["Sharpe ratio"], 2, "sharpe")})`,
-    //       chartTitle: `Annualized Ret (${formatPercentage(portfolio?.[0]?.holdings?.client?.optimizer_stats?.["Annual return"], 2, "ret")})`,
-    //       chartLegend: `Annualized Vol (${formatPercentage(portfolio?.[0]?.holdings?.client?.optimizer_stats?.["Annual volatility"])})`,
-    //       data:
-    //         formatPortfoliPnlData(portfolio?.[0]?.holdings?.client?.portfolio_pnl)
-    //     },
-    //     {
-    //       name: "Risk Constrained Allocation",
-    //       type: "LinearChart",
-    //       useLogo: true,
-    //       description: `${portfolio?.[0]?.holdings?.asset_x?.sentences?.portfolio_pnl}`,
-    //       chartSubtitle: `Sharpe (${formatPercentage(portfolio?.[0]?.holdings?.asset_x?.optimizer_stats?.["Sharpe ratio"], 2, "sharpe")})`,
-    //       chartTitle: `Annualized Ret (${formatPercentage(portfolio?.[0]?.holdings?.asset_x?.optimizer_stats?.["Annual return"], 2, "ret")})`,
-    //       chartLegend: `Annualized Vol (${formatPercentage(portfolio?.[0]?.holdings?.asset_x?.optimizer_stats?.["Annual volatility"])})`,
-    //       data:
-    //         formatPortfoliPnlData(portfolio?.[0]?.holdings?.asset_x?.portfolio_pnl)
-    //     }
-    //   ]
-    // };
-    // const riskAllocationChartConfig = {
-    //   charts: [
-    //     {
-    //       name: "Your portfolio allocation",
-    //       type: "NormalizedStackedAreaChart",
-    //       description: `${portfolio?.[0]?.holdings?.client?.sentences.optimal_weights}`,
-    //       data:
-    //         formatRiskAllocationData(portfolio?.[0]?.holdings?.client?.optimal_weights_historical[0])
-    //     },
-    //     {
-    //       name: "Dynamic Rebalancing",
-    //       useLogo: true,
-    //       type: "NormalizedStackedAreaChart",
-    //       description: `${portfolio?.[0]?.holdings?.asset_x?.sentences?.optimal_weights}`,
-    //       data:
-    //         formatRiskAllocationData(portfolio?.[0]?.holdings?.asset_x?.optimal_weights_historical?.[0])
-    //     }
-    //   ]
-    // };
-    //
-    // const factorContributionChartConfig = {
-    //   charts: [
-    //     {
-    //       name: "Your portfolio allocation",
-    //       type: "NormalizedStackedAreaChart",
-    //       description: `${portfolio?.[0]?.holdings?.client?.sentences.factor_contribution}`,
-    //       data:
-    //         formatFactorContributionData(portfolio?.[0]?.holdings?.client?.factor_contribution)
-    //     },
-    //     {
-    //       name: "Dynamic Rebalancing",
-    //       useLogo: true,
-    //       type: "NormalizedStackedAreaChart",
-    //       description: `${portfolio?.[0]?.holdings?.asset_x?.sentences?.factor_contribution}`,
-    //       data:
-    //         formatFactorContributionData(portfolio?.[0]?.holdings?.asset_x?.factor_contribution)
-    //     }
-    //   ]
-    // };
-    // const last5SellOffsChartConfig = {
-    //   charts: [
-    //     {
-    //       name: "Your historical drawdowns",
-    //       type: "BoxPlot",
-    //       description: `${portfolio?.[0]?.holdings?.client?.sentences?.drawdown
-    //       }`,
-    //       data:
-    //         [
-    //           {
-    //             y: portfolio?.[0]?.holdings?.client?.drawdown_dates,
-    //             boxpoints: "all",
-    //             jitter: 0.3,
-    //             pointpos: -1.8,
-    //             type: "box",
-    //             name: "Top Drawdowns",
-    //             marker: {
-    //               color: "#1E8FCC"
-    //             }
-    //           }
-    //         ]
-    //     },
-    //     {
-    //       name: "AssetX",
-    //       useLogo: true,
-    //       type: "BoxPlot",
-    //       description: `${portfolio?.[0]?.holdings?.asset_x?.sentences?.drawdown
-    //       }`,
-    //       data:
-    //         [
-    //           {
-    //             y: portfolio?.[0]?.holdings?.asset_x?.drawdown_dates,
-    //             boxpoints: "all",
-    //             jitter: 0.3,
-    //             pointpos: -1.8,
-    //             type: "box",
-    //             name: "Top Drawdowns",
-    //             marker: {
-    //               color: "#1E8FCC"
-    //             }
-    //           }
-    //         ]
-    //     }
-    //   ]
-    // };
-    // const betaChartConfig = {
-    //   charts: [
-    //     {
-    //       name: "Your portfolio allocation",
-    //       type: "BetaChart",
-    //       description: `${portfolio?.[0]?.holdings?.client?.sentences?.beta}`,
-    //       data:
-    //         [{
-    //           type: "bar",
-    //           marker: {
-    //             color: "#1E8FCC",
-    //             opacity: 0.7
-    //           },
-    //           y: Object.keys(portfolio?.[0]?.holdings?.client?.beta),
-    //           x: Object.values(portfolio?.[0]?.holdings?.client?.beta),
-    //           text: formatBeta(Object.values(portfolio?.[0]?.holdings?.client?.beta)),
-    //           textposition: "auto",
-    //           orientation: "h"
-    //
-    //         }]
-    //     },
-    //     {
-    //       name: "Dynamic Rebalancing",
-    //       useLogo: true,
-    //       type: "BetaChart",
-    //       description: `${portfolio?.[0]?.holdings?.asset_x?.sentences?.beta}`,
-    //       data:
-    //         [{
-    //           type: "bar",
-    //           marker: {
-    //             color: "#1E8FCC",
-    //             opacity: 0.7
-    //           },
-    //           y: Object.keys(portfolio?.[0]?.holdings?.asset_x?.beta),
-    //           x: Object.values(portfolio?.[0]?.holdings?.asset_x?.beta),
-    //           text: formatBeta(Object.values(portfolio?.[0]?.holdings?.asset_x?.beta)),
-    //           textposition: "auto",
-    //           orientation: "h"
-    //         }]
-    //     }
-    //   ]
-    // };
-    // const resultTabsConfig = {
-    //   type: "pills",
-    //   tabs: [
-    //     { name: "Performance", "content": <TwoColumnCharts config={performanceChartConfig} key={0} /> },
-    //     { name: "Portfolio Beta", "content": <TwoColumnCharts config={betaChartConfig} key={1} /> },
-    //     { name: "Last 5 Sell Offs", "content": <TwoColumnCharts config={last5SellOffsChartConfig} key={2} /> },
-    //     { name: "Risk Allocation", "content": <TwoColumnCharts config={riskAllocationChartConfig} key={3} /> },
-    //     { name: "Factor Contribution", "content": <TwoColumnCharts config={factorContributionChartConfig} key={4} /> }
-    //   ]
-    // };
-    // const handleRowClick = (ticker) => {
-    //   window.open(`/us/ticker/${ticker}`, "_blank", "noreferrer");
-    // };
-
-
     const resultColumns = useMemo(
       () => [
         {
           Header: "Ticker",
           accessor: "ticker",
           Cell: ({ row }) => (
-            <div className="flex items-center" onClick={() => handleRowClick(row.original.ticker)}>
+            <div className="flex items-center" onClick={() => console.log}>
               <img
                 className="w-10 h-10 rounded-full"
                 src={row.original.company_logo || "https://www.ortodonciasyv.cl/wp-content/uploads/2016/10/orionthemes-placeholder-image-2.png"}
@@ -285,13 +108,14 @@ const NewPortfolioAnalysisResults = ({ portfolio }) => {
           )
         },
         {
-          Header: "Weigh",
+          Header: "Weight",
           accessor: "weight"
         },
 
         {
           Header: "AssetX Signal",
-          accessor: "AssetX Signal"
+          accessor: "AssetX Signal",
+          Cell: RecommendationPill
         }
       ],
       []
@@ -303,7 +127,7 @@ const NewPortfolioAnalysisResults = ({ portfolio }) => {
           Header: "Ticker",
           accessor: "ticker",
           Cell: ({ row }) => (
-            <div className="flex items-center" onClick={() => handleRowClick(row.original.ticker)}>
+            <div className="flex items-center" onClick={() =>  console.log}>
               <img
                 className="w-10 h-10 rounded-full"
                 src={row.original.company_logo || "https://www.ortodonciasyv.cl/wp-content/uploads/2016/10/orionthemes-placeholder-image-2.png"}
@@ -350,7 +174,6 @@ const NewPortfolioAnalysisResults = ({ portfolio }) => {
 
     const keys = ["Growth", "Quality", "Macro", "Momentum Fast", "Momentum Slow", "Trend Following", "Value", "Other Factors", "Overall"];
     const [selectedKey, setSelectedKey] = useState(keys[0]);
-
 
     const data = {
       "current_attribution": [
@@ -401,7 +224,12 @@ const NewPortfolioAnalysisResults = ({ portfolio }) => {
     };
 
     const renderTableRows = () => {
-      const { current_attribution, average_attribution, current_contribution, average_contribution } = data;
+      const factorContribution = context.predictionData?.["1M"]?.factor_contribution;
+      if (!factorContribution) {
+        return null;
+      }
+
+      const { current_contribution, average_contribution } = factorContribution;
       const keys = Object.keys(current_contribution);
 
       return keys.map((key, index) => (
@@ -413,6 +241,12 @@ const NewPortfolioAnalysisResults = ({ portfolio }) => {
         </tr>
       ));
     };
+
+  function getLastMonthDate() {
+    const today = new Date();
+    const lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
+    return formatDateToDashFormat(lastMonth);
+  }
 
     return (
       <>
@@ -444,13 +278,13 @@ const NewPortfolioAnalysisResults = ({ portfolio }) => {
 
                     </div>
                     <div>
-                      <span className="text-xs font-medium">Show history for:</span>
+                      <span className="text-xs font-medium">Forecast Horizon</span>
+                      <span
+                        className="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">1W</span>
+                      <span
+                        className="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">1M</span>
                       <span
                         className="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">1Y</span>
-                      <span
-                        className="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">3Y</span>
-                      <span
-                        className="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">5Y</span>
                     </div>
 
                     {/*End Objective Function*/}
@@ -514,7 +348,7 @@ const NewPortfolioAnalysisResults = ({ portfolio }) => {
                 </section>
 
                 <section>
-                  <h3 className="text-3xl font-semibold">Fundamental Sub Categories</h3>
+                  <h3 className="text-3xl font-semibold">Factor Contribution</h3>
                   <ResultsTable
                     columns={subCategoriesColumns}
                     data={context.predictionData?.["1M"]?.ticker_contribution}
@@ -533,6 +367,9 @@ const NewPortfolioAnalysisResults = ({ portfolio }) => {
                 </section>
                 <section className="mb-20">
                   <h3 className="text-3xl font-semibold">AI Selected Comparables</h3>
+                  <p className="text-gray-500 font-light mt-4">
+                    as of  {getLastMonthDate()}
+                  </p>
                   <div className="mt-10">
                   <div className="relative overflow-x">
                     <div className="relative overflow-x-auto shadow-md sm:rounded-lg p-3 h-{600}">

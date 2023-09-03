@@ -23,13 +23,18 @@ export function StatusPill({ value }) {
 
 export function RecommendationPill({ value }) {
   const status = value ? value.toLowerCase() : "unknown";
+  console.log("-> status", status);
+
 
   return (
     <span
       className={classNames(
         "px-1 py-1 uppercase leading-wide font-bold text-xs rounded-full shadow-sm",
-        status.startsWith("increase weight") ? "bg-green-100 text-green-700" : null,
-        status.startsWith("decrease weight") ? "bg-red-100 text-red-700" : null,
+        status.startsWith("strong buy") ? "bg-green-100 text-green-700" : null,
+        status.startsWith("weak buy") ? "bg-green-100 text-green-700" : null,
+        status.startsWith("strong sell") ? "bg-red-100 text-red-700" : null,
+        status.startsWith("weak sell") ? "bg-red-100 text-red-700" : null,
+        status.startsWith("neutral") ? "bg-yellow-100-100 text-yellow-700" : null,
         status.startsWith("none") ? "bg-gray-100 text-gray-700" : null
       )}
     >

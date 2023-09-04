@@ -1,92 +1,20 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Header } from "../../components/Header.jsx";
 import { Container } from "../../components/Container.jsx";
 import Placeholder01 from "../../assets/images/placeholder-01.png";
-import usFlag from "../../assets/images/us.png";
-import Tabs from "../../components/Tabs.jsx";
 import { RecommendationPill } from "../../components/Table.jsx";
-import MiniChart from "../../assets/images/mini-chart.png";
-import TwoColumnCharts from "./components/TwoColumnCharts.jsx";
 import ResultsTable from "./components/ResultsTable.jsx";
 import { useMain } from "../../store/context/MainContext.jsx";
-import { Button } from "../../components/Button.jsx";
-import { useNavigate } from "react-router-dom";
-import { formatDataForResultsTable, formatDataForTickerTable, formatDateToDashFormat } from "../../utils/index.js";
+import { formatDateToDashFormat } from "../../utils/index.js";
 import {
   AsymmetricErrorBarsWithConstantOffsetChart
 } from "../../components/AsymmetricErrorBarsWithConstantOffsetChart.jsx";
 import { BasicWaterfallChart } from "../../components/BasicWaterfallChart.jsx";
-import Dropdown from "../../components/Dropdown.jsx";
 
-// function formatPortfoliPnlData(obj) {
-//   const result = [];
-//
-//   for (const [key, value] of Object.entries(obj)) {
-//     result.push({
-//       "time": key,
-//       "value": value
-//     });
-//   }
-//
-//   return result;
-// }
-//
-// function formatRiskAllocationData(obj) {
-//   const result = [];
-//
-//   for (const [key, value] of Object.entries(obj)) {
-//     if (key !== "date") {
-//       // Set groupnorm to 'percent' only for the first element
-//       const groupnorm = result.length === 0 ? "percent" : undefined;
-//
-//       result.push(
-//         { x: obj["date"], y: value, name: key, stackgroup: "one", groupnorm }
-//       );
-//     }
-//   }
-//
-//
-//   return result;
-// }
-//
-// function formatFactorContributionData(obj) {
-//   const result = [];
-//
-//   for (const [key, value] of Object.entries(obj)) {
-//     if (key !== "dates") {
-//       // Set groupnorm to 'percent' only for the first element
-//       const groupnorm = result.length === 0 ? "percent" : undefined;
-//
-//       result.push(
-//         { x: obj["dates"], y: value, name: key, stackgroup: "one", groupnorm }
-//       );
-//     }
-//   }
-//
-//
-//   return result;
-// }
-//
-// function formatBeta(obj, decimals = 1) {
-//   for (const [key, value] of Object.entries(obj)) {
-//     obj[key] = value.toFixed(decimals);
-//   }
-//
-//   return obj;
-//
-// }
-//
-// function formatPercentage(num, decimals = 2, type) {
-//   if (!num) return (0).toFixed(decimals) + "%";
-//   if (type === "sharpe") return (num).toFixed(decimals);
-//   if (type === "ret") return (num * 100).toFixed(decimals) + "%";
-//   return (num).toFixed(decimals) + "%";
-// }
-
-const NewPortfolioAnalysisResults = ({ portfolio }) => {
+const NewPortfolioAnalysisResults = () => {
     const context = useMain();
-    const navigate = useNavigate();
-    console.log("-> context", context.predictionData);
+    const keys = ["Growth", "Quality", "Macro", "Momentum Fast", "Momentum Slow", "Trend Following", "Value", "Other Factors", "Overall"];
+    const [selectedKey, setSelectedKey] = useState(keys[0]);
 
     const resultColumns = useMemo(
       () => [
@@ -127,7 +55,7 @@ const NewPortfolioAnalysisResults = ({ portfolio }) => {
           Header: "Ticker",
           accessor: "ticker",
           Cell: ({ row }) => (
-            <div className="flex items-center" onClick={() =>  console.log}>
+            <div className="flex items-center" onClick={() => handleRowClick(row.original.ticker)}>
               <img
                 className="w-10 h-10 rounded-full"
                 src={row.original.company_logo || "https://www.ortodonciasyv.cl/wp-content/uploads/2016/10/orionthemes-placeholder-image-2.png"}
@@ -172,57 +100,12 @@ const NewPortfolioAnalysisResults = ({ portfolio }) => {
       []
     );
 
-    const keys = ["Growth", "Quality", "Macro", "Momentum Fast", "Momentum Slow", "Trend Following", "Value", "Other Factors", "Overall"];
-    const [selectedKey, setSelectedKey] = useState(keys[0]);
-
-    const data = {
-      "current_attribution": [
-        -0.1,
-        -0.04,
-        -0.01,
-        0,
-        0.18,
-        0.21,
-        1.06,
-        -0.12
-      ],
-      "average_attribution": [
-        -0.03,
-        -0.05,
-        0,
-        -0.02,
-        0.06,
-        0.07,
-        0.34,
-        -0.2
-      ],
-      "current_contribution": {
-        "Growth": "19.97%",
-        "Quality": "11.3%",
-        "Macro": "100.0%",
-        "Momentum Fast": "12.61%",
-        "Momentum Slow": "13.8%",
-        "Trend Following": "16.58%",
-        "Value": "26.44%",
-        "Other Factors": "14.43%"
-      },
-      "average_contribution": {
-        "Growth": "16.67%",
-        "Quality": "16.67%",
-        "Macro": "16.67%",
-        "Momentum Fast": "16.67%",
-        "Momentum Slow": "16.67%",
-        "Trend Following": "16.67%",
-        "Value": "16.67%",
-        "Other Factors": "16.67%"
-      }
-    };
-
     const renderTableHeader = () => {
       const headers = ["Attribution", "Current", "Average"];
       return headers.map((header, index) => <th key={index} className="px-6 py-4">{header}</th>);
     };
 
+    console.log(context.predictionData?.["1M"])
     const renderTableRows = () => {
       const factorContribution = context.predictionData?.["1M"]?.factor_contribution;
       if (!factorContribution) {
@@ -242,11 +125,15 @@ const NewPortfolioAnalysisResults = ({ portfolio }) => {
       ));
     };
 
-  function getLastMonthDate() {
-    const today = new Date();
-    const lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
-    return formatDateToDashFormat(lastMonth);
-  }
+    const getLastMonthDate = () => {
+      const today = new Date();
+      const lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
+      return formatDateToDashFormat(lastMonth);
+    };
+
+    const handleRowClick = (ticker) => {
+      window.open(`/us/ticker/${ticker}`, "_blank", "noreferrer");
+    };
 
     return (
       <>
@@ -256,6 +143,7 @@ const NewPortfolioAnalysisResults = ({ portfolio }) => {
             <header className="flex">
               <h1 className="text-4xl font-semibold pl-4">Your Portfolio</h1>
             </header>
+            {/*Content  */}
             <div className="grid grid-cols-6 gap-4 sm:col">
               <div className="col-span-6 md:col-span-3 lg:grid-cols-6 xl:col-span-4">
                 <section>
@@ -368,45 +256,45 @@ const NewPortfolioAnalysisResults = ({ portfolio }) => {
                 <section className="mb-20">
                   <h3 className="text-3xl font-semibold">AI Selected Comparables</h3>
                   <p className="text-gray-500 font-light mt-4">
-                    as of  {getLastMonthDate()}
+                    as of {getLastMonthDate()}
                   </p>
                   <div className="mt-10">
-                  <div className="relative overflow-x">
-                    <div className="relative overflow-x-auto shadow-md sm:rounded-lg p-3 h-{600}">
-                      <table className="w-full text-sm text-left text-gray-500">
-                        <thead className=" sticky  text-xs text-gray-700 uppercase bg-gray-50 ">
-                        </thead>
-                        <tbody>
-                        {context.predictionData?.["1M"].ai_alternatives.map(([symbol, company]) => (
-                          <tr key={symbol}  className="bg-white border-b  hover:bg-gray-50 ">
-                            <td className="px-6 py-4">
-                            <div className="flex items-center" onClick={console.log}>
-                              <img
-                                className="w-10 h-10 rounded-full"
-                                src={company.company_logo || "https://www.ortodonciasyv.cl/wp-content/uploads/2016/10/orionthemes-placeholder-image-2.png"}
-                                alt={company.company_name + " image"}
-                              />
-                              <div className="pl-3">
-                                <div className="text-base font-semibold">{company.company_name}</div>
-                                <div className="font-normal text-gray-500">{company.sector}</div>
-                              </div>
-                            </div>
-                            {/*<th  scope="col" className="px-6 py-4">*/}
-                            {/*  <p>{symbol}</p>*/}
-                            {/*  <p>{company.company_name}</p>*/}
-                            {/*  <p>{company.sector}</p>*/}
-                            {/*  <img src={company.company_logo} alt="Company Logo" />*/}
-                            {/*</th>*/}
-                            {/*<td className="px-6 py-4">*/}
-                            {/*  {company.ticker}*/}
-                            {/*</td>*/}
-                            </td>
-                          </tr>
-                        ))}
-                        </tbody>
-                      </table>
+                    <div className="relative overflow-x">
+                      <div className="relative overflow-x-auto shadow-md sm:rounded-lg p-3 h-{600}">
+                        <table className="w-full text-sm text-left text-gray-500">
+                          <thead className=" sticky  text-xs text-gray-700 uppercase bg-gray-50 ">
+                          </thead>
+                          <tbody>
+                          {context.predictionData?.["1M"].ai_alternatives.map(([symbol, company]) => (
+                            <tr key={symbol} className="bg-white border-b  hover:bg-gray-50 ">
+                              <td className="px-6 py-4">
+                                <div className="flex items-center" onClick={() => handleRowClick(company.ticker)}>
+                                  <img
+                                    className="w-10 h-10 rounded-full"
+                                    src={company.company_logo || "https://www.ortodonciasyv.cl/wp-content/uploads/2016/10/orionthemes-placeholder-image-2.png"}
+                                    alt={company.company_name + " image"}
+                                  />
+                                  <div className="pl-3">
+                                    <div className="text-base font-semibold">{company.company_name}</div>
+                                    <div className="font-normal text-gray-500">{company.sector}</div>
+                                  </div>
+                                </div>
+                                {/*<th  scope="col" className="px-6 py-4">*/}
+                                {/*  <p>{symbol}</p>*/}
+                                {/*  <p>{company.company_name}</p>*/}
+                                {/*  <p>{company.sector}</p>*/}
+                                {/*  <img src={company.company_logo} alt="Company Logo" />*/}
+                                {/*</th>*/}
+                                {/*<td className="px-6 py-4">*/}
+                                {/*  {company.ticker}*/}
+                                {/*</td>*/}
+                              </td>
+                            </tr>
+                          ))}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
-                  </div>
                   </div>
                 </section>
                 <section>
@@ -425,7 +313,8 @@ const NewPortfolioAnalysisResults = ({ portfolio }) => {
                 </section>
               </div>
             </div>
-
+            {/*End Content*/}
+            {/*Footer*/}
             <section className="flex">
               {/*card*/}
               <div
@@ -538,6 +427,7 @@ const NewPortfolioAnalysisResults = ({ portfolio }) => {
 
 
             </section>
+            {/*End Footer*/}
           </Container>
         </main>
       </>

@@ -53,7 +53,7 @@ export const CombinedLinearChartComponent = ({ data }) => {
       });
 
       lineSeries.setData(
-        data.pnl
+        data.lineSeries
       );
 
       const average_series = chart.addLineSeries({
@@ -63,15 +63,15 @@ export const CombinedLinearChartComponent = ({ data }) => {
       });
 
       average_series.setData(
-        data.median_forecast
+        data.average_series
       );
 
       top_forecast_series.setData(
-        data.upper_range
+        data.top_forecast_series
       );
 
       bottom_forecast_series.setData(
-        data.lower_range
+        data.bottom_forecast_series
       );
 
       window.addEventListener("resize", handleResize);

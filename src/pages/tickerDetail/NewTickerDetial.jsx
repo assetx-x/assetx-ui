@@ -32,7 +32,7 @@ const TickerDetail = () => {
       isLoading
     } = useQuery(["details", { ticker }], fetchTickerDetails);
 
-  console.log("-> data.results[data.results.length-1].data?.factor_contribution", data?.results?.[data?.results.length-1].data?.ai_comparables);
+  console.log("-> data.results[data.results.length-1].data", data?.results?.[data?.results.length-1].data);
 
     // Handle Errors
     useEffect(() => {
@@ -94,6 +94,39 @@ const TickerDetail = () => {
       ));
     };
 
+
+    const renderStatsTableHeader = () => {
+      const headers = [
+        "Factor",
+        "1 Week",
+        "1 Month",
+        "1 Quarter",
+      ];
+      return headers.map((header, index) => <th key={index} className="px-6 py-4">{header}</th>);
+    };
+    const renderStatsTableRows = () => {
+      const statsInfo =  data.results[data.results.length-1].data?.summary_stats.summary_table[0];
+      if (!statsInfo) {
+        return null;
+      }
+
+      const keys = Object.keys(statsInfo);
+      return keys.map((key, index) => {
+        console.log("-> key", statsInfo[key]['1 Month']);
+          return (<tr key={index}
+              className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+            <td className="px-6 py-4">{key}</td>
+            <td className="px-6 py-4">{ statsInfo[key]['1 Week']}</td>
+            <td className="px-6 py-4">{statsInfo[key]['1 Month']}</td>
+            <td className="px-6 py-4">{statsInfo[key]['1 Quarter']}</td>
+          </tr>);
+        }
+      );
+    };
+
+
+
+
     return (
       <>
         <Header />
@@ -104,13 +137,13 @@ const TickerDetail = () => {
                 <div className="flex flex-col md:flex-row md:items-center">
                   <div className="flex items-center justify-center w-168 h-168 mb-4 md:mb-0 md:mr-4">
                     <img
-                      src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Apple_Computer_Logo_rainbow.svg/640px-Apple_Computer_Logo_rainbow.svg.png"
+                      src={data?.results?.[data?.results.length-1].data.header_info.company_logo}
                       alt=""
                       className="rounded-full" width={168}
                       height={168} />
                   </div>
                   <div className="flex flex-col">
-                    <h1 className="text-4xl pl-6">Apple CO</h1>
+                    <h1 className="text-4xl pl-6">{data?.results?.[data?.results.length-1].data.header_info.company_name}</h1>
                     <div className="p-4 flex justify-between ">
                       {/*Investment Horizon*/}
                       <div className="ml-6">
@@ -409,6 +442,26 @@ const TickerDetail = () => {
                     </div>
                   </section>
                   {/*Performance Attribution*/}
+
+                  {/*Return Summary*/}
+                  <section>
+                    <div className="mt-10">
+                      <h3 className="text-3xl font-semibold">Return Summary</h3>
+                      <p>{data?.results?.[data?.results.length - 1].data.summary_stats.summary_sentence}</p>
+                      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+                        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                          <thead
+                            className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                          {renderStatsTableHeader()}
+                          </thead>
+                          <tbody>
+                          {renderStatsTableRows()}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </section>
+                  {/*End Return Summary*/}
 
                 </div>
               </div>

@@ -8,6 +8,7 @@ import BlockUi from "@availity/block-ui";
 import { useMain } from "../../store/context/MainContext.jsx";
 import { useQuery } from "react-query";
 import fetchTickerDetails from "../../store/models/details/fetchTickerDetails.jsx";
+import fetchTickerPrice from "../../store/models/details/fetchTickerPrice.jsx";
 import StackedView from "../stockMarketDetails/components/StackedView.jsx";
 import { WaterfallChart } from "../../components/WaterfallChart.jsx";
 import { Loader } from "react-loaders";
@@ -32,7 +33,14 @@ const TickerDetail = () => {
       isLoading
     } = useQuery(["details", { ticker }], fetchTickerDetails);
 
-  console.log("-> data.results[data.results.length-1].data", data?.results?.[data?.results.length-1].data);
+    const {
+      data: priceData,
+      error: priceError,
+      isLoading: priceIsLoading
+    } = useQuery(["priceData", { ticker }], fetchTickerPrice);
+    console.log("-> priceData", priceData);
+
+    console.log("-> data.results[data.results.length-1].data", data?.results?.[data?.results.length - 1].data);
 
     // Handle Errors
     useEffect(() => {
@@ -62,7 +70,7 @@ const TickerDetail = () => {
     };
 
     function isNegativeNumber(number) {
-      return number < 0;
+      return number <= 0;
     }
 
     const renderTableHeader = () => {
@@ -75,7 +83,7 @@ const TickerDetail = () => {
       return headers.map((header, index) => <th key={index} className="px-6 py-4">{header}</th>);
     };
     const renderTableRows = () => {
-      const factorContribution =  data.results[data.results.length-1].data?.factor_contribution;
+      const factorContribution = data.results[data.results.length - 1].data?.factor_contribution;
       if (!factorContribution) {
         return null;
       }
@@ -100,31 +108,29 @@ const TickerDetail = () => {
         "Factor",
         "1 Week",
         "1 Month",
-        "1 Quarter",
+        "1 Quarter"
       ];
       return headers.map((header, index) => <th key={index} className="px-6 py-4">{header}</th>);
     };
     const renderStatsTableRows = () => {
-      const statsInfo =  data.results[data.results.length-1].data?.summary_stats.summary_table[0];
+      const statsInfo = data.results[data.results.length - 1].data?.summary_stats.summary_table[0];
       if (!statsInfo) {
         return null;
       }
 
       const keys = Object.keys(statsInfo);
       return keys.map((key, index) => {
-        console.log("-> key", statsInfo[key]['1 Month']);
+          console.log("-> key", statsInfo[key]["1 Month"]);
           return (<tr key={index}
-              className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                      className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
             <td className="px-6 py-4">{key}</td>
-            <td className="px-6 py-4">{ statsInfo[key]['1 Week']}</td>
-            <td className="px-6 py-4">{statsInfo[key]['1 Month']}</td>
-            <td className="px-6 py-4">{statsInfo[key]['1 Quarter']}</td>
+            <td className="px-6 py-4">{statsInfo[key]["1 Week"]}</td>
+            <td className="px-6 py-4">{statsInfo[key]["1 Month"]}</td>
+            <td className="px-6 py-4">{statsInfo[key]["1 Quarter"]}</td>
           </tr>);
         }
       );
     };
-
-
 
 
     return (
@@ -137,13 +143,14 @@ const TickerDetail = () => {
                 <div className="flex flex-col md:flex-row md:items-center">
                   <div className="flex items-center justify-center w-168 h-168 mb-4 md:mb-0 md:mr-4">
                     <img
-                      src={data?.results?.[data?.results.length-1].data.header_info.company_logo}
+                      src={data?.results?.[data?.results.length - 1].data.header_info.company_logo}
                       alt=""
                       className="rounded-full" width={168}
                       height={168} />
                   </div>
                   <div className="flex flex-col">
-                    <h1 className="text-4xl pl-6">{data?.results?.[data?.results.length-1].data.header_info.company_name}</h1>
+                    <h1
+                      className="text-4xl pl-6">{data?.results?.[data?.results.length - 1].data.header_info.company_name}</h1>
                     <div className="p-4 flex justify-between ">
                       {/*Investment Horizon*/}
                       <div className="ml-6">
@@ -242,15 +249,17 @@ const TickerDetail = () => {
                       </div>
                       {/*End Objective Function*/}
                     </div>
+                    <BlockUi blocking={priceIsLoading} loader={<Loader active type="ball-scale" color="#0248C7" />}>
                     <h2 className="pl-6"><span
-                      className="text-5xl font-bold">{data?.header_information?.last_price}</span>
+                      className="text-5xl font-bold">{priceData?.current_price}</span>
                       <span
                         className="ml-1 text-l">USD</span>
-                      <span className="ml-4 text-xl text-green-600">{data?.header_information?.percent_change} </span>
+                      <span className="ml-4 text-xl text-green-600">{priceData?.ytd} </span>
                       {/*TODO: color should change based on the value*/}
                       <span
-                        className={isNegativeNumber(data?.header_information?.percent_change) ? "text-xl text-red-600 " : "text-xl text-green-600 "}>%</span>
+                        className={isNegativeNumber(priceData?.mtd) ? "text-xl text-red-600 " : "text-xl text-green-600 "}>%</span>
                     </h2>
+                    </BlockUi>
                     {/*<h3 className="text-sm text-gray-400 pl-6">Last update at Apr 27, 11:16 EDT</h3>*/}
                   </div>
                 </div>
@@ -263,7 +272,7 @@ const TickerDetail = () => {
                   {/*Placeholder*/}
                   <section>
                     <img width={"100%"} src={Placeholder01} alt="" />
-                    <p>{data.results[data.results.length-1].data?.sentence}</p>
+                    <p>{data.results[data.results.length - 1].data?.sentence}</p>
                   </section>
                   {/*End Placeholder*/}
 
@@ -297,7 +306,7 @@ const TickerDetail = () => {
                       {/*End Objective Function*/}
                     </div>
                     <CombinedLinearChart
-                      data={data.results[data.results.length-1].data?.forecast}
+                      data={data.results[data.results.length - 1].data?.forecast}
                     />
                     {/*<AsymmetricErrorBarsWithConstantOffsetChart data={context.predictionData?.["1M"]?.portfolio} />*/}
                   </section>
@@ -352,7 +361,7 @@ const TickerDetail = () => {
                   </div>
                   {/*End Selectable options*/}
                   <BasicWaterfallChart
-                    data={data.results[data.results.length-1].data?.feature_importance_graph?.[selectedKey]}
+                    data={data.results[data.results.length - 1].data?.feature_importance_graph?.[selectedKey]}
                     key={selectedKey}
                   />
                   {/*</section>*/}
@@ -391,7 +400,7 @@ const TickerDetail = () => {
                             <thead className=" sticky  text-xs text-gray-700 uppercase bg-gray-50 ">
                             </thead>
                             <tbody>
-                            {Object.entries(data?.results?.[data?.results.length-1].data?.ai_comparables[0]).map(([symbol, company]) => (
+                            {Object.entries(data?.results?.[data?.results.length - 1].data?.ai_comparables[0]).map(([symbol, company]) => (
 
                               <tr key={symbol} className="bg-white border-b  hover:bg-gray-50 ">
 
@@ -447,7 +456,8 @@ const TickerDetail = () => {
                   <section>
                     <div className="mt-10">
                       <h3 className="text-3xl font-semibold">Return Summary</h3>
-                      <p>{data?.results?.[data?.results.length - 1].data.summary_stats.summary_sentence}</p>
+                      <p className="text-gray-500 font-light mt-4 mb-5">
+                        {data?.results?.[data?.results.length - 1].data.summary_stats.summary_sentence}</p>
                       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                           <thead

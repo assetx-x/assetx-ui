@@ -5,6 +5,7 @@ export const API_URL = {
   VALIDATIONS: `${BASE_URL}/portfolio_validation/data/`,
   PREDICTIONS: `${BASE_URL}/holdings/data/`,
   DETAILS: `${BASE_URL}/forecast/`,
+  PRICE: `${BASE_URL}/prices/`,
   LOGIN: `${BASE_URL}/auth/token/`,
   HOLDINGS: `${BASE_URL}/holdings/`,
 }

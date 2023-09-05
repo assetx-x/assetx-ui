@@ -268,7 +268,7 @@ const NewPortfolioAnalysisResults = () => {
                           {context.predictionData?.["1M"].ai_alternatives.map(([symbol, company]) => (
                             <tr key={symbol} className="bg-white border-b  hover:bg-gray-50 ">
                               <td className="px-6 py-4">
-                                <div className="flex items-center" onClick={() => handleRowClick(company.ticker)}>
+                                <div className="flex items-center" onClick={() => console.log}>
                                   <img
                                     className="w-10 h-10 rounded-full"
                                     src={company.company_logo || "https://www.ortodonciasyv.cl/wp-content/uploads/2016/10/orionthemes-placeholder-image-2.png"}

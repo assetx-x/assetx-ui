@@ -15,6 +15,8 @@ const NewPortfolioAnalysisResults = () => {
     const context = useMain();
     const keys = ["Growth", "Quality", "Macro", "Momentum Fast", "Momentum Slow", "Trend Following", "Value", "Other Factors", "Overall"];
     const [selectedKey, setSelectedKey] = useState(keys[0]);
+    const [scope, setScope] = useState("categories");
+    const [timeScope, setTimeScope] = useState("historical");
 
     const resultColumns = useMemo(
       () => [
@@ -105,7 +107,7 @@ const NewPortfolioAnalysisResults = () => {
       return headers.map((header, index) => <th key={index} className="px-6 py-4">{header}</th>);
     };
 
-    console.log(context.predictionData?.["1M"])
+    console.log(context.predictionData?.["1M"]);
     const renderTableRows = () => {
       const factorContribution = context.predictionData?.["1M"]?.factor_contribution;
       if (!factorContribution) {
@@ -135,6 +137,13 @@ const NewPortfolioAnalysisResults = () => {
       window.open(`/us/ticker/${ticker}`, "_blank", "noreferrer");
     };
 
+    const handleSetScope = (event) => {
+      setScope(event.target.value);
+    };
+
+    const handleTimeScope = (event) => {
+      setTimeScope(event.target.value);
+    };
     return (
       <>
         <Header />
@@ -191,33 +200,83 @@ const NewPortfolioAnalysisResults = () => {
                       <div>
                         <h3 className="text-3xl font-semibold">Details</h3>
                       </div>
+                      <span className="text-xs pr-4">View by:</span>
                       <div>
-                        <span className="text-xs font-medium">View by:</span>
-                        <span
-                          className="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Categories</span>
-                        <span
-                          className="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Individual</span>
-                      </div>
-                      <div>
-                        <span
-                          className="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Historical</span>
-                        <span
-                          className="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Current</span>
+                        <div className="" role="group">
+                          <button type="button">
+                            <input
+                              className="hidden"
+                              type="radio"
+                              id="categories"
+                              name="scope"
+                              value="categories"
+                              checked={scope === "categories"}
+                              onChange={handleSetScope}
+                            />
+                            <label
+                              className="px-1 py-1 text-xs font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 "
+                              htmlFor="categories">
+                              Categories
+                            </label>
+                          </button>
+                          <button type="button"
+                                  className="">
+                            <input
+                              className="hidden"
+                              type="radio"
+                              id="individual"
+                              name="scope"
+                              value="individual"
+                            />
+                            <label
+                              className="px-1 py-1 text-xs font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
+                              htmlFor="individual">
+                              Individual
+                            </label>
+                          </button>
+                        </div>
 
                       </div>
-                      {/*End Objective Function*/}
-                    </div>
-                    <div className="mt-10" style={{
-                      display: "flex",
-                      justifyContent: "flex-start",
-                      alignItems: "center",
-                      flexDirection: "row-reverse"
-                    }}>
-                      {/*Investment Horizon*/}
+                      <div>
+                        <div className="inline-flex rounded-md shadow-sm" role="group">
+                          <button type="button">
+                            <input
+                              className="hidden"
+                              type="radio"
+                              id="historical"
+                              name="timeScope"
+                              value="historical"
+                              checked={timeScope === "historical"}
+                              onChange={handleTimeScope}
+                            />
+                            <label
+                              className="px-1 py-1 text-xs font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 "
+                              htmlFor="historical">
+                              Historical
+                            </label>
+                          </button>
+                          <button type="button"
+                                  className="">
+                            <input
+                              className="hidden"
+                              type="radio"
+                              id="current"
+                              name="timeScope"
+                              value="current"
+                            />
+                            <label
+                              className="px-1 py-1 text-xs font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
+                              htmlFor="current">
+                              Current
+                            </label>
+                          </button>
+                        </div>
+
+                      </div>
                       <div>
                         {keys.map((key) => (
                           <button
-                            className="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300"
+                            className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-xs px-3 py-1.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
                             key={key}
                             onClick={() => setSelectedKey(key)}
                           >
@@ -225,7 +284,6 @@ const NewPortfolioAnalysisResults = () => {
                           </button>
                         ))}
                       </div>
-                      {/*End Investment Horizon*/}
                     </div>
                   </div>
                   {/*End Selectable options*/}

@@ -7,5 +7,6 @@ export const API_URL = {
   DETAILS: `${BASE_URL}/forecast/`,
   PRICE: `${BASE_URL}/prices/`,
   LOGIN: `${BASE_URL}/auth/token/`,
+  REGISTER: `${BASE_URL}/auth/users/`,
   HOLDINGS: `${BASE_URL}/holdings/`,
 }

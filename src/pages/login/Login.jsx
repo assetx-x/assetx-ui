@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useQuery } from "react-query";
-import fetchLogin from "../../store/models/predicton/fetchLogin.jsx";
+import fetchLogin from "../../store/models/auth/fetchLogin.jsx";
 import { useAuth } from "../../store/context/AuthContext.jsx";
 
 

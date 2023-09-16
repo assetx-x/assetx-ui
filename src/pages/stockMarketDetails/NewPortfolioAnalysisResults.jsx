@@ -155,9 +155,7 @@ const NewPortfolioAnalysisResults = () => {
             {/*Content  */}
             <div className="grid grid-cols-6 gap-4 sm:col">
               <div className="col-span-6 md:col-span-3 lg:grid-cols-6 xl:col-span-4">
-                <section>
-                  <img width={"100%"} src={Placeholder01} alt="" />
-                </section>
+
                 <section>
                   <div className="mt-10 " style={{
                     display: "flex",

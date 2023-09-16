@@ -15,7 +15,7 @@ import fetchHoldings from "../../store/models/validations/fetchHoldings.jsx";
 import { useQuery } from "react-query";
 import Dropdown from "../../components/Dropdown.jsx";
 import { formatDataForTickerTable, formatDataToSendOptimization, formatDateToDashFormat } from "../../utils/index.js";
-import fetchPredictions from "../../store/models/auth/fetchPredictions.jsx";
+import fetchPredictions from "../../store/models/predicton/fetchPredictions.jsx";
 import fetchValidations from "../../store/models/holdings/fetchValidations.jsx";
 import { Loader } from "react-loaders";
 

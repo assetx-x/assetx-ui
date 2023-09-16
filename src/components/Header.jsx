@@ -96,7 +96,7 @@ export function Header() {
 
   return (
     <>
-      {auth.isAuthenticated ? (
+      {auth.isAuthenticated() ? (
           <header className="mb-10">
             <LoggedHeader logoutAction={auth.logout} />
           </header>
@@ -106,7 +106,7 @@ export function Header() {
             <Container>
               <nav className="relative z-50 flex justify-between">
                 <div className="flex items-center md:gap-x-12">
-                  <Link href="#" aria-label="Home">
+                  <Link to="/" aria-label="Home">
                     <img src={Logo} className="h-10 w-auto" alt="Logo" />
                   </Link>
                   <div className="hidden md:flex md:gap-x-6">
@@ -120,10 +120,10 @@ export function Header() {
                   <div className="hidden md:block">
                     <NavLink href="/login">Sign in</NavLink>
                   </div>
-                  <Button href="/register" color="blue">
-              <span>
-                Sign up
-              </span>
+                  <Button onClick={()=>window.location.href='/register'} color="blue">
+                    <span>
+                      Sign up
+                    </span>
                   </Button>
                   <div className="-mr-1 md:hidden">
                     <MobileNavigation />

@@ -19,13 +19,13 @@ function AuthProvider(props) {
   const logout = () => {
     // clear the token in localStorage and the user data
     window.localStorage.clear()
-    navigate("/login", { replace: true });
+    navigate("/", { replace: true });
   }
 
   const isAuthenticated = () => {
     const localToken = window.localStorage.getItem('token');
     const token = JSON.parse(localToken);
-    return token && token.isAuthenticated;
+    return !!(token && token.isAuthenticated);
   }
 
 

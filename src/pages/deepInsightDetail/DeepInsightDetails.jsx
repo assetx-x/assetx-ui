@@ -8,7 +8,6 @@ import { useQuery } from "react-query";
 import fetchTickerDetails from "../../store/models/details/fetchTickerDetails.jsx";
 import fetchTickerPrice from "../../store/models/details/fetchTickerPrice.jsx";
 import { Loader } from "react-loaders";
-import Placeholder01 from "../../assets/images/placeholder-01.png";
 import { BasicWaterfallChart } from "../../components/BasicWaterfallChart.jsx";
 import { formatDateToDashFormat } from "../../utils/index.js";
 import { CombinedLinearChart } from "../../components/CombinatedLinearChart.jsx";
@@ -282,7 +281,7 @@ const TickerDetail = () => {
               <div className="col-span-6 md:col-span-3 lg:grid-cols-6 xl:col-span-4">
 
                 {/*Placeholder*/}
-                <section>
+                <section className="mt-10">
                   <h1>{deepData?.[0]?.['overall_sentence']}</h1>
                   <p>{deepData?.[0]?.['in_depth_sentence']}</p>
                 </section>
@@ -463,8 +462,8 @@ const TickerDetail = () => {
                         <table className="w-full text-sm text-left text-gray-500">
                           <thead className=" sticky  text-xs text-gray-700 uppercase bg-gray-50 ">
                           </thead>
-                          {headerData?.data && <tbody>
-                          {Object.entries(headerData?.data?.ai_comparables[0]).map(([symbol, company]) => (
+                          {deepData?.[0] && <tbody>
+                          {Object.entries(deepData?.[0].ai_comparables[0]).map(([symbol, company]) => (
 
                             <tr key={symbol} className="bg-white border-b  hover:bg-gray-50 ">
 

@@ -292,7 +292,7 @@ const TickerDetail = () => {
               <div className="col-span-6 md:col-span-3 lg:grid-cols-6 xl:col-span-4">
 
                 {/*Placeholder*/}
-                <section className="mt-10">
+                <section className="pt-10">
                   <p>{data?.[selector]?.sentence}</p>
                 </section>
                 {/*End Placeholder*/}

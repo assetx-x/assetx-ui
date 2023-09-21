@@ -1,5 +1,5 @@
 import { API_URL } from "../../constants/api.jsx";
-import { get } from "../../services/apiClient.jsx";
+import { get, post } from "../../services/apiClient.jsx";
 
 export const getDetails = async (ticker) => {
   const token = JSON.parse(localStorage.getItem("token"));
@@ -8,6 +8,11 @@ export const getDetails = async (ticker) => {
     headers: { Authorization: `Bearer ${token?.access}` }
   });
 };
+
+
+export const getDeepInsightDetails = async (data) =>
+  await post(`${API_URL.DEEP_INSIGHTS}`, { data });
+
 
 export const getPrice = async (ticker) => {
   const token = JSON.parse(localStorage.getItem("token"));

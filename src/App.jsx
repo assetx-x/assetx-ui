@@ -9,6 +9,7 @@ import PortfolioAnalysis from "./pages/stockMarketDetails/PortfolioAnalysis.jsx"
 import PortfolioAnalysisResultsContainer from "./pages/stockMarketDetails/PortfolioAnalysisResultsContainer.jsx";
 import NewTickerDetial from "./pages/tickerDetail/NewTickerDetial.jsx";
 import Register from "./pages/register/Register.jsx";
+import DeepInsightDetails from "./pages/deepInsightDetail/DeepInsightDetails.jsx";
 // import AiDrivenInsights from "./pages/aiDrivenInsights/AIDrivenInsights.jsx";
 
 function App() {
@@ -24,6 +25,9 @@ function App() {
           <Route path="/:market/portfolio-analysis" element={<PortfolioAnalysis  />} />
           <Route path="/:market/portfolio-analysis/:id"
                  element={<PortfolioAnalysisResultsContainer selected={"portfolio-analysis"} />}
+          />
+          <Route path="/:market/ticker/:ticker/deep-insight/:x"
+                 element={<DeepInsightDetails />}
           />
         </Route>
         <Route exact path="/login" element={<Login />} />

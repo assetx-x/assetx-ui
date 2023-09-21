@@ -52,18 +52,18 @@ const Register = () => {
     <>
       <Header />
       <main>
-        <Container className="pt-20 pb-16 text-center lg:pt-32">
+        <Container className="pt-20 pb-16 text-center lg:pt-32 flex">
 
           {/*first column*/}
-          <div className="">
+          <div className="flex items-center">
 
             <div className="container mx-auto">
               <div>
                 <h3>Meet your new A.I Analyst</h3>
-                <p>Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt
-                  amet fugiat veniam occaecat fugiat aliqua ad ad non deserunt sunt.</p>
+                <p>Make data-driven decisions with confidence. This powerful tool utilizes advanced machine learning
+                  algorithms to extract meaningful insights and patterns from complex data sets.</p>
               </div>
-              <div>
+              <div className="flex justify-between">
                 <div>
                   <img
                     src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2288%22%20height%3D%2240%22%20viewBox%3D%220%200%2088%2040%22%20fill%3D%22none%22%3E%0A%20%20%3Cg%20clip-path%3D%22url(%23clip0_2828_1369)%22%3E%0A%20%20%20%20%3Cpath%20fill-rule%3D%22evenodd%22%20clip-rule%3D%22evenodd%22%20d%3D%22M0%208.33334L15%203.33334V11.25L20%209.58334V35.8333L5%2030.8333V26.25L0%2024.5833V8.33334ZM15%2029.5833L6.66667%2026.8058V29.6333L18.3333%2033.5208V11.8958L15%2013.0067V29.5833Z%22%20fill%3D%22%239CA3AF%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M35.75%2025.8333V17.0425H32.825V14.215H42.3967V17.0417H39.455V25.8333H35.75Z%22%20fill%3D%22%239CA3AF%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M49.5675%2026.045C46.1708%2026.045%2044.2542%2024.355%2044.2542%2021.04V14.215H47.9258V20.8942C47.9258%2022.405%2048.2508%2023.1525%2049.5675%2023.1525C50.8675%2023.1525%2051.1925%2022.405%2051.1925%2020.8775V14.215H54.8975V21.0075C54.8975%2024.5008%2052.8175%2026.045%2049.5675%2026.045Z%22%20fill%3D%22%239CA3AF%22%2F%3E%0A%20%20%20%20%3Cpath%20fill-rule%3D%22evenodd%22%20clip-rule%3D%22evenodd%22%20d%3D%22M57.4708%2025.8333V14.215H62.1025C65.45%2014.215%2066.88%2015.71%2066.88%2018.1958V18.2608C66.88%2020.6825%2065.2717%2022.0475%2062.265%2022.0475H61.1433V25.8333H57.4708ZM61.9067%2019.5775H61.1433V16.9608H61.9233C62.8817%2016.9608%2063.3858%2017.3192%2063.3858%2018.2125V18.2775C63.3858%2019.1383%2062.8817%2019.5775%2061.9067%2019.5775Z%22%20fill%3D%22%239CA3AF%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M68.8025%2014.215V25.8333H76.7167V22.99H72.4917V14.215H68.8025Z%22%20fill%3D%22%239CA3AF%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M78.8017%2025.8333V14.215H87.0567V17.0425H82.4742V18.6842H86.1142V21.2675H82.4742V23.0058H87.3167V25.8333H78.8017Z%22%20fill%3D%22%239CA3AF%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3CclipPath%20id%3D%22clip0_2828_1369%22%3E%0A%20%20%20%20%20%20%3Crect%20width%3D%2287.5%22%20height%3D%2240%22%20fill%3D%22white%22%2F%3E%0A%20%20%20%20%3C%2FclipPath%3E%0A%20%20%3C%2Fdefs%3E%0A%3C%2Fsvg%3E"

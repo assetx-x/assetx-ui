@@ -2,29 +2,21 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Header } from "../../components/Header.jsx";
 import { Container } from "../../components/Container.jsx";
-import Tabs from "../../components/Tabs.jsx";
-import DetailView from "../stockMarketDetails/components/DetailView.jsx";
 import BlockUi from "@availity/block-ui";
 import { useMain } from "../../store/context/MainContext.jsx";
 import { useQuery } from "react-query";
 import fetchTickerDetails from "../../store/models/details/fetchTickerDetails.jsx";
 import fetchTickerPrice from "../../store/models/details/fetchTickerPrice.jsx";
-import StackedView from "../stockMarketDetails/components/StackedView.jsx";
-import { WaterfallChart } from "../../components/WaterfallChart.jsx";
 import { Loader } from "react-loaders";
 import Placeholder01 from "../../assets/images/placeholder-01.png";
-import {
-  AsymmetricErrorBarsWithConstantOffsetChart
-} from "../../components/AsymmetricErrorBarsWithConstantOffsetChart.jsx";
 import { BasicWaterfallChart } from "../../components/BasicWaterfallChart.jsx";
-import ResultsTable from "../stockMarketDetails/components/ResultsTable.jsx";
 import { formatDateToDashFormat } from "../../utils/index.js";
 import { CombinedLinearChart } from "../../components/CombinatedLinearChart.jsx";
+import fetchDeepInsightsDetails from "../../store/models/details/fetchDeepInsightsDetail.jsx";
 
 const TickerDetail = () => {
   const navigate = useNavigate();
-  const context = useMain();
-  const { ticker } = useParams();
+  const { ticker, x } = useParams();
   const keywords = [
     "Overall",
     "Macro",
@@ -43,13 +35,15 @@ const TickerDetail = () => {
   const {
     data, error, isLoading
   } = useQuery(["details", { ticker }], fetchTickerDetails);
-  console.log("-> main data", data);
 
 
   const {
     data: priceData, error: priceError, isLoading: priceIsLoading
   } = useQuery(["priceData", { ticker }], fetchTickerPrice);
 
+  const {
+    data: deepData, error: deepError, isLoading: deepIsLoading
+  } = useQuery(["deepInsightsData", { ticker, x: 'Net Margin' }], fetchDeepInsightsDetails);
 
   // Handle Errors
   useEffect(() => {
@@ -108,7 +102,7 @@ const TickerDetail = () => {
     return headers.map((header, index) => <th key={index} className="px-6 py-4">{header}</th>);
   };
   const renderStatsTableRows = () => {
-    const statsInfo = data?.[selector]?.summary_stats.summary_table[0];
+    const statsInfo = deepData?.[selector]?.summary_stats.summary_table[0];
     if (!statsInfo) {
       return null;
     }
@@ -147,8 +141,6 @@ const TickerDetail = () => {
     for (let i = 0; i < data.points.length; i++) {
       pts = data.points[i].x;
     }
-    console.log(extractString(pts))
-    console.log(ticker)
     navigate(`/us/ticker/${ticker}/deep-insight/${extractString(pts)}`, {replace: true})
 
   }
@@ -291,8 +283,8 @@ const TickerDetail = () => {
 
                 {/*Placeholder*/}
                 <section>
-                  <img width={"100%"} src={Placeholder01} alt="" />
-                  <p>{headerData?.data?.sentence}</p>
+                  <h1>{deepData?.[0]?.['overall_sentence']}</h1>
+                  <p>{deepData?.[0]?.['in_depth_sentence']}</p>
                 </section>
                 {/*End Placeholder*/}
 
@@ -323,8 +315,8 @@ const TickerDetail = () => {
 
                     {/*End Objective Function*/}
                   </div>
-                  {headerData?.data && <CombinedLinearChart
-                    data={headerData?.data?.forecast}
+                  {deepData?.[0] && <CombinedLinearChart
+                    data={deepData?.[0]?.forecast}
                   />}
                   {/*<AsymmetricErrorBarsWithConstantOffsetChart data={context.predictionData?.["1M"]?.portfolio} />*/}
                 </section>
@@ -524,11 +516,11 @@ const TickerDetail = () => {
                 {/*Performance Attribution*/}
 
                 {/*Return Summary*/}
-                {headerData?.data && <section>
+                {deepData?.[0] && <section>
                   <div className="mt-10">
                     <h3 className="text-3xl font-semibold">Return Summary</h3>
                     <p className="text-gray-500 font-light mt-4 mb-5">
-                      {headerData?.data?.summary_stats.summary_sentence}</p>
+                      {deepData?.[0]?.['summary_stats']['summary_sentence']}</p>
                     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                       <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                         <thead

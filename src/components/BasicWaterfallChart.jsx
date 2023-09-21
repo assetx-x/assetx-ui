@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Plot from "react-plotly.js";
 
-export function BasicWaterfallChart({ data, key }) {
+export function BasicWaterfallChart({ data, key, onClick }) {
   const [settings, updateSettings] = useState({
     data: [
       {
@@ -50,6 +50,12 @@ export function BasicWaterfallChart({ data, key }) {
 
   let config = { responsive: true };
 
-  return <Plot data={settings.data} layout={settings.layout} style={{ width: "100%" }} config={config}
-               revision={key} />;
+  return <Plot
+    data={settings.data}
+    layout={settings.layout}
+    style={{ width: "100%" }}
+    config={config}
+    revision={key}
+    onClick={onClick}
+  />;
 }

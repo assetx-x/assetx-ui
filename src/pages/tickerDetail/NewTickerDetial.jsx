@@ -20,6 +20,7 @@ import { BasicWaterfallChart } from "../../components/BasicWaterfallChart.jsx";
 import ResultsTable from "../stockMarketDetails/components/ResultsTable.jsx";
 import { formatDateToDashFormat } from "../../utils/index.js";
 import { CombinedLinearChart } from "../../components/CombinatedLinearChart.jsx";
+import { EarningsChart } from "../../components/EarnningsChart.jsx";
 
 const TickerDetail = () => {
   const navigate = useNavigate();
@@ -130,28 +131,29 @@ const TickerDetail = () => {
   };
 
   const handleTimeScope = (event) => {
-    setTimeScope(event.target.value);
+    console.log(event.target.value);
+    setSelector(event.target.value);
   };
 
 
   const extractString = (str) => {
-    const parts = str.split('=');
+    const parts = str.split("=");
     if (parts.length >= 2) {
       return parts[1].trim();
     }
     return null; // or any other default value you prefer
-  }
+  };
 
   const handleDeepInsights = (data) => {
     let pts = "";
     for (let i = 0; i < data.points.length; i++) {
       pts = data.points[i].x;
     }
-    console.log(extractString(pts))
-    console.log(ticker)
-    navigate(`/us/ticker/${ticker}/deep-insight/${extractString(pts)}`, {replace: true})
+    console.log(extractString(pts));
+    console.log(ticker);
+    navigate(`/us/ticker/${ticker}/deep-insight/${extractString(pts)}`, { replace: true });
 
-  }
+  };
 
   return (
     <>
@@ -305,10 +307,40 @@ const TickerDetail = () => {
                       <h3 className="text-3xl font-semibold">Historical Price Performance</h3>
                     </div>
                     <div>
-                        <span
-                          className="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Value</span>
-                      <span
-                        className="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Growth</span>
+                      <div className="inline-flex rounded-md shadow-sm" role="group">
+                        <button type="button">
+                          <input
+                            id="earnings"
+                            name="model"
+                            className="hidden"
+                            type="radio"
+                            value="earnings"
+                            checked={selector === "earnings"}
+                            onChange={handleTimeScope}
+                          />
+                          <label
+                            className="px-1 py-1 text-xs font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 "
+                            htmlFor="earnings">
+                            Earnings Model
+                          </label>
+                        </button>
+                        <button type="button">
+                          <input
+                            id="returns"
+                            name="model"
+                            className="hidden"
+                            type="radio"
+                            value="returns"
+                            checked={selector === "returns"}
+                            onChange={handleTimeScope}
+                          />
+                          <label
+                            className="px-1 py-1 text-xs font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
+                            htmlFor="returns">
+                            Returns Model
+                          </label>
+                        </button>
+                      </div>
 
                     </div>
                     <div>
@@ -331,7 +363,9 @@ const TickerDetail = () => {
                 {/*End Historical Price Performance*/}
 
                 {/*<section>*/}
-                {/*Selectable options*/}
+                <EarningsChart
+                  data={data?.['earnings']?.forecast}
+                />
                 <div className="pl-[10px] pr-[10px]">
                   <div className="mt-10 " style={{
                     display: "flex", justifyContent: "space-between", alignItems: "center"
@@ -376,42 +410,7 @@ const TickerDetail = () => {
                       </div>
 
                     </div>
-                    <div>
-                      <div className="inline-flex rounded-md shadow-sm" role="group">
-                        <button type="button">
-                          <input
-                            className="hidden"
-                            type="radio"
-                            id="historical"
-                            name="timeScope"
-                            value="historical"
-                            checked={timeScope === "historical"}
-                            onChange={handleTimeScope}
-                          />
-                          <label
-                            className="px-1 py-1 text-xs font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 "
-                            htmlFor="historical">
-                            Historical
-                          </label>
-                        </button>
-                        <button type="button"
-                                className="">
-                          <input
-                            className="hidden"
-                            type="radio"
-                            id="current"
-                            name="timeScope"
-                            value="current"
-                          />
-                          <label
-                            className="px-1 py-1 text-xs font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
-                            htmlFor="current">
-                            Current
-                          </label>
-                        </button>
-                      </div>
 
-                    </div>
                     <div>
                       {keywords.map((key) => (<button
                         className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-xs px-3 py-1.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
@@ -430,12 +429,12 @@ const TickerDetail = () => {
                     {/*End Investment Horizon*/}
                   </div>
                 </div>
-                {/*End Selectable options*/}
-                {data && <BasicWaterfallChart
-                  data={data?.[selector]?.feature_importance_graph?.[selectedKey]}
-                  key={selectedKey}
-                  onClick={handleDeepInsights}
-                />}
+                <BasicWaterfallChart
+                    data={data?.["returns"]?.feature_importance_graph?.[selectedKey]}
+                    key={selectedKey}
+                    onClick={handleDeepInsights}
+                  />
+
                 {/*</section>*/}
 
                 {/*Factor Contribution*/}

@@ -292,9 +292,8 @@ const TickerDetail = () => {
               <div className="col-span-6 md:col-span-3 lg:grid-cols-6 xl:col-span-4">
 
                 {/*Placeholder*/}
-                <section>
-                  <img width={"100%"} src={Placeholder01} alt="" />
-                  <p>{headerData?.data?.sentence}</p>
+                <section className="mt-10">
+                  <p>{data?.[selector]?.sentence}</p>
                 </section>
                 {/*End Placeholder*/}
 
@@ -304,7 +303,7 @@ const TickerDetail = () => {
                     display: "flex", justifyContent: "space-between", alignItems: "center"
                   }}>
                     <div>
-                      <h3 className="text-3xl font-semibold">Historical Price Performance</h3>
+                      <h3 className="text-3xl font-semibold">Historical Performance</h3>
                     </div>
                     <div>
                       <div className="inline-flex rounded-md shadow-sm" role="group">
@@ -344,21 +343,22 @@ const TickerDetail = () => {
 
                     </div>
                     <div>
-                      <span className="text-xs font-medium">Forecast Horizon</span>
-                      <span
-                        className="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">1W</span>
-                      <span
-                        className="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">1M</span>
-                      <span
-                        className="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">1Y</span>
+                      {/*<span className="text-xs font-medium">Forecast Horizon</span>*/}
+                      {/*<span*/}
+                      {/*  className="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">1W</span>*/}
+                      {/*<span*/}
+                      {/*  className="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">1M</span>*/}
+                      {/*<span*/}
+                      {/*  className="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">1Y</span>*/}
                     </div>
 
                     {/*End Objective Function*/}
                   </div>
-                  {headerData?.data && <CombinedLinearChart
-                    data={headerData?.data?.forecast}
-                  />}
+                  {/*{headerData?.data && <CombinedLinearChart*/}
+                  {/*  data={headerData?.data?.forecast}*/}
+                  {/*/>}*/}
                   {/*<AsymmetricErrorBarsWithConstantOffsetChart data={context.predictionData?.["1M"]?.portfolio} />*/}
+
                 </section>
                 {/*End Historical Price Performance*/}
 
@@ -372,43 +372,6 @@ const TickerDetail = () => {
                   }}>
                     <div>
                       <h3 className="text-3xl font-semibold">Details</h3>
-                    </div>
-                    <span className="text-xs pr-4">View by:</span>
-                    <div>
-                      <div className="" role="group">
-                        <button type="button">
-                          <input
-                            className="hidden"
-                            type="radio"
-                            id="categories"
-                            name="scope"
-                            value="categories"
-                            checked={scope === "categories"}
-                            onChange={handleSetScope}
-                          />
-                          <label
-                            className="px-1 py-1 text-xs font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 "
-                            htmlFor="categories">
-                            Categories
-                          </label>
-                        </button>
-                        <button type="button"
-                                className="">
-                          <input
-                            className="hidden"
-                            type="radio"
-                            id="individual"
-                            name="scope"
-                            value="individual"
-                          />
-                          <label
-                            className="px-1 py-1 text-xs font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
-                            htmlFor="individual">
-                            Individual
-                          </label>
-                        </button>
-                      </div>
-
                     </div>
 
                     <div>

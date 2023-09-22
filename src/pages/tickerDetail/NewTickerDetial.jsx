@@ -155,8 +155,7 @@ const TickerDetail = () => {
     window.open(`/us/ticker/${ticker}/deep-insight/${extractString(pts)}`, '_blank');
   };
 
-
-
+console.log('.....',data?.[selector]?.ai_comparables)
   return (
     <>
       <Header />
@@ -436,11 +435,12 @@ const TickerDetail = () => {
                           <thead className=" sticky  text-xs text-gray-700 uppercase bg-gray-50 ">
                           </thead>
                           {data?.[selector] && <tbody>
-                          {Object.entries(data?.[selector]?.ai_comparables[0]).map(([symbol, company]) => (
+                          {Object.entries(data?.[selector]?.ai_comparables).map(([symbol, company]) => (
 
                             <tr key={symbol} className="bg-white border-b  hover:bg-gray-50 ">
                               <td className="px-6 py-4">
                                 <div className="flex items-center">
+
                                   <img
                                     className="w-10 h-10 rounded-full"
                                     src={company.company_logo || "https://www.ortodonciasyv.cl/wp-content/uploads/2016/10/orionthemes-placeholder-image-2.png"}

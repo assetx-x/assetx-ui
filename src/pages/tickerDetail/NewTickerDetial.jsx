@@ -21,6 +21,7 @@ import ResultsTable from "../stockMarketDetails/components/ResultsTable.jsx";
 import { formatDateToDashFormat } from "../../utils/index.js";
 import { CombinedLinearChart } from "../../components/CombinatedLinearChart.jsx";
 import { EarningsChart } from "../../components/EarnningsChart.jsx";
+import PerformanceAttributionTable from "../../components/PerformanceAttributionTable.jsx";
 
 const TickerDetail = () => {
   const navigate = useNavigate();
@@ -84,6 +85,10 @@ const TickerDetail = () => {
     const headers = ["Factor", "Current Contribution", "Historical Contribution", "Sector Current Contribution", "Sector Historical Contribution"];
     return headers.map((header, index) => <th key={index} className="px-6 py-4">{header}</th>);
   };
+
+
+  console.log("data ------>>", data?.[selector]?.factor_attribution)
+
   const renderTableRows = () => {
     const factorContribution = data?.[selector]?.factor_contribution;
     if (!factorContribution) {
@@ -471,15 +476,8 @@ const TickerDetail = () => {
                 {/*Performance Attribution*/}
                 <section>
                   <h3 className="text-3xl font-semibold">Performance Attribution</h3>
-                  <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-                    <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                      <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                      {renderTableHeader()}
-                      </thead>
-                      <tbody>
-                      {renderTableRows()}
-                      </tbody>
-                    </table>
+                  <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-6">
+                   <PerformanceAttributionTable data={data?.[selector]?.factor_attribution} />
                   </div>
                 </section>
                 {/*Performance Attribution*/}

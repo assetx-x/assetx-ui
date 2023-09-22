@@ -12,6 +12,9 @@ import { BasicWaterfallChart } from "../../components/BasicWaterfallChart.jsx";
 import { formatDateToDashFormat } from "../../utils/index.js";
 import { CombinedLinearChart } from "../../components/CombinatedLinearChart.jsx";
 import fetchDeepInsightsDetails from "../../store/models/details/fetchDeepInsightsDetail.jsx";
+import ReturnSummaryTable from "../../components/ReturnSummaryTable.jsx";
+import { IsolationReturnChart } from "../../components/IsolationReturnChart.jsx";
+import { ReactionChart } from "../../components/ReactionChart.jsx";
 
 const TickerDetail = () => {
   const navigate = useNavigate();
@@ -140,10 +143,10 @@ const TickerDetail = () => {
     for (let i = 0; i < data.points.length; i++) {
       pts = data.points[i].x;
     }
-    navigate(`/us/ticker/${ticker}/deep-insight/${extractString(pts)}`, {replace: true})
-
+  console.log(pts)
   }
 
+console.log(deepData?.[0])
   return (
     <>
       <Header />
@@ -282,8 +285,8 @@ const TickerDetail = () => {
 
                 {/*Placeholder*/}
                 <section className="mt-10">
-                  <h1>{deepData?.[0]?.['overall_sentence']}</h1>
-                  <p>{deepData?.[0]?.['in_depth_sentence']}</p>
+                  <h1 className="text-2xl font-extrabold">{deepData?.[0]?.['overall_sentence']}</h1>
+                  <p className="text-lg text-gray-500 mt-6">{deepData?.[0]?.['in_depth_sentence']}</p>
                 </section>
                 {/*End Placeholder*/}
 
@@ -431,17 +434,13 @@ const TickerDetail = () => {
 
                 {/*Factor Contribution*/}
                 <section>
-                  <h3 className="text-3xl font-semibold">Factor Contribution</h3>
-
+                  <h3 className="text-3xl font-semibold">Historical Event Dates in Isolation</h3>
+                  <p>{data?.[selector]?.action}</p>
                   <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-                    <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                      <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                      {renderTableHeader()}
-                      </thead>
-                      <tbody>
-                      {renderTableRows()}
-                      </tbody>
-                    </table>
+
+                    {deepData?.[0] && <ReactionChart data={deepData?.[0]?.reaction} />}
+
+
                   </div>
                 </section>
                 {/*Factor Contribution*/}
@@ -460,43 +459,7 @@ const TickerDetail = () => {
                   <div className="mt-10">
                     <div className="relative overflow-x">
                       <div className="relative overflow-x-auto shadow-md sm:rounded-lg p-3 h-{600}">
-
-
-                        <table className="w-full text-sm text-left text-gray-500">
-                          <thead className=" sticky  text-xs text-gray-700 uppercase bg-gray-50 ">
-                          </thead>
-                          {deepData?.[0] && <tbody>
-                          {Object.entries(deepData?.[0].ai_comparables[0]).map(([symbol, company]) => (
-
-                            <tr key={symbol} className="bg-white border-b  hover:bg-gray-50 ">
-
-                              <td className="px-6 py-4">
-                                <div className="flex items-center">
-                                  <img
-                                    className="w-10 h-10 rounded-full"
-                                    src={company.company_logo || "https://www.ortodonciasyv.cl/wp-content/uploads/2016/10/orionthemes-placeholder-image-2.png"}
-                                    alt={company.company_name + " image"}
-                                  />
-                                  <div className="pl-3">
-                                    <div className="text-base font-semibold">{company.company_name}</div>
-                                    <div className="font-normal text-gray-500">{company.sector}</div>
-                                  </div>
-                                </div>
-                                {/*<th  scope="col" className="px-6 py-4">*/}
-                                {/*  <p>{symbol}</p>*/}
-                                {/*  <p>{company.company_name}</p>*/}
-                                {/*  <p>{company.sector}</p>*/}
-                                {/*  <img src={company.company_logo} alt="Company Logo" />*/}
-                                {/*</th>*/}
-                                {/*<td className="px-6 py-4">*/}
-                                {/*  {company.ticker}*/}
-                                {/*</td>*/}
-                              </td>
-                            </tr>))}
-                          </tbody>}
-                        </table>
-
-
+                        {deepData?.[0]&& <ReturnSummaryTable data={deepData?.[0]?.summary_stats?.summary_table?.[0]} />}
                       </div>
                     </div>
                   </div>
@@ -505,16 +468,15 @@ const TickerDetail = () => {
 
                 {/*Performance Attribution*/}
                 <section>
-                  <h3 className="text-3xl font-semibold">Performance Attribution</h3>
+                  <h3 className="text-3xl font-semibold">Event Based Backtest</h3>
                   <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-                    <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                      <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                      {renderTableHeader()}
-                      </thead>
-                      <tbody>
-                      {renderTableRows()}
-                      </tbody>
-                    </table>
+
+
+                    {deepData?.[0]?.isolation_return &&  <IsolationReturnChart data={deepData?.[0]?.isolation_return} />}
+
+
+
+
                   </div>
                 </section>
                 {/*Performance Attribution*/}
@@ -522,19 +484,45 @@ const TickerDetail = () => {
                 {/*Return Summary*/}
                 {deepData?.[0] && <section>
                   <div className="mt-10">
-                    <h3 className="text-3xl font-semibold">Return Summary</h3>
-                    <p className="text-gray-500 font-light mt-4 mb-5">
-                      {deepData?.[0]?.['summary_stats']['summary_sentence']}</p>
-                    <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-                      <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                        <thead
-                          className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                        {renderStatsTableHeader()}
-                        </thead>
-                        <tbody>
-                        {renderStatsTableRows()}
-                        </tbody>
-                      </table>
+                    <h3 className="text-3xl font-semibold">AI Selectable Comparables</h3>
+                    <div className="mt-10">
+                      <div className="relative overflow-x">
+                        <div className="relative overflow-x-auto shadow-md sm:rounded-lg p-3 h-{600}">
+                          <table className="w-full text-sm text-left text-gray-500">
+                            <thead className=" sticky  text-xs text-gray-700 uppercase bg-gray-50 ">
+                            </thead>
+                            {deepData?.[0] && <tbody>
+                            {Object.entries(deepData?.[0].ai_comparables[0]).map(([symbol, company]) => (
+
+                              <tr key={symbol} className="bg-white border-b  hover:bg-gray-50 ">
+
+                                <td className="px-6 py-4">
+                                  <div className="flex items-center">
+                                    <img
+                                      className="w-10 h-10 rounded-full"
+                                      src={company.company_logo || "https://www.ortodonciasyv.cl/wp-content/uploads/2016/10/orionthemes-placeholder-image-2.png"}
+                                      alt={company.company_name + " image"}
+                                    />
+                                    <div className="pl-3">
+                                      <div className="text-base font-semibold">{company.company_name}</div>
+                                      <div className="font-normal text-gray-500">{company.sector}</div>
+                                    </div>
+                                  </div>
+                                  {/*<th  scope="col" className="px-6 py-4">*/}
+                                  {/*  <p>{symbol}</p>*/}
+                                  {/*  <p>{company.company_name}</p>*/}
+                                  {/*  <p>{company.sector}</p>*/}
+                                  {/*  <img src={company.company_logo} alt="Company Logo" />*/}
+                                  {/*</th>*/}
+                                  {/*<td className="px-6 py-4">*/}
+                                  {/*  {company.ticker}*/}
+                                  {/*</td>*/}
+                                </td>
+                              </tr>))}
+                            </tbody>}
+                          </table>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </section>}

@@ -44,7 +44,6 @@ const TickerDetail = () => {
   const {
     data, error, isLoading
   } = useQuery(["details", { ticker }], fetchTickerDetails);
-  console.log("-> main data", data);
 
 
   const {
@@ -131,7 +130,6 @@ const TickerDetail = () => {
   };
 
   const handleTimeScope = (event) => {
-    console.log(event.target.value);
     setSelector(event.target.value);
   };
 

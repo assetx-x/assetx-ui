@@ -489,7 +489,7 @@ const TickerDetail = () => {
                   <div className="mt-10">
                     <h3 className="text-3xl font-semibold">Return Summary</h3>
                     <p className="text-gray-500 font-light mt-4 mb-5">
-                      {headerData?.data?.summary_stats.summary_sentence}</p>
+                      {data?.[selector]?.summary_stats.summary_sentence}</p>
                     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                       <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                         <thead

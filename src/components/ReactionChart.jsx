@@ -4,166 +4,46 @@ import Plot from "react-plotly.js";
 export function ReactionChart({ data, onClick }) {
 
 
-  const [settings, updateSettings] = useState({
-    historicaltrace2: {
-      x: [0,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        10,
-        11,
-        12,
-        13,
-        14,
-        15,
-        16,
-        17,
-        18,
-        19,
-        20,
-        21,
-        22,
-        23,
-        24,
-        25,
-        26,
-        27,
-        28,
-        29,
-        30],
-      y: [0.0,
-        0.0020397221131756016,
-        -0.003113366189337663,
-        0.0031132785234539995,
-        0.014921960707098947,
-        0.022007555747173724,
-        0.01867967114072422,
-        0.01943096776297515,
-        0.01814262993793414,
-        0.019323752387360837,
-        0.03327972272332991,
-        0.0343531038018412,
-        0.03854002640145726,
-        0.04916802446509316,
-        0.04659152414677825,
-        0.05968863182134787,
-        0.05593135971714047,
-        0.04068731455378116,
-        0.0419752140494043,
-        0.038218117276964,
-        0.01771341777194313,
-        0.028770803333337147,
-        0.007622110247562874,
-        0.01739115798391566,
-        0.026301606056519766,
-        0.026731081220161323,
-        0.03843281102584295,
-        0.02608691230764082,
-        0.03274276918642327,
-        0.04100931134415764,
-        0.05142244032714749],
-      mode: "lines",
-      type: "scatter",
-      opacity: 0.3,
-      line: {
+  for (const key in data) {
+    if (key.startsWith("historicaltrace")) {
+      data[key].mode = "lines";
+      data[key].type = "scatter";
+      data[key].opacity = 0.3;
+      data[key].line = {
         color: "rgb(226, 226, 226)",
         width: 3
-      }
-    },
+      };
+    }
 
-
-    // principal
-    average_trace: {
-      x: [0,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        10,
-        11,
-        12,
-        13,
-        14,
-        15,
-        16,
-        17,
-        18,
-        19,
-        20,
-        21,
-        22,
-        23,
-        24,
-        25,
-        26,
-        27,
-        28,
-        29,
-        30],
-      y: [0.0,
-        0.003639255990919656,
-        0.005321613669366783,
-        0.003383582794679592,
-        0.0044218518185332656,
-        0.0036376673462281167,
-        0.0045330986245445725,
-        0.005848527225039071,
-        0.0057429403855839434,
-        0.010129336578572635,
-        0.010436041968450977,
-        0.01394845860903447,
-        0.018106285284170628,
-        0.010311249543307774,
-        0.01054666722086568,
-        0.011507056554277044,
-        0.010443801663444234,
-        0.004250493125706982,
-        0.005501001531624254,
-        0.007921600270726954,
-        0.007497662222369472,
-        0.008770838313780279,
-        0.011889034974616039,
-        0.012582630762707797,
-        0.00934043476977865,
-        0.009853256690806746,
-        0.010366117694453756,
-        0.01044895230098036,
-        0.009549413849196747,
-        0.013403172839307198,
-        0.014728466473888714],
-      mode: "lines",
-      type: "scatter",
-      line: {
+    if (key.startsWith("average_trace")) {
+      data[key].mode = "lines";
+      data[key].type = "scatter";
+      data[key].line = {
         color: "rgb(49,130,189)",
         width: 3
-      }
-    },
-    average_point: {
-      x: [30],
-      y: [0.014728466473888714],
-      mode: "markers+text",
-      type: "scatter",
-      text: ["1.47%"],
-      textfont: {
+      };
+    }
+
+    if (key.startsWith("average_point")) {
+      data[key].mode = "markers+text";
+      data[key].type = "scatter";
+      data[key].texy = ["1.47%"];
+      data[key].textfont = {
         family: "sans serif"
-      },
-      textposition: "bottom center",
-      marker: {
+      };
+      data[key].textposition = "bottom center";
+      data[key].marker = {
         size: 12,
         color: "rgb(49,130,189)"
-      }
-    },
+      };
+    }
+  }
+
+  const ladata = Object.keys(data).map(key => data[key]);
+
+  console.log("-> data", ladata);
+
+  const [settings, updateSettings] = useState({
     layout: {
       plot_bgcolor: "rgba(0,0,0,0)",
       showlegend: false,
@@ -179,7 +59,6 @@ export function ReactionChart({ data, onClick }) {
       }
     }
 
-
   });
 
   useEffect(() => {
@@ -192,7 +71,7 @@ export function ReactionChart({ data, onClick }) {
   let config = { responsive: true };
 
   return <Plot
-    data={[settings.average_point, settings.average_trace, settings.historicaltrace2]}
+    data={[...ladata]}
     layout={settings.layout}
     style={{ width: "100%" }}
     config={config}

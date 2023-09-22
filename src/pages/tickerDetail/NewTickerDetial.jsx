@@ -149,11 +149,10 @@ const TickerDetail = () => {
     for (let i = 0; i < data.points.length; i++) {
       pts = data.points[i].x;
     }
-    console.log(extractString(pts));
-    console.log(ticker);
-    navigate(`/us/ticker/${ticker}/deep-insight/${extractString(pts)}`, { replace: true });
-
+    window.open(`/us/ticker/${ticker}/deep-insight/${extractString(pts)}`, '_blank');
   };
+
+
 
   return (
     <>
@@ -354,18 +353,18 @@ const TickerDetail = () => {
 
                     {/*End Objective Function*/}
                   </div>
-                  {/*{headerData?.data && <CombinedLinearChart*/}
-                  {/*  data={headerData?.data?.forecast}*/}
-                  {/*/>}*/}
+                  {selector === "returns" ? <CombinedLinearChart
+                    data={data?.["returns"]?.forecast}
+                  /> : null}
                   {/*<AsymmetricErrorBarsWithConstantOffsetChart data={context.predictionData?.["1M"]?.portfolio} />*/}
 
                 </section>
                 {/*End Historical Price Performance*/}
 
                 {/*<section>*/}
-                <EarningsChart
-                  data={data?.['earnings']?.forecast}
-                />
+                {selector === 'earnings' ?<EarningsChart
+                  data={data?.["earnings"]?.forecast}
+                /> : null}
                 <div className="pl-[10px] pr-[10px]">
                   <div className="mt-10 " style={{
                     display: "flex", justifyContent: "space-between", alignItems: "center"
@@ -393,10 +392,10 @@ const TickerDetail = () => {
                   </div>
                 </div>
                 <BasicWaterfallChart
-                    data={data?.["returns"]?.feature_importance_graph?.[selectedKey]}
-                    key={selectedKey}
-                    onClick={handleDeepInsights}
-                  />
+                  data={data?.["returns"]?.feature_importance_graph?.[selectedKey]}
+                  key={selectedKey}
+                  onClick={handleDeepInsights}
+                />
 
                 {/*</section>*/}
 
@@ -433,11 +432,10 @@ const TickerDetail = () => {
                         <table className="w-full text-sm text-left text-gray-500">
                           <thead className=" sticky  text-xs text-gray-700 uppercase bg-gray-50 ">
                           </thead>
-                          {headerData?.data && <tbody>
-                          {Object.entries(headerData?.data?.ai_comparables[0]).map(([symbol, company]) => (
+                          {data?.[selector] && <tbody>
+                          {Object.entries(data?.[selector]?.ai_comparables[0]).map(([symbol, company]) => (
 
                             <tr key={symbol} className="bg-white border-b  hover:bg-gray-50 ">
-
                               <td className="px-6 py-4">
                                 <div className="flex items-center">
                                   <img
@@ -460,7 +458,10 @@ const TickerDetail = () => {
                                 {/*  {company.ticker}*/}
                                 {/*</td>*/}
                               </td>
-                            </tr>))}
+                            </tr>
+
+                          ))}
+
                           </tbody>}
                         </table>
                       </div>

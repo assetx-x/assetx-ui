@@ -452,13 +452,16 @@ const TickerDetail = () => {
 
                 {/*AI Selected Comparables*/}
                 <section className="mb-20">
-                  <h3 className="text-3xl font-semibold">AI Selected Comparables</h3>
+                  <h3 className="text-3xl font-semibold">Return Summary</h3>
                   <p className="text-gray-500 font-light mt-4">
-                    as of {getLastMonthDate()}
+                    {deepData?.[0]?.summary_stats?.summary_sentence}
                   </p>
+
                   <div className="mt-10">
                     <div className="relative overflow-x">
                       <div className="relative overflow-x-auto shadow-md sm:rounded-lg p-3 h-{600}">
+
+
                         <table className="w-full text-sm text-left text-gray-500">
                           <thead className=" sticky  text-xs text-gray-700 uppercase bg-gray-50 ">
                           </thead>
@@ -492,6 +495,8 @@ const TickerDetail = () => {
                             </tr>))}
                           </tbody>}
                         </table>
+
+
                       </div>
                     </div>
                   </div>

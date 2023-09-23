@@ -45,6 +45,7 @@ export function ReactionChart({ data, onClick }) {
 
   const [settings, updateSettings] = useState({
     layout: {
+      height: 750,
       plot_bgcolor: "rgba(0,0,0,0)",
       showlegend: false,
       xaxis: {

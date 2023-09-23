@@ -12,7 +12,7 @@ export const CombinedLinearChartComponent = ({ data }) => {
       };
 
       const width = chartContainerRef.current.clientWidth;
-      const height = 450;
+      const height = 750;
 
 
       const chart = createChart(chartContainerRef.current, {

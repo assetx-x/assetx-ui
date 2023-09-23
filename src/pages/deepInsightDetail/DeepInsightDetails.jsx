@@ -322,120 +322,11 @@ console.log(deepData?.[0])
                   />}
                   {/*<AsymmetricErrorBarsWithConstantOffsetChart data={context.predictionData?.["1M"]?.portfolio} />*/}
                 </section>
-                {/*End Historical Price Performance*/}
 
-                {/*<section>*/}
-                {/*Selectable options*/}
-                <div className="pl-[10px] pr-[10px]">
-                  <div className="mt-10 " style={{
-                    display: "flex", justifyContent: "space-between", alignItems: "center"
-                  }}>
-                    <div>
-                      <h3 className="text-3xl font-semibold">Details</h3>
-                    </div>
-                    <span className="text-xs pr-4">View by:</span>
-                    <div>
-                      <div className="" role="group">
-                        <button type="button">
-                          <input
-                            className="hidden"
-                            type="radio"
-                            id="categories"
-                            name="scope"
-                            value="categories"
-                            checked={scope === "categories"}
-                            onChange={handleSetScope}
-                          />
-                          <label
-                            className="px-1 py-1 text-xs font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 "
-                            htmlFor="categories">
-                            Categories
-                          </label>
-                        </button>
-                        <button type="button"
-                                className="">
-                          <input
-                            className="hidden"
-                            type="radio"
-                            id="individual"
-                            name="scope"
-                            value="individual"
-                          />
-                          <label
-                            className="px-1 py-1 text-xs font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
-                            htmlFor="individual">
-                            Individual
-                          </label>
-                        </button>
-                      </div>
 
-                    </div>
-                    <div>
-                      <div className="inline-flex rounded-md shadow-sm" role="group">
-                        <button type="button">
-                          <input
-                            className="hidden"
-                            type="radio"
-                            id="historical"
-                            name="timeScope"
-                            value="historical"
-                            checked={timeScope === "historical"}
-                            onChange={handleTimeScope}
-                          />
-                          <label
-                            className="px-1 py-1 text-xs font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 "
-                            htmlFor="historical">
-                            Historical
-                          </label>
-                        </button>
-                        <button type="button"
-                                className="">
-                          <input
-                            className="hidden"
-                            type="radio"
-                            id="current"
-                            name="timeScope"
-                            value="current"
-                          />
-                          <label
-                            className="px-1 py-1 text-xs font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
-                            htmlFor="current">
-                            Current
-                          </label>
-                        </button>
-                      </div>
-
-                    </div>
-                    <div>
-                      {keywords.map((key) => (<button
-                        className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-xs px-3 py-1.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
-                        key={key}
-                        onClick={() => setSelectedKey(key)}
-                      >
-                        {key}
-                      </button>))}
-                    </div>
-                  </div>
-                  <div className="mt-10" style={{
-                    display: "flex", justifyContent: "flex-start", alignItems: "center", flexDirection: "row-reverse"
-                  }}>
-                    {/*Investment Horizon*/}
-
-                    {/*End Investment Horizon*/}
-                  </div>
-                </div>
-                {/*End Selectable options*/}
-                {data && <BasicWaterfallChart
-                  data={data?.[selector]?.feature_importance_graph?.[selectedKey]}
-                  key={selectedKey}
-                  onClick={handleDeepInsights}
-                />}
-                {/*</section>*/}
-
-                {/*Factor Contribution*/}
                 <section>
                   <h3 className="text-3xl font-semibold">Historical Event Dates in Isolation</h3>
-                  <p>{data?.[selector]?.action}</p>
+                  <p className="text-gray-500 font-light mt-4">AssetX has detected a BUY signal X amount of times in the past 10 years based on the current set of factors driving the assets movement. Out of the X distinct times this signal has been triggered, the median hit ratio across all time horizons is X% and the median return is X.XX%</p>
                   <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
 
                     {deepData?.[0] && <ReactionChart data={deepData?.[0]?.reaction} />}
@@ -448,14 +339,11 @@ console.log(deepData?.[0])
 
               </div>
               <div className="col-span-6 md:col-span-3 lg:grid-cols-6 xl:col-span-2">
-
-                {/*AI Selected Comparables*/}
                 <section className="mb-20">
                   <h3 className="text-3xl font-semibold">Return Summary</h3>
                   <p className="text-gray-500 font-light mt-4">
                     {deepData?.[0]?.summary_stats?.summary_sentence}
                   </p>
-
                   <div className="mt-10">
                     <div className="relative overflow-x">
                       <div className="relative overflow-x-auto shadow-md sm:rounded-lg p-3 h-{600}">
@@ -464,26 +352,17 @@ console.log(deepData?.[0])
                     </div>
                   </div>
                 </section>
-                {/*End AI Selected Comparables*/}
 
-                {/*Performance Attribution*/}
                 <section>
                   <h3 className="text-3xl font-semibold">Event Based Backtest</h3>
+                  <p className="text-gray-500 font-light mt-4">Cumulative Return based on $1 according to a long-only signal based on this factor</p>
                   <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-
-
                     {deepData?.[0]?.isolation_return &&  <IsolationReturnChart data={deepData?.[0]?.isolation_return} />}
-
-
-
-
                   </div>
                 </section>
-                {/*Performance Attribution*/}
 
-                {/*Return Summary*/}
                 {deepData?.[0] && <section>
-                  <div className="mt-10">
+                  <div className="mt-10 h-[830px] overflow-scroll">
                     <h3 className="text-3xl font-semibold">AI Selectable Comparables</h3>
                     <div className="mt-10">
                       <div className="relative overflow-x">
@@ -526,7 +405,6 @@ console.log(deepData?.[0])
                     </div>
                   </div>
                 </section>}
-                {/*End Return Summary*/}
 
               </div>
             </div>

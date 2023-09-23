@@ -50,7 +50,6 @@ const TickerDetail = () => {
     }
   }, [error]);
 
-  // Handle Errors
   useEffect(() => {
     if (!isLoading) {
       const featureImportanceGraph = data?.[selector]?.feature_importance_graph;

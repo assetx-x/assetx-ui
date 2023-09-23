@@ -7,11 +7,11 @@ export function BasicWaterfallChart({ data, key, onClick }) {
       {
         type: "waterfall",
         orientation: "v",
-        measure: data.measure,
-        x: data.x,
-        y: data.y,
+        measure: data?.measure,
+        x: data?.x,
+        y: data?.y,
         textposition: "inside",
-        text: data.text,
+        text: data?.text,
         increasing: { marker: { color: "rgb(30,143,204)" } },
         decreasing: { marker: { color: "rgb(225,0,75.54)" } },
         connector: {
@@ -39,19 +39,19 @@ export function BasicWaterfallChart({ data, key, onClick }) {
         color: "rgb(226,226,226)"
       }
     }
-
   });
+
   useEffect(() => {
     updateSettings((settings) => ({
       ...settings,
-      data: [{ ...settings.data[0], y: data.y, x: data.x }]
+      data: [{ ...settings.data[0], y: data?.y, x: data?.x }]
     }));
   }, [data]);
 
   let config = { responsive: true };
 
   return <Plot
-    data={settings.data}
+    data={settings?.data}
     layout={settings.layout}
     style={{ width: "100%" }}
     config={config}

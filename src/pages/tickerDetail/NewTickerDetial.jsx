@@ -27,39 +27,44 @@ const TickerDetail = () => {
   const navigate = useNavigate();
   const context = useMain();
   const { ticker } = useParams();
-  const keywords = [
-    "Overall",
-    "Macro",
-    "Balance Sheet",
-    "Income Statement",
-    "Cash Flows"
-  ];
+  const [keywords, setKeywords] = useState([]);
+  const [selectedKey, setSelectedKey] = useState('Overall');
   const [investingHorizonOption, setInvestingHorizonsOption] = useState("21D");
-  const [selectedKey, setSelectedKey] = useState(keywords[0]);
   const [headerData, setHeaderData] = useState({});
   const [scope, setScope] = useState("categories");
   const [selector, setSelector] = useState("returns");
   const [timeScope, setTimeScope] = useState("historical");
 
-
   const {
     data, error, isLoading
   } = useQuery(["details", { ticker }], fetchTickerDetails);
 
-
   const {
     data: priceData, error: priceError, isLoading: priceIsLoading
   } = useQuery(["priceData", { ticker }], fetchTickerPrice);
-
 
   // Handle Errors
   useEffect(() => {
     if (error) {
       console.log("details error ", error);
     }
-
   }, [error]);
 
+  // Handle Errors
+  useEffect(() => {
+    if (!isLoading) {
+      const featureImportanceGraph = data?.[selector]?.feature_importance_graph;
+
+      if (featureImportanceGraph) {
+        const _featureImportanceGraphKeys = Object.keys(featureImportanceGraph);
+        const _indexOverall = _featureImportanceGraphKeys.indexOf('Overall');
+        const _overall = _featureImportanceGraphKeys.splice(_indexOverall, 1);
+
+        setKeywords([..._overall, ..._featureImportanceGraphKeys]);
+        setSelectedKey('Overall');
+      }
+    }
+  }, [isLoading, selector]);
 
   // TODO: Add skeleton
   if (!data) return (<>
@@ -85,9 +90,6 @@ const TickerDetail = () => {
     const headers = ["Factor", "Current Contribution", "Historical Contribution", "Sector Current Contribution", "Sector Historical Contribution"];
     return headers.map((header, index) => <th key={index} className="px-6 py-4">{header}</th>);
   };
-
-
-  console.log("data ------>>", data?.[selector]?.factor_attribution)
 
   const renderTableRows = () => {
     const factorContribution = data?.[selector]?.factor_contribution;
@@ -155,7 +157,6 @@ const TickerDetail = () => {
     window.open(`/us/ticker/${ticker}/deep-insight/${extractString(pts)}`, '_blank');
   };
 
-console.log('.....',data?.[selector]?.ai_comparables)
   return (
     <>
       <Header />
@@ -376,8 +377,8 @@ console.log('.....',data?.[selector]?.ai_comparables)
                     </div>
 
                     <div>
-                      {keywords.map((key) => (<button
-                        className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-xs px-3 py-1.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+                      {keywords?.length > 0 && keywords.map((key) => (<button
+                        className={`${selectedKey === key ? 'bg-gray-300' : 'text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700'} font-medium rounded-full text-xs px-3 py-1.5 mr-2 mb-2 `}
                         key={key}
                         onClick={() => setSelectedKey(key)}
                       >
@@ -393,11 +394,11 @@ console.log('.....',data?.[selector]?.ai_comparables)
                     {/*End Investment Horizon*/}
                   </div>
                 </div>
-                <BasicWaterfallChart
-                  data={data?.["returns"]?.feature_importance_graph?.[selectedKey]}
+                {selectedKey && <BasicWaterfallChart
+                  data={data?.[selector]?.feature_importance_graph?.[selectedKey]}
                   key={selectedKey}
                   onClick={handleDeepInsights}
-                />
+                />}
 
                 {/*</section>*/}
 

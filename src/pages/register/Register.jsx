@@ -5,23 +5,53 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useQuery } from "react-query";
 import fetchRegister from "../../store/models/auth/fetchRegister.jsx";
+import fetchLogin from "../../store/models/auth/fetchLogin.jsx";
 import { useNavigate } from "react-router-dom";
-
+import { useAuth } from "../../store/context/AuthContext.jsx";
 
 const Register = () => {
+  const auth = useAuth();
   const navigate = useNavigate();
   const [registerParams, setRegisterParams] = useState();
+  const [loginParams, setLoginParams] = useState();
   const {
     data,
     error,
     isLoading,
     refetch
   } = useQuery(["register", registerParams], fetchRegister, { enabled: false });
+  const {
+    data: loginData,
+    error: loginError,
+    isLoading: loginLoading,
+    refetch: loginRefetch
+  } = useQuery(["login", loginParams], fetchLogin, { enabled: false });
 
+  useEffect(() => {
+    if (data?.message === 'Successfully created user') {
+      setLoginParams({
+        "username": registerParams.username,
+        "password": registerParams.password
+      });
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (loginData) {
+      auth.login(loginData);
+    }
+  }
+  , [loginData, auth]);
 
   useEffect(() => {
     if (registerParams !== undefined) refetch();
   }, [registerParams]);
+
+  useEffect(() => {
+    if (loginParams) {
+      loginRefetch();
+    }
+  }, [loginParams]);
 
   const formik = useFormik({
     initialValues: {
@@ -46,7 +76,6 @@ const Register = () => {
       password: Yup.string().required("Password is required")
     })
   });
-
 
   return (
     <>

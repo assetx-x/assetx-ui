@@ -8,16 +8,15 @@ export function NormalizedStackedAreaChart({ data }) {
     xaxis: {
       showgrid: false},
     yaxis: {
-      showgrid: false},
+      title: '(%) Risk Contribution',
+      zeroline: false,
+      showgrid: false
+    },
     legend: {"orientation": "h"},
     font: {
       family: 'NunitoSans-ExtraBold',
       color: '#1E8FCC'
     },
-    yaxis: {
-      title: '(%) Risk Contribution',
-      zeroline: false
-    }
   };
 
   const compactLayout = {
@@ -25,16 +24,14 @@ export function NormalizedStackedAreaChart({ data }) {
     xaxis: {
       showgrid: false},
     yaxis: {
+      title: '(%) Risk Contribution',
+      zeroline: false,
       showgrid: false},
     legend: {showlegend: false},
     font: {
       family: 'NunitoSans-ExtraBold',
       color: '#1E8FCC'
     },
-    yaxis: {
-      title: '(%) Risk Contribution',
-      zeroline: false
-    }
   };
 
   let layout = data.length > 10 ? compactLayout : normalLayout;

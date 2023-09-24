@@ -16,9 +16,6 @@ export function WaterfallChart({ data }) {
       title: "<b>(β)</b> Relative Factor Contribution",
       showgrid: false
     },
-
-
-    showlegend: false,
     font: {
       family: "NunitoSans-ExtraBold",
       color: "#537FA0"

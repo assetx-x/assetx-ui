@@ -24,7 +24,7 @@ const TickerDetail = () => {
     "Macro",
     "Balance Sheet",
     "Income Statement",
-    "Cash Flows"
+    "Cash Flows",
   ];
   const [investingHorizonOption, setInvestingHorizonsOption] = useState("21D");
   const [selectedKey, setSelectedKey] = useState(keywords[0]);
@@ -33,42 +33,56 @@ const TickerDetail = () => {
   const [selector, setSelector] = useState("returns");
   const [timeScope, setTimeScope] = useState("historical");
 
+  const { data, error, isLoading } = useQuery(
+    ["details", { ticker }],
+    fetchTickerDetails
+  );
 
   const {
-    data, error, isLoading
-  } = useQuery(["details", { ticker }], fetchTickerDetails);
-
-
-  const {
-    data: priceData, error: priceError, isLoading: priceIsLoading
+    data: priceData,
+    error: priceError,
+    isLoading: priceIsLoading,
   } = useQuery(["priceData", { ticker }], fetchTickerPrice);
 
   const {
-    data: deepData, error: deepError, isLoading: deepIsLoading
-  } = useQuery(["deepInsightsData", { ticker, x: 'Net Margin' }], fetchDeepInsightsDetails);
+    data: deepData,
+    error: deepError,
+    isLoading: deepIsLoading,
+  } = useQuery(["deepInsightsData", { ticker, x }], fetchDeepInsightsDetails);
 
   // Handle Errors
   useEffect(() => {
     if (error) {
       console.log("details error ", error);
     }
-
   }, [error]);
 
+  useEffect(() => {
+    console.log({ ticker, x });
+  }, [ticker, x]);
 
   // TODO: Add skeleton
-  if (!data) return (<>
-    <Header />
-    <BlockUi blocking={isLoading} loader={<Loader active type="ball-scale" color="#0248C7" />}>
-      <Container />
-      <div className="flex items-center justify-center h-screen">
-      </div>
-    </BlockUi>
-  </>);
+  if (!data)
+    return (
+      <>
+        <Header />
+        <BlockUi
+          blocking={isLoading}
+          loader={<Loader active type="ball-scale" color="#0248C7" />}
+        >
+          <Container />
+          <div className="flex items-center justify-center h-screen"></div>
+        </BlockUi>
+      </>
+    );
 
   const getLastMonthDate = () => {
     const today = new Date();
-    const lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
+    const lastMonth = new Date(
+      today.getFullYear(),
+      today.getMonth() - 1,
+      today.getDate()
+    );
     return formatDateToDashFormat(lastMonth);
   };
 
@@ -77,8 +91,18 @@ const TickerDetail = () => {
   }
 
   const renderTableHeader = () => {
-    const headers = ["Factor", "Current Contribution", "Historical Contribution", "Sector Current Contribution", "Sector Historical Contribution"];
-    return headers.map((header, index) => <th key={index} className="px-6 py-4">{header}</th>);
+    const headers = [
+      "Factor",
+      "Current Contribution",
+      "Historical Contribution",
+      "Sector Current Contribution",
+      "Sector Historical Contribution",
+    ];
+    return headers.map((header, index) => (
+      <th key={index} className="px-6 py-4">
+        {header}
+      </th>
+    ));
   };
   const renderTableRows = () => {
     const factorContribution = data?.[selector]?.factor_contribution;
@@ -88,20 +112,35 @@ const TickerDetail = () => {
 
     const { current_contribution } = factorContribution;
     const keys = Object.keys(current_contribution);
-    return keys.map((key, index) => (<tr key={index}
-                                         className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-      <td className="px-6 py-4">{key}</td>
-      <td className="px-6 py-4">{factorContribution.current_contribution[key]}</td>
-      <td className="px-6 py-4">{factorContribution.historical_contribution[key]}</td>
-      <td className="px-6 py-4">{factorContribution.sector_current_contribution[key]}</td>
-      <td className="px-6 py-4">{factorContribution.sector_historical_contribution[key]}</td>
-    </tr>));
+    return keys.map((key, index) => (
+      <tr
+        key={index}
+        className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+      >
+        <td className="px-6 py-4">{key}</td>
+        <td className="px-6 py-4">
+          {factorContribution.current_contribution[key]}
+        </td>
+        <td className="px-6 py-4">
+          {factorContribution.historical_contribution[key]}
+        </td>
+        <td className="px-6 py-4">
+          {factorContribution.sector_current_contribution[key]}
+        </td>
+        <td className="px-6 py-4">
+          {factorContribution.sector_historical_contribution[key]}
+        </td>
+      </tr>
+    ));
   };
-
 
   const renderStatsTableHeader = () => {
     const headers = ["Factor", "1 Week", "1 Month", "1 Quarter"];
-    return headers.map((header, index) => <th key={index} className="px-6 py-4">{header}</th>);
+    return headers.map((header, index) => (
+      <th key={index} className="px-6 py-4">
+        {header}
+      </th>
+    ));
   };
   const renderStatsTableRows = () => {
     const statsInfo = deepData?.[selector]?.summary_stats.summary_table[0];
@@ -111,13 +150,17 @@ const TickerDetail = () => {
 
     const keys = Object.keys(statsInfo);
     return keys.map((key, index) => {
-      return (<tr key={index}
-                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-        <td className="px-6 py-4">{key}</td>
-        <td className="px-6 py-4">{statsInfo[key]["1 Week"]}</td>
-        <td className="px-6 py-4">{statsInfo[key]["1 Month"]}</td>
-        <td className="px-6 py-4">{statsInfo[key]["1 Quarter"]}</td>
-      </tr>);
+      return (
+        <tr
+          key={index}
+          className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+        >
+          <td className="px-6 py-4">{key}</td>
+          <td className="px-6 py-4">{statsInfo[key]["1 Week"]}</td>
+          <td className="px-6 py-4">{statsInfo[key]["1 Month"]}</td>
+          <td className="px-6 py-4">{statsInfo[key]["1 Quarter"]}</td>
+        </tr>
+      );
     });
   };
 
@@ -129,28 +172,30 @@ const TickerDetail = () => {
     setTimeScope(event.target.value);
   };
 
-
   const extractString = (str) => {
-    const parts = str.split('=');
+    const parts = str.split("=");
     if (parts.length >= 2) {
       return parts[1].trim();
     }
     return null; // or any other default value you prefer
-  }
+  };
 
   const handleDeepInsights = (data) => {
     let pts = "";
     for (let i = 0; i < data.points.length; i++) {
       pts = data.points[i].x;
     }
-  console.log(pts)
-  }
+    console.log(pts);
+  };
 
-console.log(deepData?.[0])
+  console.log(deepData?.[0]);
   return (
     <>
       <Header />
-      <BlockUi blocking={isLoading} loader={<Loader active type="ball-scale" color="#0248C7" />}>
+      <BlockUi
+        blocking={isLoading}
+        loader={<Loader active type="ball-scale" color="#0248C7" />}
+      >
         <main>
           <Container>
             <div className="flex flex-col md:flex-row md:items-center md:justify-between">
@@ -159,16 +204,22 @@ console.log(deepData?.[0])
                   <img
                     src={data?.[selector]?.header_info.company_logo}
                     alt=""
-                    className="rounded-full" width={168}
-                    height={168} />
+                    className="rounded-full"
+                    width={168}
+                    height={168}
+                  />
                 </div>
                 <div className="flex flex-col">
-                  <h1
-                    className="text-4xl pl-6">{data?.[selector]?.header_info.company_name}</h1>
+                  <h1 className="text-4xl pl-6">
+                    {data?.[selector]?.header_info.company_name}
+                  </h1>
                   <div className="p-4 flex justify-between ">
                     {/*Investment Horizon*/}
                     <div className="ml-6">
-                      <div className="inline-flex rounded-md shadow-sm" role="group">
+                      <div
+                        className="inline-flex rounded-md shadow-sm"
+                        role="group"
+                      >
                         <button type="button">
                           <input
                             className="hidden"
@@ -181,7 +232,8 @@ console.log(deepData?.[0])
                           />
                           <label
                             className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
-                            htmlFor="1D">
+                            htmlFor="1D"
+                          >
                             Daily
                           </label>
                         </button>
@@ -197,12 +249,12 @@ console.log(deepData?.[0])
                           />
                           <label
                             className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 "
-                            htmlFor="21D">
+                            htmlFor="21D"
+                          >
                             Monthly
                           </label>
                         </button>
-                        <button type="button"
-                                className="">
+                        <button type="button" className="">
                           <input
                             className="hidden"
                             type="radio"
@@ -214,7 +266,8 @@ console.log(deepData?.[0])
                           />
                           <label
                             className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 "
-                            htmlFor="42D">
+                            htmlFor="42D"
+                          >
                             Bi-Monthly
                           </label>
                         </button>
@@ -224,7 +277,10 @@ console.log(deepData?.[0])
                     {/*TODO: this should be hidden on forecast tab*/}
                     {/*Objective Function*/}
                     <div className="ml-2 hidden">
-                      <div className="inline-flex rounded-md shadow-sm" role="group">
+                      <div
+                        className="inline-flex rounded-md shadow-sm"
+                        role="group"
+                      >
                         <button type="button">
                           <input
                             className="hidden"
@@ -237,12 +293,12 @@ console.log(deepData?.[0])
                           />
                           <label
                             className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 "
-                            htmlFor="min_variance">
+                            htmlFor="min_variance"
+                          >
                             Relative
                           </label>
                         </button>
-                        <button type="button"
-                                className="">
+                        <button type="button" className="">
                           <input
                             className="hidden"
                             type="radio"
@@ -254,24 +310,37 @@ console.log(deepData?.[0])
                           />
                           <label
                             className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
-                            htmlFor="max_sharpe">
+                            htmlFor="max_sharpe"
+                          >
                             Absolute
                           </label>
                         </button>
                       </div>
-
                     </div>
                     {/*End Objective Function*/}
                   </div>
-                  <BlockUi blocking={priceIsLoading} loader={<Loader active type="ball-scale" color="#0248C7" />}>
-                    <h2 className="pl-6"><span
-                      className="text-5xl font-bold">{priceData?.current_price}</span>
-                      <span
-                        className="ml-1 text-l">USD</span>
-                      <span className="ml-4 text-xl text-green-600">{priceData?.ytd} </span>
+                  <BlockUi
+                    blocking={priceIsLoading}
+                    loader={<Loader active type="ball-scale" color="#0248C7" />}
+                  >
+                    <h2 className="pl-6">
+                      <span className="text-5xl font-bold">
+                        {priceData?.current_price}
+                      </span>
+                      <span className="ml-1 text-l">USD</span>
+                      <span className="ml-4 text-xl text-green-600">
+                        {priceData?.ytd}{" "}
+                      </span>
                       {/*TODO: color should change based on the value*/}
                       <span
-                        className={isNegativeNumber(priceData?.mtd) ? "text-xl text-red-600 " : "text-xl text-green-600 "}>%</span>
+                        className={
+                          isNegativeNumber(priceData?.mtd)
+                            ? "text-xl text-red-600 "
+                            : "text-xl text-green-600 "
+                        }
+                      >
+                        %
+                      </span>
                     </h2>
                   </BlockUi>
                   {/*<h3 className="text-sm text-gray-400 pl-6">Last update at Apr 27, 11:16 EDT</h3>*/}
@@ -282,61 +351,59 @@ console.log(deepData?.[0])
             {/*Content  */}
             <div className="grid grid-cols-6 gap-4 sm:col">
               <div className="col-span-6 md:col-span-3 lg:grid-cols-6 xl:col-span-4">
-
                 {/*Placeholder*/}
                 <section className="mt-10">
-                  <h1 className="text-2xl font-extrabold">{deepData?.[0]?.['overall_sentence']}</h1>
-                  <p className="text-lg text-gray-500 mt-6">{deepData?.[0]?.['in_depth_sentence']}</p>
+                  <h1 className="text-2xl font-extrabold">
+                    {deepData?.[0]?.["overall_sentence"]}
+                  </h1>
+                  <p className="text-lg text-gray-500 mt-6">
+                    {deepData?.[0]?.["in_depth_sentence"]}
+                  </p>
                 </section>
                 {/*End Placeholder*/}
 
                 {/*Historical Price Performance*/}
                 <section>
-                  <div className="mt-10 " style={{
-                    display: "flex", justifyContent: "space-between", alignItems: "center"
-                  }}>
+                  <div
+                    className="mt-10 "
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
                     <div>
-                      <h3 className="text-3xl font-semibold">Historical Price Performance</h3>
-                    </div>
-                    <div>
-                        <span
-                          className="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Value</span>
-                      <span
-                        className="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Growth</span>
-
-                    </div>
-                    <div>
-                      <span className="text-xs font-medium">Forecast Horizon</span>
-                      <span
-                        className="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">1W</span>
-                      <span
-                        className="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">1M</span>
-                      <span
-                        className="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">1Y</span>
+                      <h3 className="text-3xl font-semibold">
+                        Historical Price Performance
+                      </h3>
                     </div>
 
                     {/*End Objective Function*/}
                   </div>
-                  {deepData?.[0] && <CombinedLinearChart
-                    data={deepData?.[0]?.forecast}
-                  />}
+                  {deepData?.[0] && (
+                    <CombinedLinearChart data={deepData?.[0]?.forecast} />
+                  )}
                   {/*<AsymmetricErrorBarsWithConstantOffsetChart data={context.predictionData?.["1M"]?.portfolio} />*/}
                 </section>
 
-
                 <section>
-                  <h3 className="text-3xl font-semibold">Historical Event Dates in Isolation</h3>
-                  <p className="text-gray-500 font-light mt-4">AssetX has detected a BUY signal X amount of times in the past 10 years based on the current set of factors driving the assets movement. Out of the X distinct times this signal has been triggered, the median hit ratio across all time horizons is X% and the median return is X.XX%</p>
+                  <h3 className="text-3xl font-semibold">
+                    Historical Event Dates in Isolation
+                  </h3>
+                  <p className="text-gray-500 font-light mt-4">
+                    AssetX has detected a BUY signal X amount of times in the
+                    past 10 years based on the current set of factors driving
+                    the assets movement. Out of the X distinct times this signal
+                    has been triggered, the median hit ratio across all time
+                    horizons is X% and the median return is X.XX%
+                  </p>
                   <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-
-                    {deepData?.[0] && <ReactionChart data={deepData?.[0]?.reaction} />}
-
-
+                    {deepData?.[0] && (
+                      <ReactionChart data={deepData?.[0]?.reaction} />
+                    )}
                   </div>
                 </section>
                 {/*Factor Contribution*/}
-
-
               </div>
               <div className="col-span-6 md:col-span-3 lg:grid-cols-6 xl:col-span-2">
                 <section className="mb-20">
@@ -347,65 +414,97 @@ console.log(deepData?.[0])
                   <div className="mt-10">
                     <div className="relative overflow-x">
                       <div className="relative overflow-x-auto shadow-md sm:rounded-lg p-3 h-{600}">
-                        {deepData?.[0]&& <ReturnSummaryTable data={deepData?.[0]?.summary_stats?.summary_table?.[0]} />}
+                        {deepData?.[0] && (
+                          <ReturnSummaryTable
+                            data={
+                              deepData?.[0]?.summary_stats?.summary_table?.[0]
+                            }
+                          />
+                        )}
                       </div>
                     </div>
                   </div>
                 </section>
 
                 <section>
-                  <h3 className="text-3xl font-semibold">Event Based Backtest</h3>
-                  <p className="text-gray-500 font-light mt-4">Cumulative Return based on $1 according to a long-only signal based on this factor</p>
+                  <h3 className="text-3xl font-semibold">
+                    Event Based Backtest
+                  </h3>
+                  <p className="text-gray-500 font-light mt-4">
+                    Cumulative Return based on $1 according to a long-only
+                    signal based on this factor
+                  </p>
                   <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-                    {deepData?.[0]?.isolation_return &&  <IsolationReturnChart data={deepData?.[0]?.isolation_return} />}
+                    {deepData?.[0]?.isolation_return && (
+                      <IsolationReturnChart
+                        data={deepData?.[0]?.isolation_return}
+                      />
+                    )}
                   </div>
                 </section>
 
-                {deepData?.[0] && <section>
-                  <div className="mt-10 h-[830px] overflow-scroll">
-                    <h3 className="text-3xl font-semibold">AI Selectable Comparables</h3>
-                    <div className="mt-10">
-                      <div className="relative overflow-x">
-                        <div className="relative overflow-x-auto shadow-md sm:rounded-lg p-3 h-{600}">
-                          <table className="w-full text-sm text-left text-gray-500">
-                            <thead className=" sticky  text-xs text-gray-700 uppercase bg-gray-50 ">
-                            </thead>
-                            {deepData?.[0] && <tbody>
-                            {Object.entries(deepData?.[0].ai_comparables[0]).map(([symbol, company]) => (
-
-                              <tr key={symbol} className="bg-white border-b  hover:bg-gray-50 ">
-
-                                <td className="px-6 py-4">
-                                  <div className="flex items-center">
-                                    <img
-                                      className="w-10 h-10 rounded-full"
-                                      src={company.company_logo || "https://www.ortodonciasyv.cl/wp-content/uploads/2016/10/orionthemes-placeholder-image-2.png"}
-                                      alt={company.company_name + " image"}
-                                    />
-                                    <div className="pl-3">
-                                      <div className="text-base font-semibold">{company.company_name}</div>
-                                      <div className="font-normal text-gray-500">{company.sector}</div>
-                                    </div>
-                                  </div>
-                                  {/*<th  scope="col" className="px-6 py-4">*/}
-                                  {/*  <p>{symbol}</p>*/}
-                                  {/*  <p>{company.company_name}</p>*/}
-                                  {/*  <p>{company.sector}</p>*/}
-                                  {/*  <img src={company.company_logo} alt="Company Logo" />*/}
-                                  {/*</th>*/}
-                                  {/*<td className="px-6 py-4">*/}
-                                  {/*  {company.ticker}*/}
-                                  {/*</td>*/}
-                                </td>
-                              </tr>))}
-                            </tbody>}
-                          </table>
+                {deepData?.[0] && (
+                  <section>
+                    <div className="mt-10 h-[830px] overflow-scroll">
+                      <h3 className="text-3xl font-semibold">
+                        AI Selectable Comparables
+                      </h3>
+                      <div className="mt-10">
+                        <div className="relative overflow-x">
+                          <div className="relative overflow-x-auto shadow-md sm:rounded-lg p-3 h-{600}">
+                            <table className="w-full text-sm text-left text-gray-500">
+                              <thead className=" sticky  text-xs text-gray-700 uppercase bg-gray-50 "></thead>
+                              {deepData?.[0] && (
+                                <tbody>
+                                  {Object.entries(
+                                    deepData?.[0].ai_comparables[0]
+                                  ).map(([symbol, company]) => (
+                                    <tr
+                                      key={symbol}
+                                      className="bg-white border-b  hover:bg-gray-50 "
+                                    >
+                                      <td className="px-6 py-4">
+                                        <div className="flex items-center">
+                                          <img
+                                            className="w-10 h-10 rounded-full"
+                                            src={
+                                              company.company_logo ||
+                                              "https://www.ortodonciasyv.cl/wp-content/uploads/2016/10/orionthemes-placeholder-image-2.png"
+                                            }
+                                            alt={
+                                              company.company_name + " image"
+                                            }
+                                          />
+                                          <div className="pl-3">
+                                            <div className="text-base font-semibold">
+                                              {company.company_name}
+                                            </div>
+                                            <div className="font-normal text-gray-500">
+                                              {company.sector}
+                                            </div>
+                                          </div>
+                                        </div>
+                                        {/*<th  scope="col" className="px-6 py-4">*/}
+                                        {/*  <p>{symbol}</p>*/}
+                                        {/*  <p>{company.company_name}</p>*/}
+                                        {/*  <p>{company.sector}</p>*/}
+                                        {/*  <img src={company.company_logo} alt="Company Logo" />*/}
+                                        {/*</th>*/}
+                                        {/*<td className="px-6 py-4">*/}
+                                        {/*  {company.ticker}*/}
+                                        {/*</td>*/}
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              )}
+                            </table>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </section>}
-
+                  </section>
+                )}
               </div>
             </div>
             {/*End Content*/}
@@ -524,8 +623,9 @@ console.log(deepData?.[0])
             {/*End Tabs*/}
           </Container>
         </main>
-      </ BlockUi>
-    </>);
+      </BlockUi>
+    </>
+  );
 };
 
 export default TickerDetail;

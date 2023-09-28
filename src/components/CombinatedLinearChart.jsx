@@ -2,7 +2,7 @@ import { createChart } from "lightweight-charts";
 import React, { useEffect, useRef } from "react";
 import * as LightweightCharts from "lightweight-charts";
 
-export const CombinedLinearChartComponent = ({ data }) => {
+export const CombinedLinearChartComponent = ({ data, height=750 }) => {
   const chartContainerRef = useRef();
 
   useEffect(
@@ -12,7 +12,7 @@ export const CombinedLinearChartComponent = ({ data }) => {
       };
 
       const width = chartContainerRef.current.clientWidth;
-      const height = 750;
+      // const height = 750;
 
 
       const chart = createChart(chartContainerRef.current, {

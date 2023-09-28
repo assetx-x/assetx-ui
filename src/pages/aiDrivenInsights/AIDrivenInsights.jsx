@@ -7,20 +7,22 @@ import Tabs from "../../components/Tabs.jsx";
 import { Dialog, Disclosure, Popover, Tab, Transition } from "@headlessui/react";
 import { Bars3Icon, MagnifyingGlassIcon, ShoppingBagIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { ChevronDownIcon, PlusIcon } from "@heroicons/react/20/solid";
+import { useQuery } from "react-query";
+import fetchTickerDetails from "../../store/models/details/fetchTickerDetails.jsx";
+import fetchInsightsDash from "../../store/models/details/fetchInsightsDash.jsx";
+import { Loader } from "react-loaders";
+import BlockUi from "@availity/block-ui";
+import { CombinedLinearChart } from "../../components/CombinatedLinearChart.jsx";
 
 const AiDrivenInsights = () => {
   const navigate = useNavigate();
 
-  // TODO migrate main menu to its own component
-  const tabsConfig = {
-    isMain: true,
-    type: "underline",
-    tabs: [
-      { name: "A.I. Driven insights", onClickHandler: () => navigate("/us/ai-driven-insights") },
-      { name: "Regime Analysis" },
-      { name: "Portfolio Analysis", onClickHandler: () => navigate("/us/portfolio-analysis") }
-    ]
-  };
+
+  const { data, error, isLoading } = useQuery(
+    ["dash"],
+    fetchInsightsDash
+  );
+
 
   const filters = [
     {
@@ -66,74 +68,14 @@ const AiDrivenInsights = () => {
       ]
     }
   ];
-  const products = [
-    {
-      id: 1,
-      name: "Basic Tee 8-Pack",
-      href: "#",
-      price: "$256",
-      description: "Get the full lineup of our Basic Tees. Have a fresh shirt all week, and an extra for laundry day.",
-      options: "8 colors",
-      imageSrc: "https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-01.jpg",
-      imageAlt: "Eight shirts arranged on table in black, olive, grey, blue, white, red, mustard, and green."
-    },
-    {
-      id: 2,
-      name: "Basic Tee",
-      href: "#",
-      price: "$32",
-      description: "Look like a visionary CEO and wear the same black t-shirt every day.",
-      options: "Black",
-      imageSrc: "https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-02.jpg",
-      imageAlt: "Front of plain black t-shirt."
-    },
-    {
-      id: 2,
-      name: "Basic Tee",
-      href: "#",
-      price: "$32",
-      description: "Look like a visionary CEO and wear the same black t-shirt every day.",
-      options: "Black",
-      imageSrc: "https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-02.jpg",
-      imageAlt: "Front of plain black t-shirt."
-    },
-    {
-      id: 2,
-      name: "Basic Tee",
-      href: "#",
-      price: "$32",
-      description: "Look like a visionary CEO and wear the same black t-shirt every day.",
-      options: "Black",
-      imageSrc: "https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-02.jpg",
-      imageAlt: "Front of plain black t-shirt."
-    },
-    {
-      id: 2,
-      name: "Basic Tee",
-      href: "#",
-      price: "$32",
-      description: "Look like a visionary CEO and wear the same black t-shirt every day.",
-      options: "Black",
-      imageSrc: "https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-02.jpg",
-      imageAlt: "Front of plain black t-shirt."
-    },
-    {
-      id: 2,
-      name: "Basic Tee",
-      href: "#",
-      price: "$32",
-      description: "Look like a visionary CEO and wear the same black t-shirt every day.",
-      options: "Black",
-      imageSrc: "https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-02.jpg",
-      imageAlt: "Front of plain black t-shirt."
-    }
-    // More products...
-  ];
-
   return (
     <>
       <Header />
       <main>
+        <BlockUi
+          blocking={isLoading}
+          loader={<Loader active type="ball-scale" color="#0248C7" />}
+        >
         <Container>
           {/*Title*/}
           <div className="flex">
@@ -145,9 +87,6 @@ const AiDrivenInsights = () => {
             <h1 className="text-4xl font-semibold pl-4	uppercase">US Stock Market</h1>
           </div>
           {/*End Title*/}
-          {/*Tabs*/}
-          <Tabs config={tabsConfig} />
-          {/*End Tabs*/}
           {/*Section*/}
           <section className="mt-4">
             <div className="pb-24 pt-12 lg:grid lg:grid-cols-3 lg:gap-x-8 xl:grid-cols-4">
@@ -193,46 +132,44 @@ const AiDrivenInsights = () => {
                 </div>
               </aside>
 
-              <section aria-labelledby="product-heading" className="mt-6 lg:col-span-2 lg:mt-0 xl:col-span-3">
-                <h2 id="product-heading" className="sr-only">
-                  Products
-                </h2>
+              <section aria-labelledby="item-heading" className="mt-6 lg:col-span-2 lg:mt-0 xl:col-span-3">
 
-                <div
+                {data?.results && <div
                   className="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:gap-x-8 xl:grid-cols-3">
-                  {products.map((product) => (
+                  {data.results.map((item) => (
                     <div
-                      key={product.id}
+                      onClick={() => navigate(`/us/ticker/${item.symbol}`, {replace: true})}
+                      key={item.ticker}
                       className="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white"
                     >
-                      <div
-                        className="aspect-h-4 aspect-w-3 bg-gray-200 sm:aspect-none group-hover:opacity-75 sm:h-96">
+                      <div className="flex justify-between items-center">
+                      <h3 className="text-xl font-medium text-gray-900 m-4">
+                          <span aria-hidden="true" className="absolute inset-0" />
+                          {item.symbol}
+                      </h3>
                         <img
-                          src={product.imageSrc}
-                          alt={product.imageAlt}
-                          className="h-full w-full object-cover object-center sm:h-full sm:w-full"
+                          src={item.header_info.company_logo}
+                          alt=""
+                          className="w-10 h-10 rounded-full m-2 mr-4"
                         />
                       </div>
-                      <div className="flex flex-1 flex-col space-y-2 p-4">
-                        <h3 className="text-sm font-medium text-gray-900">
-                          <a href={product.href}>
-                            <span aria-hidden="true" className="absolute inset-0" />
-                            {product.name}
-                          </a>
-                        </h3>
-                        <p className="text-sm text-gray-500">{product.description}</p>
-                        <div className="flex flex-1 flex-col justify-end">
-                          <p className="text-sm italic text-gray-500">{product.options}</p>
-                          <p className="text-base font-medium text-gray-900">{product.price}</p>
+                      <div
+                        className="aspect-h-4 aspect-w-3 bg-gray-200 sm:aspect-none group-hover:opacity-75 sm:h-96">
+                        <div className="h-full w-full object-cover object-center sm:h-full sm:w-full">
+                          <CombinedLinearChart data={item?.forecast} height={385}/>
                         </div>
+                      </div>
+                      <div className="flex flex-1 flex-col space-y-2 p-4">
+                        <p className="text-sm text-gray-500">{item.sentence}</p>
                       </div>
                     </div>
                   ))}
-                </div>
+                </div>}
               </section>
             </div>
           </section>
         </Container>
+        </BlockUi>
       </main>
     </>
   );

@@ -13,7 +13,7 @@ function AuthProvider(props) {
       window.localStorage.setItem('token', JSON.stringify({...data, isAuthenticated: true}));
       setAccessToken(data.access);
       setIsInvalid(false);
-      navigate("/us/portfolio-analysis", { replace: true });
+      navigate("/us", { replace: true });
   }
   const register = () => {} // register the user
   const logout = () => {

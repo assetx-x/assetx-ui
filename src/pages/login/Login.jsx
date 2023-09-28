@@ -52,7 +52,7 @@ const Login = () => {
   });
 
   useEffect(() => {
-    if (auth.isAuthenticated()) navigate("/us/portfolio-analysis", { replace: true });
+    if (auth.isAuthenticated()) navigate("/us", { replace: true });
   }, []);
 
   return (

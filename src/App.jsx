@@ -10,6 +10,7 @@ import NewTickerDetial from "./pages/tickerDetail/NewTickerDetial.jsx";
 import Register from "./pages/register/Register.jsx";
 import DeepInsightDetails from "./pages/deepInsightDetail/DeepInsightDetails.jsx";
 import AiDrivenInsights from "./pages/aiDrivenInsights/AIDrivenInsights.jsx";
+import Market from "./pages/market/Market.jsx";
 
 function App() {
   return (
@@ -20,13 +21,22 @@ function App() {
         <Route exact path="/" element={<PrivateRoute />}>
           <Route path="/:market/ticker/:ticker" element={<NewTickerDetial />} />
           {/*TODO: stop using magic strings*/}
-          <Route path="/:market" element={<AiDrivenInsights />} />
-          <Route path="/:market/portfolio-analysis" element={<PortfolioAnalysis  />} />
-          <Route path="/:market/portfolio-analysis/:id"
-                 element={<PortfolioAnalysisResultsContainer selected={"portfolio-analysis"} />}
+          <Route path="/:market" element={<Market />} />
+          {/* <Route
+            path="/:market/portfolio-analysis"
+            element={<PortfolioAnalysis />}
+          /> */}
+          <Route
+            path="/:market/portfolio-analysis/:id"
+            element={
+              <PortfolioAnalysisResultsContainer
+                selected={"portfolio-analysis"}
+              />
+            }
           />
-          <Route path="/:market/ticker/:ticker/deep-insight/:x"
-                 element={<DeepInsightDetails />}
+          <Route
+            path="/:market/ticker/:ticker/deep-insight/:x"
+            element={<DeepInsightDetails />}
           />
         </Route>
         <Route exact path="/login" element={<Login />} />

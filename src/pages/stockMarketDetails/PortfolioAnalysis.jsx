@@ -396,288 +396,304 @@ const PortfolioAnalysis = () => {
     setShowUploader(true);
   };
 
-  if (holdingsIsLoading) return null;
   return (
     <>
       <main>
-        <Container>
-          {!holdingsData?.length || showUploader ? (
-            <>
-              {/*Section*/}
-              <section className="mt-8">
-                {/*Title*/}
-                <div>
-                  <h3 className="text-3xl font-semibold">
-                    Portfolio Calibration
-                  </h3>
-                  <p className="text-gray-500 font-light mt-4">
-                    Upload your portfolio and select the objective function and
-                    investment horizon to see how our algorithm would weight the
-                    portfolio.
-                  </p>
-                </div>
-                {/*End Title*/}
-                {/*Selectable options*/}
-                <div className="pl-[100px] pr-[100px]">
-                  <div className="mt-10 flex justify-between ">
-                    {/*Sample portfolio*/}
-                    <Dropdown
-                      demoButtonEnable
-                      demoButtonHandler={handleDemoButtonClick}
-                    />
-                    {/*End Sample Portfolio*/}
-                    {/*Objective Function*/}
-                    <div>
-                      <div
-                        className="inline-flex rounded-md shadow-sm"
-                        role="group"
-                      >
-                        <button type="button">
-                          <input
-                            className="hidden"
-                            type="radio"
-                            id="min_variance"
-                            name="objectiveFunction"
-                            value="min_variance"
-                            checked={objectiveFunctionOption === "min_variance"}
-                            onChange={handleObjectiveFunctionChange}
-                          />
-                          <label
-                            className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 "
-                            htmlFor="min_variance"
-                          >
-                            Minimum Variance
-                          </label>
-                        </button>
-                        <button type="button" className="">
-                          <input
-                            className="hidden"
-                            type="radio"
-                            id="max_sharpe"
-                            name="objectiveFunction"
-                            value="max_sharpe"
-                            checked={objectiveFunctionOption === "max_sharpe"}
-                            onChange={handleObjectiveFunctionChange}
-                          />
-                          <label
-                            className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
-                            htmlFor="max_sharpe"
-                          >
-                            Max Return
-                          </label>
-                        </button>
-                      </div>
-                    </div>
-                    {/*End Objective Function*/}
-                    {/*Investment Horizon*/}
-                    <div>
-                      <div
-                        className="inline-flex rounded-md shadow-sm"
-                        role="group"
-                      >
-                        <button type="button">
-                          <input
-                            className="hidden"
-                            type="radio"
-                            id="1D"
-                            name="investingHorizons"
-                            value="1D"
-                            checked={investingHorizonOption === "1D"}
-                            onChange={handleInvestingHorizonsChange}
-                          />
-                          <label
-                            className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
-                            htmlFor="1D"
-                          >
-                            Daily
-                          </label>
-                        </button>
-                        <button type="button">
-                          <input
-                            className="hidden"
-                            type="radio"
-                            id="21D"
-                            name="investingHorizons"
-                            value="21D"
-                            checked={investingHorizonOption === "21D"}
-                            onChange={handleInvestingHorizonsChange}
-                          />
-                          <label
-                            className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 "
-                            htmlFor="21D"
-                          >
-                            Monthly
-                          </label>
-                        </button>
-                        <button type="button" className="">
-                          <input
-                            className="hidden"
-                            type="radio"
-                            id="42D"
-                            name="investingHorizons"
-                            value="42D"
-                            checked={investingHorizonOption === "42D"}
-                            onChange={handleInvestingHorizonsChange}
-                          />
-                          <label
-                            className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 "
-                            htmlFor="42D"
-                          >
-                            Bi-Monthly
-                          </label>
-                        </button>
-                      </div>
-                    </div>
-                    {/*End Investment Horizon*/}
+        <BlockUi
+          blocking={holdingsIsLoading}
+          loader={<Loader active type="ball-scale" color="#0248C7" />}
+        >
+          <Container>
+            {!holdingsData?.length || showUploader ? (
+              <>
+                {/*Section*/}
+                <section className="mt-8">
+                  {/*Title*/}
+                  <div>
+                    <h3 className="text-3xl font-semibold">
+                      Portfolio Calibration
+                    </h3>
+                    <p className="text-gray-500 font-light mt-4">
+                      Upload your portfolio and select the objective function
+                      and investment horizon to see how our algorithm would
+                      weight the portfolio.
+                    </p>
                   </div>
-                </div>
-                {/*End Selectable options*/}
-
-                {/*Drag and drop*/}
-                {!isChecked && isDragAndDropVisible && (
-                  <div className="pt-5">
-                    <form>
-                      <div className="flex items-center justify-center w-full">
+                  {/*End Title*/}
+                  {/*Selectable options*/}
+                  <div className="pl-[100px] pr-[100px]">
+                    <div className="mt-10 flex justify-between ">
+                      {/*Sample portfolio*/}
+                      <Dropdown
+                        demoButtonEnable
+                        demoButtonHandler={handleDemoButtonClick}
+                      />
+                      {/*End Sample Portfolio*/}
+                      {/*Objective Function*/}
+                      <div>
                         <div
-                          {...getRootProps()}
-                          className="flex flex-col items-center justify-center w-full h-[400px] border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50"
+                          className="inline-flex rounded-md shadow-sm"
+                          role="group"
                         >
-                          <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                            <svg
-                              aria-hidden="true"
-                              className="w-10 h-10 mb-3 text-gray-400"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                              xmlns="http://www.w3.org/2000/svg"
+                          <button type="button">
+                            <input
+                              className="hidden"
+                              type="radio"
+                              id="min_variance"
+                              name="objectiveFunction"
+                              value="min_variance"
+                              checked={
+                                objectiveFunctionOption === "min_variance"
+                              }
+                              onChange={handleObjectiveFunctionChange}
+                            />
+                            <label
+                              className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 "
+                              htmlFor="min_variance"
                             >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                              ></path>
-                            </svg>
-                            <p className="mb-2 text-sm text-gray-500">
-                              <span className="font-semibold">
-                                Click to upload
-                              </span>{" "}
-                              or drag and drop
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              CSV (MAX. 800KB)
-                            </p>
-                          </div>
-                          <input
-                            {...getInputProps()}
-                            id="csv-file"
-                            type="file"
-                            accept=".csv"
-                            className="hidden"
-                          />
+                              Minimum Variance
+                            </label>
+                          </button>
+                          <button type="button" className="">
+                            <input
+                              className="hidden"
+                              type="radio"
+                              id="max_sharpe"
+                              name="objectiveFunction"
+                              value="max_sharpe"
+                              checked={objectiveFunctionOption === "max_sharpe"}
+                              onChange={handleObjectiveFunctionChange}
+                            />
+                            <label
+                              className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
+                              htmlFor="max_sharpe"
+                            >
+                              Max Return
+                            </label>
+                          </button>
                         </div>
                       </div>
-                    </form>
+                      {/*End Objective Function*/}
+                      {/*Investment Horizon*/}
+                      <div>
+                        <div
+                          className="inline-flex rounded-md shadow-sm"
+                          role="group"
+                        >
+                          <button type="button">
+                            <input
+                              className="hidden"
+                              type="radio"
+                              id="1D"
+                              name="investingHorizons"
+                              value="1D"
+                              checked={investingHorizonOption === "1D"}
+                              onChange={handleInvestingHorizonsChange}
+                            />
+                            <label
+                              className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
+                              htmlFor="1D"
+                            >
+                              Daily
+                            </label>
+                          </button>
+                          <button type="button">
+                            <input
+                              className="hidden"
+                              type="radio"
+                              id="21D"
+                              name="investingHorizons"
+                              value="21D"
+                              checked={investingHorizonOption === "21D"}
+                              onChange={handleInvestingHorizonsChange}
+                            />
+                            <label
+                              className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 "
+                              htmlFor="21D"
+                            >
+                              Monthly
+                            </label>
+                          </button>
+                          <button type="button" className="">
+                            <input
+                              className="hidden"
+                              type="radio"
+                              id="42D"
+                              name="investingHorizons"
+                              value="42D"
+                              checked={investingHorizonOption === "42D"}
+                              onChange={handleInvestingHorizonsChange}
+                            />
+                            <label
+                              className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 "
+                              htmlFor="42D"
+                            >
+                              Bi-Monthly
+                            </label>
+                          </button>
+                        </div>
+                      </div>
+                      {/*End Investment Horizon*/}
+                    </div>
                   </div>
-                )}
-                {/*End Drag and drop*/}
+                  {/*End Selectable options*/}
 
-                {/*Upload Table*/}
-                {jsonData && isUploadTableVisible && (
-                  <BlockUi
-                    blocking={validationIsLoading}
-                    message="Validating, please wait"
-                    loader={<Loader active type="ball-scale" color="#0248C7" />}
-                  >
-                    <Table
-                      data={jsonData}
-                      columns={uploadedColumns}
-                      paginated={true}
-                      itemsPerPage={10}
-                    />
-                  </BlockUi>
-                )}
-                {/*End Upload Table*/}
+                  {/*Drag and drop*/}
+                  {!isChecked && isDragAndDropVisible && (
+                    <div className="pt-5">
+                      <form>
+                        <div className="flex items-center justify-center w-full">
+                          <div
+                            {...getRootProps()}
+                            className="flex flex-col items-center justify-center w-full h-[400px] border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50"
+                          >
+                            <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                              <svg
+                                aria-hidden="true"
+                                className="w-10 h-10 mb-3 text-gray-400"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth="2"
+                                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                                ></path>
+                              </svg>
+                              <p className="mb-2 text-sm text-gray-500">
+                                <span className="font-semibold">
+                                  Click to upload
+                                </span>{" "}
+                                or drag and drop
+                              </p>
+                              <p className="text-xs text-gray-500">
+                                CSV (MAX. 800KB)
+                              </p>
+                            </div>
+                            <input
+                              {...getInputProps()}
+                              id="csv-file"
+                              type="file"
+                              accept=".csv"
+                              className="hidden"
+                            />
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  )}
+                  {/*End Drag and drop*/}
 
-                {/*Final Table*/}
-                {isFinalTableVisible && !isChecked && !isUploadTableVisible && (
-                  <BlockUi
-                    blocking={optimizationsIsLoading}
-                    message="Optimizing your portfolio, please wait"
-                    loader={<Loader active type="ball-scale" color="#0248C7" />}
-                  >
-                    <div className="mt-10">
+                  {/*Upload Table*/}
+                  {jsonData && isUploadTableVisible && (
+                    <BlockUi
+                      blocking={validationIsLoading}
+                      message="Validating, please wait"
+                      loader={
+                        <Loader active type="ball-scale" color="#0248C7" />
+                      }
+                    >
                       <Table
-                        data={jsonFinalData}
-                        columns={finalColumns}
+                        data={jsonData}
+                        columns={uploadedColumns}
                         paginated={true}
                         itemsPerPage={10}
                       />
-                    </div>
-                  </BlockUi>
-                )}
-                {/*End Fonal Table*/}
-                {/*Button*/}
-                <div className="mt-10 flex flex-row-reverse pb-20">
-                  <Button
-                    disabled={
-                      (!isChecked && isDragAndDropVisible) ||
-                      optimizationsIsLoading
-                    }
-                    color="blue"
-                    onClick={
-                      isFinalTableVisible && !isChecked && !isUploadTableVisible
-                        ? handleOptimize
-                        : handleValidate
-                    }
-                  >
-                    {isFinalTableVisible && !isChecked && !isUploadTableVisible
-                      ? "Optimize"
-                      : "Validate"}
-                  </Button>
-                  <Button
-                    onClick={handleReset}
-                    variant="outline"
-                    className="mr-4"
-                    color="blue"
-                  >
-                    Cancel
-                  </Button>
-                </div>
-                {/*End Button*/}
-              </section>
-            </>
-          ) : (
-            <>
-              <section className="mt-4">
-                {/*<BlockUi blocking={optimizationsIsLoading} message="Optimizing your portfolio, please wait"*/}
-                {/*         loader={<Loader active type="ball-scale" color="#0248C7" />}>*/}
-                <div className="mt-10">
-                  <div className="flex flex-row-reverse">
+                    </BlockUi>
+                  )}
+                  {/*End Upload Table*/}
+
+                  {/*Final Table*/}
+                  {isFinalTableVisible &&
+                    !isChecked &&
+                    !isUploadTableVisible && (
+                      <BlockUi
+                        blocking={optimizationsIsLoading}
+                        message="Optimizing your portfolio, please wait"
+                        loader={
+                          <Loader active type="ball-scale" color="#0248C7" />
+                        }
+                      >
+                        <div className="mt-10">
+                          <Table
+                            data={jsonFinalData}
+                            columns={finalColumns}
+                            paginated={true}
+                            itemsPerPage={10}
+                          />
+                        </div>
+                      </BlockUi>
+                    )}
+                  {/*End Fonal Table*/}
+                  {/*Button*/}
+                  <div className="mt-10 flex flex-row-reverse pb-20">
                     <Button
-                      variant="outline"
-                      onClick={handleNewPorfolioButtonClick}
+                      disabled={
+                        (!isChecked && isDragAndDropVisible) ||
+                        optimizationsIsLoading
+                      }
+                      color="blue"
+                      onClick={
+                        isFinalTableVisible &&
+                        !isChecked &&
+                        !isUploadTableVisible
+                          ? handleOptimize
+                          : handleValidate
+                      }
                     >
-                      New Portfolio
+                      {isFinalTableVisible &&
+                      !isChecked &&
+                      !isUploadTableVisible
+                        ? "Optimize"
+                        : "Validate"}
+                    </Button>
+                    <Button
+                      onClick={handleReset}
+                      variant="outline"
+                      className="mr-4"
+                      color="blue"
+                    >
+                      Cancel
                     </Button>
                   </div>
-                  <Table
-                    data={holdingsData}
-                    columns={listPortfolioColumns}
-                    paginated={true}
-                    itemsPerPage={10}
-                    handleRowClick={(id) =>
-                      navigate(`/us/portfolio-analysis/${id}`, {
-                        replace: true,
-                      })
-                    }
-                  />
-                </div>
-                {/*</BlockUi>)}*/}
-              </section>
-            </>
-          )}
-        </Container>
+                  {/*End Button*/}
+                </section>
+              </>
+            ) : (
+              <>
+                <section className="mt-4">
+                  {/*<BlockUi blocking={optimizationsIsLoading} message="Optimizing your portfolio, please wait"*/}
+                  {/*         loader={<Loader active type="ball-scale" color="#0248C7" />}>*/}
+                  <div className="mt-10">
+                    <div className="flex flex-row-reverse">
+                      <Button
+                        variant="outline"
+                        onClick={handleNewPorfolioButtonClick}
+                      >
+                        New Portfolio
+                      </Button>
+                    </div>
+                    <Table
+                      data={holdingsData}
+                      columns={listPortfolioColumns}
+                      paginated={true}
+                      itemsPerPage={10}
+                      handleRowClick={(id) =>
+                        navigate(`/us/portfolio-analysis/${id}`, {
+                          replace: true,
+                        })
+                      }
+                    />
+                  </div>
+                  {/*</BlockUi>)}*/}
+                </section>
+              </>
+            )}
+          </Container>
+        </BlockUi>
       </main>
     </>
   );

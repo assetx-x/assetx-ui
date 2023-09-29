@@ -22,10 +22,6 @@ function App() {
           <Route path="/:market/ticker/:ticker" element={<NewTickerDetial />} />
           {/*TODO: stop using magic strings*/}
           <Route path="/:market" element={<Market />} />
-          {/* <Route
-            path="/:market/portfolio-analysis"
-            element={<PortfolioAnalysis />}
-          /> */}
           <Route
             path="/:market/portfolio-analysis/:id"
             element={

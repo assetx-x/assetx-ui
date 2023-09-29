@@ -1,34 +1,36 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Header } from "../../components/Header.jsx";
 import { Container } from "../../components/Container.jsx";
-import usFlag from "../../assets/images/us.png";
-import Tabs from "../../components/Tabs.jsx";
-import {
-  Dialog,
-  Disclosure,
-  Popover,
-  Tab,
-  Transition,
-} from "@headlessui/react";
-import {
-  Bars3Icon,
-  MagnifyingGlassIcon,
-  ShoppingBagIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
-import { ChevronDownIcon, PlusIcon } from "@heroicons/react/20/solid";
+import { PlusIcon } from "@heroicons/react/20/solid";
 import { useQuery } from "react-query";
-import fetchTickerDetails from "../../store/models/details/fetchTickerDetails.jsx";
 import fetchInsightsDash from "../../store/models/details/fetchInsightsDash.jsx";
 import { Loader } from "react-loaders";
 import BlockUi from "@availity/block-ui";
 import { CombinedLinearChart } from "../../components/CombinatedLinearChart.jsx";
+import ReactPaginate from "react-paginate";
+import { API_URL } from "../../constants/api.jsx";
 
 const AiDrivenInsights = () => {
   const navigate = useNavigate();
 
-  const { data, error, isLoading } = useQuery(["dash"], fetchInsightsDash);
+  const [pageRequestOffset, setPageRequestOffset] = useState(0);
+  const [totalItems, setTotalItems] = useState(0);
+
+  const itensPerPage = 6;
+
+  const { data, error, isLoading } = useQuery(["dash", pageRequestOffset], () =>
+    fetchInsightsDash({ offset: pageRequestOffset, limit: itensPerPage })
+  );
+
+  const handlePageClick = (event) => {
+    const newOffset = (event.selected * itensPerPage) % totalItems;
+    console.log(newOffset);
+    setPageRequestOffset(newOffset);
+  };
+
+  useEffect(() => {
+    if (data) setTotalItems(data.count);
+  }, [data]);
 
   const filters = [
     {
@@ -192,6 +194,31 @@ const AiDrivenInsights = () => {
                   )}
                 </section>
               </div>
+
+              <nav className="mt-5 flex flex-row-reverse pb-20">
+                <ReactPaginate
+                  previousLabel={"Previous"}
+                  nextLabel={"Next"}
+                  pageCount={Math.ceil(totalItems / itensPerPage)}
+                  onPageChange={handlePageClick}
+                  containerClassName={"inline-flex -space-x-px"}
+                  previousLinkClassName={
+                    "px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700"
+                  }
+                  nextLinkClassName={
+                    "px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 "
+                  }
+                  disabledLinkClassName={
+                    "px-3 py-2 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 "
+                  }
+                  activeLinkClassName={
+                    "px-3 py-2 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 "
+                  }
+                  pageLinkClassName={
+                    "px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 "
+                  }
+                />
+              </nav>
             </section>
           </Container>
         </BlockUi>

@@ -1,8 +1,7 @@
 import { getInsightsDash } from "../../api/dash.jsx";
 
-
-const fetchInsightsDash = async () => {
-  const response = await getInsightsDash();
+const fetchInsightsDash = async (requestLimits) => {
+  const response = await getInsightsDash(requestLimits);
   return response.data;
 };
 

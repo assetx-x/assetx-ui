@@ -24,7 +24,6 @@ const AiDrivenInsights = () => {
 
   const handlePageClick = (event) => {
     const newOffset = (event.selected * itensPerPage) % totalItems;
-    console.log(newOffset);
     setPageRequestOffset(newOffset);
   };
 

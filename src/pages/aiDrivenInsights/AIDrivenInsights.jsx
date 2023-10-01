@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container } from "../../components/Container.jsx";
 import { PlusIcon } from "@heroicons/react/20/solid";
@@ -8,7 +8,6 @@ import { Loader } from "react-loaders";
 import BlockUi from "@availity/block-ui";
 import { CombinedLinearChart } from "../../components/CombinatedLinearChart.jsx";
 import ReactPaginate from "react-paginate";
-import { API_URL } from "../../constants/api.jsx";
 
 const AiDrivenInsights = () => {
   const navigate = useNavigate();
@@ -201,20 +200,21 @@ const AiDrivenInsights = () => {
                   pageCount={Math.ceil(totalItems / itensPerPage)}
                   onPageChange={handlePageClick}
                   containerClassName={"inline-flex -space-x-px"}
-                  previousLinkClassName={
-                    "px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700"
-                  }
-                  nextLinkClassName={
-                    "px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 "
-                  }
-                  disabledLinkClassName={
-                    "px-3 py-2 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 "
+                  pageLinkClassName={
+                    "px-3 py-2 border border-gray-300 text-gray-500 hover:text-gray-700 leading-tight hover:bg-gray-100"
                   }
                   activeLinkClassName={
-                    "px-3 py-2 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 "
+                    "text-white bg-blue-500 hover:bg-blue-600"
                   }
-                  pageLinkClassName={
-                    "px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 "
+                  previousLinkClassName={
+                    "px-3 py-2 leading-tight text-gray-500 border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700"
+                  }
+                  nextLinkClassName={
+                    "px-3 py-2 leading-tight text-gray-500 border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 "
+                  }
+                  disabledClassName={" hover:cursor-not-allowed"}
+                  disabledLinkClassName={
+                    "px-3 py-2 text-gray-500 border border-gray-300 bg-gray-100 hover:cursor-not-allowed"
                   }
                 />
               </nav>

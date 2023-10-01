@@ -76,7 +76,7 @@ const PortfolioAnalysis = () => {
     enabled: false,
   });
 
-  const {
+  let {
     data: holdingsData,
     error: holdingsError,
     isLoading: holdingsIsLoading,
@@ -92,10 +92,8 @@ const PortfolioAnalysis = () => {
     if (optimizationsData) {
       const data = optimizationsData;
       context.setPredictionData(data);
-
-      console.log({ optimizationsData });
-      // navigate(`/us/portfolio-analysis/${data.id}`, { replace: true });
-      navigate(`/us/portfolio-analysis/results`, { replace: true });
+      navigate(`/us/portfolio-analysis/${data.id}`, { replace: true });
+      // navigate(`/us/portfolio-analysis/results`, { replace: true });
     }
   }, [optimizationsData]);
 
@@ -254,26 +252,26 @@ const PortfolioAnalysis = () => {
         Header: "Portfolio ID",
         accessor: "id",
       },
-      {
-        Header: "Sharpe Ratio (Recommendations)",
-        accessor: "sharpe_ratio",
-        Cell: (props) =>
-          props.value !== "NaN" ? (props.value * 1).toFixed(2) : 0.0,
-      },
-      {
-        Header: "Annualized Return",
-        accessor: "annual_return",
-        Cell: (props) =>
-          props.value !== "NaN"
-            ? (props.value * 100).toFixed(2) + "%"
-            : 0.0 + "%",
-      },
-      {
-        Header: "Annualized Vol.",
-        accessor: "annual_volatility",
-        Cell: (props) =>
-          props.value !== "NaN" ? (props.value * 1).toFixed(2) : 0.0,
-      },
+      // {
+      //   Header: "Sharpe Ratio (Recommendations)",
+      //   accessor: "sharpe_ratio",
+      //   Cell: (props) =>
+      //     props.value !== "NaN" ? (props.value * 1).toFixed(2) : 0.0,
+      // },
+      // {
+      //   Header: "Annualized Return",
+      //   accessor: "annual_return",
+      //   Cell: (props) =>
+      //     props.value !== "NaN"
+      //       ? (props.value * 100).toFixed(2) + "%"
+      //       : 0.0 + "%",
+      // },
+      // {
+      //   Header: "Annualized Vol.",
+      //   accessor: "annual_volatility",
+      //   Cell: (props) =>
+      //     props.value !== "NaN" ? (props.value * 1).toFixed(2) : 0.0,
+      // },
       {
         Header: "Actions",
         Cell: (props) => (
@@ -404,7 +402,7 @@ const PortfolioAnalysis = () => {
           loader={<Loader active type="ball-scale" color="#0248C7" />}
         >
           <Container>
-            {!holdingsData?.length || showUploader ? (
+            {holdingsData?.count === 0 || showUploader ? (
               <>
                 {/*Section*/}
                 <section className="mt-8">
@@ -676,17 +674,17 @@ const PortfolioAnalysis = () => {
                         New Portfolio
                       </Button>
                     </div>
-                    <Table
-                      data={holdingsData}
+                    {holdingsData && <Table
+                      data={holdingsData?.results}
                       columns={listPortfolioColumns}
                       paginated={true}
                       itemsPerPage={10}
                       handleRowClick={(id) =>
                         navigate(`/us/portfolio-analysis/${id}`, {
-                          replace: true,
+                          replace: true
                         })
                       }
-                    />
+                    />}
                   </div>
                   {/*</BlockUi>)}*/}
                 </section>

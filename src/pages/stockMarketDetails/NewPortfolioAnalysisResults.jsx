@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { Header } from "../../components/Header.jsx";
 import { Container } from "../../components/Container.jsx";
-import Placeholder01 from "../../assets/images/placeholder-01.png";
 import { RecommendationPill } from "../../components/Table.jsx";
 import ResultsTable from "./components/ResultsTable.jsx";
 import { useMain } from "../../store/context/MainContext.jsx";
@@ -9,8 +8,10 @@ import { formatDateToDashFormat } from "../../utils/index.js";
 import { AsymmetricErrorBarsWithConstantOffsetChart } from "../../components/AsymmetricErrorBarsWithConstantOffsetChart.jsx";
 import { BasicWaterfallChart } from "../../components/BasicWaterfallChart.jsx";
 
-const NewPortfolioAnalysisResults = () => {
+const NewPortfolioAnalysisResults = ({ portfolio, id }) => {
   const context = useMain();
+  const [portfolioData, setPortfolioData] = useState(portfolio?.holdings);
+  if (!id) setPortfolioData(context.predictionData?.holdings)
   const keys = [
     "Overall",
     "Growth",
@@ -139,7 +140,7 @@ const NewPortfolioAnalysisResults = () => {
 
   const renderTableRows = () => {
     const factorContribution =
-      context.predictionData?.["1M"]?.factor_contribution;
+      portfolioData?.["1M"]?.factor_contribution;
     if (!factorContribution) {
       return null;
     }
@@ -266,7 +267,7 @@ const NewPortfolioAnalysisResults = () => {
                   {/*End Objective Function*/}
                 </div>
                 <AsymmetricErrorBarsWithConstantOffsetChart
-                  data={context.predictionData?.["1M"]?.portfolio}
+                  data={portfolioData?.["1M"]?.portfolio}
                 />
               </section>
               <section>
@@ -314,7 +315,7 @@ const NewPortfolioAnalysisResults = () => {
                 {/*End Selectable options*/}
                 <BasicWaterfallChart
                   data={
-                    context.predictionData?.["1M"]?.feature_importance?.[
+                    portfolioData?.["1M"]?.feature_importance?.[
                       selectedKey
                     ]
                   }
@@ -332,7 +333,7 @@ const NewPortfolioAnalysisResults = () => {
 
                 <ResultsTable
                   columns={subCategoriesColumns}
-                  data={context.predictionData?.["1M"]?.ticker_contribution}
+                  data={portfolioData?.["1M"]?.ticker_contribution}
                 />
               </section>
             </div>
@@ -347,7 +348,7 @@ const NewPortfolioAnalysisResults = () => {
 
                 <ResultsTable
                   columns={resultColumns}
-                  data={context.predictionData?.current_trading_book}
+                  data={portfolioData?.current_trading_book}
                 />
               </section>
               <section className="mb-20">
@@ -367,7 +368,7 @@ const NewPortfolioAnalysisResults = () => {
                       <table className="w-full text-sm text-left text-gray-500">
                         <thead className=" sticky  text-xs text-gray-700 uppercase bg-gray-50 "></thead>
                         <tbody>
-                          {context.predictionData?.["1M"]?.ai_alternatives.map(
+                          {portfolioData?.["1M"]?.ai_alternatives.map(
                             ([symbol, company]) => (
                               <tr
                                 key={symbol}

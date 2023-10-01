@@ -22,7 +22,6 @@ export function StatusPill({ value }) {
 
 export function RecommendationPill({ value }) {
   const status = value ? value.toLowerCase() : "unknown";
-  console.log("-> status", status);
 
   return (
     <span

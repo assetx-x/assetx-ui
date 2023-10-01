@@ -3,6 +3,7 @@ import Plot from "react-plotly.js";
 
 
 export function AsymmetricErrorBarsWithConstantOffsetChart({data}) {
+  console.log('data', data)
   useEffect(() => {
 
   }, [data]);

@@ -276,7 +276,12 @@ const PortfolioAnalysis = () => {
       {
         Header: "Actions",
         Cell: (props) => (
-          <div>
+          <div
+            style={{
+              textAlign:"right",
+              paddingRight:20
+            }}
+          >
             <button
               onClick={(e) => {
                 e.stopPropagation();

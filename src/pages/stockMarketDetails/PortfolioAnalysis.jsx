@@ -56,6 +56,7 @@ const PortfolioAnalysis = () => {
     useState("max_sharpe");
   const [validationsParams, setValidationParams] = useState(null);
   const [showUploader, setShowUploader] = useState(false);
+  const [editID, setEditID] = useState();
 
   const {
     data: validationData,
@@ -140,7 +141,7 @@ const PortfolioAnalysis = () => {
           tickersArray.push(json[i].ticker);
         }
       }
-      setOptimizationsParams({ data: [validatedResponse] });
+      setOptimizationsParams({ data: [validatedResponse], id: editID });
     } catch (error) {
       console.error(error);
     }
@@ -280,6 +281,7 @@ const PortfolioAnalysis = () => {
               onClick={(e) => {
                 e.stopPropagation();
                 console.log("clicked", props.row.original.id);
+                handleNewPorfolioButtonClick(props.row.original.id);
               }}
             >
               <svg
@@ -391,6 +393,7 @@ const PortfolioAnalysis = () => {
   };
 
   const handleNewPorfolioButtonClick = (id) => {
+    if (id) setEditID(id);
     setShowUploader(true);
   };
 
@@ -669,7 +672,7 @@ const PortfolioAnalysis = () => {
                     <div className="flex flex-row-reverse">
                       <Button
                         variant="outline"
-                        onClick={handleNewPorfolioButtonClick}
+                        onClick={()=>handleNewPorfolioButtonClick()}
                       >
                         New Portfolio
                       </Button>

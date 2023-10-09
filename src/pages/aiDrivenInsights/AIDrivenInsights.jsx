@@ -41,7 +41,7 @@ const AiDrivenInsights = () => {
         { value: "All", label: "All" },
         { value: "Value", label: "Value" },
         { value: "Growth", label: "Growth" },
-        { value: "Momentum", label: "Momentum" },
+        { value: "Momentum Slow", label: "Momentum" },
         { value: "Trend Following", label: "Trend Following" },
         { value: "Other", label: "Other" },
       ],

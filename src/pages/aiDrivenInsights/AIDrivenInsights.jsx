@@ -13,6 +13,7 @@ const AiDrivenInsights = () => {
   const navigate = useNavigate();
 
   const [pageRequestOffset, setPageRequestOffset] = useState(0);
+  const [checked, isChecked] = useState();
   const [totalItems, setTotalItems] = useState(0);
   const itemsPerPage = 6;
   const [selectedFilters, setSelectedFilters] = useState({});
@@ -37,7 +38,7 @@ const AiDrivenInsights = () => {
       id: "themes",
       name: "Themes",
       options: [
-        { value: "All", label: "All", default: true },
+        { value: "All", label: "All" },
         { value: "Value", label: "Value" },
         { value: "Growth", label: "Growth" },
         { value: "Momentum", label: "Momentum" },
@@ -130,7 +131,6 @@ const AiDrivenInsights = () => {
                                 id={`${section.id}-${option.value}`}
                                 name={section.id}
                                 value={option.value}
-                                checked={option.default}
                                 type="radio"
                                 className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                 onChange={(e) => handleOptionChange(section.id, e.target.value)}

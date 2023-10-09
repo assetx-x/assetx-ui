@@ -14,15 +14,17 @@ const AiDrivenInsights = () => {
 
   const [pageRequestOffset, setPageRequestOffset] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
+  const itemsPerPage = 6;
+  const [selectedFilters, setSelectedFilters] = useState({});
 
-  const itensPerPage = 6;
 
-  const { data, error, isLoading } = useQuery(["dash", pageRequestOffset], () =>
-    fetchInsightsDash({ offset: pageRequestOffset, limit: itensPerPage })
+  const { data, error, isLoading } = useQuery(
+    ["dash", pageRequestOffset, selectedFilters], // Add selectedFilters as a dependency
+    () => fetchInsightsDash({ offset: pageRequestOffset, limit: itemsPerPage, filters: selectedFilters }) // Pass selectedFilters to fetchInsightsDash function
   );
 
   const handlePageClick = (event) => {
-    const newOffset = (event.selected * itensPerPage) % totalItems;
+    const newOffset = (event.selected * itemsPerPage) % totalItems;
     setPageRequestOffset(newOffset);
   };
 
@@ -35,11 +37,12 @@ const AiDrivenInsights = () => {
       id: "themes",
       name: "Themes",
       options: [
-        { value: "all", label: "All" },
-        { value: "technical", label: "Technical" },
-        { value: "macro", label: "Macro" },
-        { value: "value", label: "Value" },
-        { value: "momentum", label: "Momentum" },
+        { value: "All", label: "All", default: true },
+        { value: "Value", label: "Value" },
+        { value: "Growth", label: "Growth" },
+        { value: "Momentum", label: "Momentum" },
+        { value: "Trend Following", label: "Trend Following" },
+        { value: "Other", label: "Other" },
       ],
     },
     {
@@ -54,26 +57,35 @@ const AiDrivenInsights = () => {
       id: "horizon",
       name: "Horizon",
       options: [
-        { value: "1W", label: "1 week" },
-        { value: "1M", label: "1 month" },
-        { value: "2M", label: "2 month" },
+        { value: "1W", label: "1 Week Forecast" },
+        { value: "1M", label: "1 Month Forecast" },
+        { value: "2M", label: "2 Month Forecast" },
       ],
     },
     {
-      id: "selector",
-      name: "Selector",
+      id: "sector",
+      name: "Sector",
       options: [
-        { value: "consumer-discretionary", label: "Consumer Discretionary" },
-        { value: "consumer-stapless", label: "Consumer Stapless" },
-        { value: "energy", label: "Energy" },
-        { value: "financials", label: "Financials" },
-        { value: "healthcare", label: "Healthcare" },
-        { value: "industrials", label: "Industrials" },
-        { value: "materials", label: "Materials" },
-        { value: "technology", label: "Technology" },
+        { value: "Consumer Discretionary", label: "Consumer Discretionary" },
+        { value: "Consumer Staples", label: "Consumer Staples" },
+        { value: "Communications", label: "Communications" },
+        { value: "Energy", label: "Energy" },
+        { value: "Financials", label: "Financials" },
+        { value: "Health Care", label: "Health Care" },
+        { value: "Industrials", label: "Industrials" },
+        { value: "Materials", label: "Materials" },
+        { value: "Technology", label: "Technology" },
       ],
     },
   ];
+
+  // Update selectedFilters when checkboxes are changed
+  const handleOptionChange = (sectionId, value) => {
+    setSelectedFilters((prevFilters) => ({
+      ...prevFilters,
+      [sectionId]: value,
+    }));
+  };
 
   return (
     <>
@@ -92,7 +104,6 @@ const AiDrivenInsights = () => {
                   <button
                     type="button"
                     className="inline-flex items-center lg:hidden"
-                    onClick={() => setMobileFiltersOpen(true)}
                   >
                     <span className="text-sm font-medium text-gray-700">
                       Filters
@@ -106,37 +117,32 @@ const AiDrivenInsights = () => {
                   <div className="hidden lg:block">
                     <form className="space-y-10 divide-y divide-gray-200">
                       {filters.map((section, sectionIdx) => (
-                        <div
-                          key={section.name}
-                          className={sectionIdx === 0 ? null : "pt-10"}
-                        >
-                          <fieldset>
-                            <legend className="block text-sm font-medium text-gray-900">
-                              {section.name}
-                            </legend>
-                            <div className="space-y-3 pt-6">
-                              {section.options.map((option, optionIdx) => (
-                                <div
-                                  key={option.value}
-                                  className="flex items-center"
-                                >
-                                  <input
-                                    id={`${section.id}-${optionIdx}`}
-                                    name={`${section.id}[]`}
-                                    defaultValue={option.value}
-                                    type="checkbox"
-                                    className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                  />
-                                  <label
-                                    htmlFor={`${section.id}-${optionIdx}`}
-                                    className="ml-3 text-sm text-gray-600"
-                                  >
-                                    {option.label}
-                                  </label>
-                                </div>
-                              ))}
+                        <div key={section.name} className={sectionIdx === 0 ? null : "pt-10"}>
+                          <label
+                            htmlFor={section.id}
+                            className="block text-sm font-medium text-gray-900"
+                          >
+                            {section.name}
+                          </label>
+                          {section.options.map((option) => (
+                            <div key={option.value} className="flex items-center">
+                              <input
+                                id={`${section.id}-${option.value}`}
+                                name={section.id}
+                                value={option.value}
+                                checked={option.default}
+                                type="radio"
+                                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                onChange={(e) => handleOptionChange(section.id, e.target.value)}
+                              />
+                              <label
+                                htmlFor={`${section.id}-${option.value}`}
+                                className="ml-3 text-sm text-gray-600"
+                              >
+                                {option.label}
+                              </label>
                             </div>
-                          </fieldset>
+                          ))}
                         </div>
                       ))}
                     </form>
@@ -197,7 +203,7 @@ const AiDrivenInsights = () => {
                 <ReactPaginate
                   previousLabel={"Previous"}
                   nextLabel={"Next"}
-                  pageCount={Math.ceil(totalItems / itensPerPage)}
+                  pageCount={Math.ceil(totalItems / itemsPerPage)}
                   onPageChange={handlePageClick}
                   containerClassName={"inline-flex -space-x-px"}
                   pageLinkClassName={

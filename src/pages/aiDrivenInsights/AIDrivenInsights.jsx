@@ -50,17 +50,17 @@ const AiDrivenInsights = () => {
       id: "direction",
       name: "Direction",
       options: [
-        { value: "bullish", label: "Bullish" },
-        { value: "bearish", label: "Bearish" },
+        { value: "bullish", label: "Bullish", disabled: true },
+        { value: "bearish", label: "Bearish", disabled: true },
       ],
     },
     {
       id: "horizon",
       name: "Horizon",
       options: [
-        { value: "1W", label: "1 Week Forecast" },
-        { value: "1M", label: "1 Month Forecast" },
-        { value: "2M", label: "2 Month Forecast" },
+        { value: "1W", label: "1 Week Forecast",  disabled: true },
+        { value: "1M", label: "1 Month Forecast",  disabled: true },
+        { value: "2M", label: "2 Month Forecast",  disabled: true },
       ],
     },
     {
@@ -134,12 +134,13 @@ const AiDrivenInsights = () => {
                                 name={section.id}
                                 value={option.value}
                                 type="radio"
+                                disabled={option.disabled}
                                 className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                 onChange={(e) => handleOptionChange(section.id, e.target.value)}
                               />
                               <label
                                 htmlFor={`${section.id}-${option.value}`}
-                                className="ml-3 text-sm text-gray-600"
+                                className={`ml-3 text-sm text-gray-600 ${option.disabled ? "text-gray-300" : ""}`}
                               >
                                 {option.label}
                               </label>

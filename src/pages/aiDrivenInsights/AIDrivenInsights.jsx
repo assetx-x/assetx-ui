@@ -59,7 +59,7 @@ const AiDrivenInsights = () => {
       name: "Horizon",
       options: [
         { value: "1W", label: "1 Week Forecast",  disabled: true },
-        { value: "1M", label: "1 Month Forecast",  disabled: true },
+        { value: "1M", label: "1 Month Forecast",  disabled: true, checked: true },
         { value: "2M", label: "2 Month Forecast",  disabled: true },
       ],
     },
@@ -134,6 +134,7 @@ const AiDrivenInsights = () => {
                                 name={section.id}
                                 value={option.value}
                                 type="radio"
+                                checked={option?.checked}
                                 disabled={option.disabled}
                                 className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                 onChange={(e) => handleOptionChange(section.id, e.target.value)}

@@ -67,15 +67,17 @@ const AiDrivenInsights = () => {
       id: "sector",
       name: "Sector",
       options: [
-        { value: "Consumer Discretionary", label: "Consumer Discretionary" },
-        { value: "Consumer Staples", label: "Consumer Staples" },
-        { value: "Communications", label: "Communications" },
-        { value: "Energy", label: "Energy" },
-        { value: "Financials", label: "Financials" },
-        { value: "Health Care", label: "Health Care" },
-        { value: "Industrials", label: "Industrials" },
-        { value: "Materials", label: "Materials" },
-        { value: "Technology", label: "Technology" },
+        {value: "Financials", label: "Financials" },
+        {value: "Industrials", label: "Industrials" },
+        {value: "Consumer Discretionary", label: "Consumer Discretionary" },
+        {value: "Information Technology", label: "Information Technology" },
+        {value: "Health Care", label: "Health Care" },
+        {value: "Real Estate", label: "Real Estate" },
+        {value: "Materials", label: "Materials" },
+        {value: "Energy", label: "Energy" },
+        {value: "Consumer Staples", label: "Consumer Staples" },
+        {value: "Communication Services", label: "Communication Services" },
+        {value: "Utilities", label: "Utilities" }
       ],
     },
   ];
@@ -196,6 +198,8 @@ const AiDrivenInsights = () => {
                       ))}
                     </div>
                   )}
+                  {!data?.results.length && !isLoading &&(<div>No data</div>)}
+                  {isLoading &&(<div>Loading...</div>)}
                 </section>
               </div>
 

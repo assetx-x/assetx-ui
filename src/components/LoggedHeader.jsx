@@ -2,6 +2,7 @@ import React, {Fragment} from "react";
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Disclosure, Transition, Menu } from "@headlessui/react";
 import Logo from "../assets/images/corporate/logo.png";
+import { Link } from "react-router-dom";
 
 const LoggedHeader = ({logoutAction}) => {
   const user = {
@@ -34,6 +35,7 @@ const LoggedHeader = ({logoutAction}) => {
             <div className="flex h-16 justify-between">
               <div className="flex">
                 <div className="flex flex-shrink-0 items-center">
+                  <Link to="/us">
                   <img
                     className="block h-8 w-auto lg:hidden"
                     src={Logo}
@@ -44,6 +46,7 @@ const LoggedHeader = ({logoutAction}) => {
                     src={Logo}
                     alt="AssetX"
                   />
+                  </Link>
                 </div>
                 <div className="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
                   {navigation.map((item) => (

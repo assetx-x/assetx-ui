@@ -21,3 +21,8 @@ export const getPrice = async (ticker) => {
     headers: { Authorization: `Bearer ${token?.access}` }
   });
 };
+
+export const getSearch = async (data) => {
+
+  return await get(`${API_URL.TICKER_SEARCH}?symbol=${data}`);
+}

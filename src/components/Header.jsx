@@ -120,7 +120,7 @@ export function Header() {
                   <div className="hidden md:block">
                     <NavLink href="/login">Sign in</NavLink>
                   </div>
-                  <Button onClick={()=>window.location.href='/register'} color="blue">
+                  <Button onClick={()=>window.location.assign('/register')} color="blue">
                     <span>
                       Sign up
                     </span>

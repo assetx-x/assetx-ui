@@ -7,10 +7,14 @@ import { useMain } from "../../store/context/MainContext.jsx";
 import { formatDateToDashFormat } from "../../utils/index.js";
 import { AsymmetricErrorBarsWithConstantOffsetChart } from "../../components/AsymmetricErrorBarsWithConstantOffsetChart.jsx";
 import { BasicWaterfallChart } from "../../components/BasicWaterfallChart.jsx";
+import { BetaChart } from "../../components/BetaChart.jsx";
 
 const NewPortfolioAnalysisResults = ({ portfolio, id }) => {
   const context = useMain();
   const [portfolioData, setPortfolioData] = useState(portfolio?.holdings);
+  const [featureImportance, setFeatureImportance] = useState('feature_importance');
+
+  
   if (!id) setPortfolioData(context.predictionData?.holdings)
   const keys = [
     "Overall",
@@ -270,20 +274,67 @@ const NewPortfolioAnalysisResults = ({ portfolio, id }) => {
                   data={portfolioData?.["1M"]?.portfolio}
                 />
               </section>
+              
               <section>
                 {/*Selectable options*/}
                 <div className="pl-[10px] pr-[10px]">
                   <div
-                    className="mt-10 "
+                    className="mt-10 mb-3"
                     style={{
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center",
+                      flexWrap:'wrap',
+                      gap: 20
                     }}
                   >
                     <div>
                       <h3 className="text-3xl font-semibold">Details</h3>
                     </div>
+
+                    <div>
+                      <button type="button">
+                        <input
+                          className="hidden"
+                          type="radio"
+                          name="feature_importance_historical" 
+                          id="feature_importance_historical" 
+                          value="feature_importance_historical"
+                          checked={featureImportance === "feature_importance_historical"}
+                          onChange={() => setFeatureImportance("feature_importance_historical")}
+                        />
+                        <label
+                            className={`
+                              px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 
+                              hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 
+                              focus:text-blue-700 rounded-l-lg`}
+                            htmlFor="feature_importance_historical"
+                          >
+                            Historical Analysis
+                          </label>
+                      </button>
+                      <button type="button">
+                        <input
+                          className="hidden"
+                          type="radio"
+                          name="feature_importance" 
+                          id="feature_importance" 
+                          value="feature_importance"
+                          checked={featureImportance === "feature_importance"}
+                          onChange={() => setFeatureImportance("feature_importance")}
+                        />
+                        <label
+                            className={`
+                              px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 
+                              hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 
+                              focus:text-blue-700 rounded-r-md`}
+                            htmlFor="feature_importance"
+                          >
+                            Current Analysis
+                          </label>
+                      </button>
+                    </div>
+
                     <div>
                       {keys.map((key, index) => (
                         <button type="button" key={key}>
@@ -313,14 +364,23 @@ const NewPortfolioAnalysisResults = ({ portfolio, id }) => {
                   </div>
                 </div>
                 {/*End Selectable options*/}
-                <BasicWaterfallChart
-                  data={
-                    portfolioData?.["1M"]?.feature_importance?.[
-                      selectedKey
-                    ]
-                  }
-                  key={selectedKey}
-                />
+                {featureImportance === 'feature_importance' &&
+                  <BasicWaterfallChart
+                    data={
+                      portfolioData?.["1M"]?.[featureImportance]?.[
+                        selectedKey
+                      ]
+                    }
+                    key={selectedKey}
+                  />
+                }
+                {featureImportance === 'feature_importance_historical' && 
+                  <BetaChart data={
+                      portfolioData?.["1M"]?.[featureImportance]?.[
+                        selectedKey
+                      ]
+                    } key={selectedKey} layoutParameters={{legend: {"orientation": "h"}}} />
+                }
               </section>
 
               <section>
@@ -337,6 +397,7 @@ const NewPortfolioAnalysisResults = ({ portfolio, id }) => {
                 />
               </section>
             </div>
+
             <div className="col-span-6 md:col-span-3 lg:grid-cols-6 xl:col-span-2">
               <section>
                 <h3 className="text-3xl font-semibold">Current Trading Book</h3>
@@ -351,6 +412,7 @@ const NewPortfolioAnalysisResults = ({ portfolio, id }) => {
                   data={portfolioData?.current_trading_book}
                 />
               </section>
+
               <section className="mb-20">
                 <h3 className="text-3xl font-semibold">
                   AI Selected Comparables
@@ -415,6 +477,7 @@ const NewPortfolioAnalysisResults = ({ portfolio, id }) => {
                   </div>
                 </div>
               </section>
+              
               <section>
                 <h3 className="text-3xl font-semibold">
                   Performance Attribution

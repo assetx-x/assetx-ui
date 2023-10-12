@@ -2,6 +2,7 @@ import React, {Fragment} from "react";
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Disclosure, Transition, Menu } from "@headlessui/react";
 import Logo from "../assets/images/corporate/logo.png";
+import SearchBar from "./SearchBar.jsx";
 
 const LoggedHeader = ({logoutAction}) => {
   const user = {
@@ -44,6 +45,9 @@ const LoggedHeader = ({logoutAction}) => {
                     src={Logo}
                     alt="AssetX"
                   />
+                  <div className="container mx-auto p-4">
+                  <SearchBar/>
+                  </div>
                 </div>
                 <div className="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
                   {navigation.map((item) => (

@@ -11,4 +11,5 @@ export const API_URL = {
   REGISTER: `${BASE_URL}/auth/users/`,
   HOLDINGS: `${BASE_URL}/holdings_test2/`,
   DEEP_INSIGHTS: `${BASE_URL}/deep_insight/grab_insights/`,
+  TICKER_SEARCH: `${BASE_URL}/tickers/`,
 }

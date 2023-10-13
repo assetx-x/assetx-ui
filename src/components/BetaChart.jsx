@@ -10,12 +10,15 @@ export function BetaChart({data, layoutParameters}) {
       showgrid: false},
     yaxis: {
       showgrid: false},
-    showlegend:false,
     font: {
       family: 'NunitoSans-ExtraBold',
       color: '#1E8FCC'
     },
-    ...layoutParameters
+    yaxis: {
+      title: '(%) Risk Contribution',
+      zeroline: false
+    },
+      ...layoutParameters
   };
 
   return <Plot data={data} style={{ width: "100%" }} layout={layout} />;

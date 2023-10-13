@@ -38,12 +38,12 @@ const LoggedHeader = ({logoutAction}) => {
                 <div className="flex flex-shrink-0 items-center">
                   <Link to="/us">
                   <img
-                    className="block h-8 w-auto lg:hidden"
+                    className="block h-15 w-auto lg:hidden"
                     src={Logo}
                     alt="AssetX"
                   />
                   <img
-                    className="hidden h-8 w-auto lg:block"
+                    className="hidden h-15 w-auto lg:block"
                     src={Logo}
                     alt="AssetX"
                   />

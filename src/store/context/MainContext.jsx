@@ -6,7 +6,7 @@ function MainProvider(props) {
   const [predictionData, setPredictionData] = useState(null);
   const [selectedTab, setSelectedTab] = useState(0);
   const [selectedRatingData, setSelectedRatingData] = useState('composite');
-
+  const [featureImportance, setFeatureImportance] = useState('feature_importance');
 
   return (
     <MainContext.Provider
@@ -16,7 +16,9 @@ function MainProvider(props) {
         selectedRatingData,
         setSelectedRatingData,
         selectedTab,
-        setSelectedTab
+        setSelectedTab,
+        featureImportance,
+        setFeatureImportance
       }}
     >
       {props.children}

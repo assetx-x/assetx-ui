@@ -12,14 +12,15 @@ const AISelectedComparables = ({data, selector}) => {
             </p>
 
             <div className="mt-10">
-            <div className="relative overflow-x">
-                <div className="relative overflow-x-auto shadow-md sm:rounded-lg p-3 h-{600}">
+            <div className="relative overflow-x ">
+                <div className="relative overflow-x-auto shadow-md sm:rounded-lg p-3 h-[780px]">
                 <table className="w-full text-sm text-left text-gray-500">
                     <thead className=" sticky  text-xs text-gray-700 uppercase bg-gray-50 "></thead>
                     {data?.[selector] && (
                     <tbody>
+                    {/*TODO: move data*/}
                         {Object.entries(
-                        data?.[selector]?.ai_comparables
+                        data?.[selector]?.summary_stats?.comparables
                         ).map(([symbol, company]) => (
                         <tr
                             key={symbol}

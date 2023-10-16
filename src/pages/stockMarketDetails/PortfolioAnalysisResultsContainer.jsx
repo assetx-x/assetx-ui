@@ -18,7 +18,8 @@ const PortfolioAnalysisResultsContainer = () => {
 
 
   if (!data) return <div>Loading...</div>;
-  console.log(data);
+
+  console.log("=>(PortfolioAnalysisResultsContainer.jsx:23) data", data);
 
   return (
     <NewPortfolioAnalysisResults  portfolio={data} id={id}/>

@@ -5,17 +5,14 @@ import { RecommendationPill } from "../../components/Table.jsx";
 import ResultsTable from "./components/ResultsTable.jsx";
 import { useMain } from "../../store/context/MainContext.jsx";
 import { formatDateToDashFormat } from "../../utils/index.js";
-import { AsymmetricErrorBarsWithConstantOffsetChart } from "../../components/AsymmetricErrorBarsWithConstantOffsetChart.jsx";
+import {
+  AsymmetricErrorBarsWithConstantOffsetChart
+} from "../../components/AsymmetricErrorBarsWithConstantOffsetChart.jsx";
 import { BasicWaterfallChart } from "../../components/BasicWaterfallChart.jsx";
 import { BetaChart } from "../../components/BetaChart.jsx";
 
 const NewPortfolioAnalysisResults = ({ portfolio, id }) => {
-  const context = useMain();
-  const [portfolioData, setPortfolioData] = useState(portfolio?.holdings);
-  const [featureImportance, setFeatureImportance] = useState('feature_importance');
-
-  
-  if (!id) setPortfolioData(context.predictionData?.holdings)
+  if (!id) setPortfolioData(context.predictionData?.holdings);
   const keys = [
     "Overall",
     "Growth",
@@ -25,8 +22,11 @@ const NewPortfolioAnalysisResults = ({ portfolio, id }) => {
     "Momentum Slow",
     "Trend Following",
     "Value",
-    "Other Factors",
+    "Other Factors"
   ];
+  const context = useMain();
+  const [portfolioData, setPortfolioData] = useState(portfolio?.holdings);
+  const [featureImportance, setFeatureImportance] = useState("feature_importance");
   const [selectedKey, setSelectedKey] = useState(keys[0]);
   const [scope, setScope] = useState("categories");
   const [timeScope, setTimeScope] = useState("historical");
@@ -57,17 +57,17 @@ const NewPortfolioAnalysisResults = ({ portfolio, id }) => {
               </div>
             </div>
           );
-        },
+        }
       },
       {
         Header: "Weight",
-        accessor: "weight",
+        accessor: "weight"
       },
       {
         Header: "AssetX Signal",
         accessor: "AssetX Signal",
-        Cell: RecommendationPill,
-      },
+        Cell: RecommendationPill
+      }
     ],
     []
   );
@@ -99,36 +99,36 @@ const NewPortfolioAnalysisResults = ({ portfolio, id }) => {
               </div>
             </div>
           </div>
-        ),
+        )
       },
       {
         Header: "Growth",
-        accessor: "Growth",
+        accessor: "Growth"
       },
       {
         Header: "Macro",
-        accessor: "Macro",
+        accessor: "Macro"
       },
       {
         Header: "Momentum Fast",
-        accessor: "Momentum Fast",
+        accessor: "Momentum Fast"
       },
       {
         Header: "Momentum Slow",
-        accessor: "Momentum Slow",
+        accessor: "Momentum Slow"
       },
       {
         Header: "Quality",
-        accessor: "Quality",
+        accessor: "Quality"
       },
       {
         Header: "Trend Following",
-        accessor: "Trend Following",
+        accessor: "Trend Following"
       },
       {
         Header: "Value",
-        accessor: "Value",
-      },
+        accessor: "Value"
+      }
     ],
     []
   );
@@ -203,7 +203,7 @@ const NewPortfolioAnalysisResults = ({ portfolio, id }) => {
                   style={{
                     display: "flex",
                     justifyContent: "space-between",
-                    alignItems: "center",
+                    alignItems: "center"
                   }}
                 >
                   <div>
@@ -274,7 +274,7 @@ const NewPortfolioAnalysisResults = ({ portfolio, id }) => {
                   data={portfolioData?.["1M"]?.portfolio}
                 />
               </section>
-              
+
               <section>
                 {/*Selectable options*/}
                 <div className="pl-[10px] pr-[10px]">
@@ -284,7 +284,7 @@ const NewPortfolioAnalysisResults = ({ portfolio, id }) => {
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center",
-                      flexWrap:'wrap',
+                      flexWrap: "wrap",
                       gap: 20
                     }}
                   >
@@ -297,41 +297,41 @@ const NewPortfolioAnalysisResults = ({ portfolio, id }) => {
                         <input
                           className="hidden"
                           type="radio"
-                          name="feature_importance_historical" 
-                          id="feature_importance_historical" 
+                          name="feature_importance_historical"
+                          id="feature_importance_historical"
                           value="feature_importance_historical"
                           checked={featureImportance === "feature_importance_historical"}
                           onChange={() => setFeatureImportance("feature_importance_historical")}
                         />
                         <label
-                            className={`
+                          className={`
                               px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 
                               hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 
                               focus:text-blue-700 rounded-l-lg`}
-                            htmlFor="feature_importance_historical"
-                          >
-                            Historical Analysis
-                          </label>
+                          htmlFor="feature_importance_historical"
+                        >
+                          Historical Analysis
+                        </label>
                       </button>
                       <button type="button">
                         <input
                           className="hidden"
                           type="radio"
-                          name="feature_importance" 
-                          id="feature_importance" 
+                          name="feature_importance"
+                          id="feature_importance"
                           value="feature_importance"
                           checked={featureImportance === "feature_importance"}
                           onChange={() => setFeatureImportance("feature_importance")}
                         />
                         <label
-                            className={`
+                          className={`
                               px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 
                               hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 
                               focus:text-blue-700 rounded-r-md`}
-                            htmlFor="feature_importance"
-                          >
-                            Current Analysis
-                          </label>
+                          htmlFor="feature_importance"
+                        >
+                          Current Analysis
+                        </label>
                       </button>
                     </div>
 
@@ -364,22 +364,22 @@ const NewPortfolioAnalysisResults = ({ portfolio, id }) => {
                   </div>
                 </div>
                 {/*End Selectable options*/}
-                {featureImportance === 'feature_importance' &&
+                {featureImportance === "feature_importance" &&
                   <BasicWaterfallChart
                     data={
                       portfolioData?.["1M"]?.[featureImportance]?.[
                         selectedKey
-                      ]
+                        ]
                     }
                     key={selectedKey}
                   />
                 }
-                {featureImportance === 'feature_importance_historical' && 
+                {featureImportance === "feature_importance_historical" &&
                   <BetaChart data={
-                      portfolioData?.["1M"]?.[featureImportance]?.[
-                        selectedKey
+                    portfolioData?.["1M"]?.[featureImportance]?.[
+                      selectedKey
                       ]
-                    } key={selectedKey} layoutParameters={{legend: {"orientation": "h"}}} />
+                  } key={selectedKey} layoutParameters={{ legend: { "orientation": "h" } }} />
                 }
               </section>
 
@@ -430,54 +430,54 @@ const NewPortfolioAnalysisResults = ({ portfolio, id }) => {
                       <table className="w-full text-sm text-left text-gray-500">
                         <thead className=" sticky  text-xs text-gray-700 uppercase bg-gray-50 "></thead>
                         <tbody>
-                          {portfolioData?.["1M"]?.ai_alternatives.map(
-                            ([symbol, company]) => (
-                              <tr
-                                key={symbol}
-                                className="bg-white border-b  hover:bg-gray-50 "
-                              >
-                                <td className="px-6 py-4">
-                                  <div
-                                    className="flex items-center"
-                                    onClick={() => console.log}
-                                  >
-                                    <img
-                                      className="w-10 h-10 rounded-full"
-                                      src={
-                                        company.company_logo ||
-                                        "https://www.ortodonciasyv.cl/wp-content/uploads/2016/10/orionthemes-placeholder-image-2.png"
-                                      }
-                                      alt={company.company_name + " image"}
-                                    />
-                                    <div className="pl-3">
-                                      <div className="text-base font-semibold">
-                                        {company.company_name}
-                                      </div>
-                                      <div className="font-normal text-gray-500">
-                                        {company.sector}
-                                      </div>
+                        {portfolioData?.["1M"]?.ai_alternatives.map(
+                          ([symbol, company]) => (
+                            <tr
+                              key={symbol}
+                              className="bg-white border-b  hover:bg-gray-50 "
+                            >
+                              <td className="px-6 py-4">
+                                <div
+                                  className="flex items-center"
+                                  onClick={() => console.log}
+                                >
+                                  <img
+                                    className="w-10 h-10 rounded-full"
+                                    src={
+                                      company.company_logo ||
+                                      "https://www.ortodonciasyv.cl/wp-content/uploads/2016/10/orionthemes-placeholder-image-2.png"
+                                    }
+                                    alt={company.company_name + " image"}
+                                  />
+                                  <div className="pl-3">
+                                    <div className="text-base font-semibold">
+                                      {company.company_name}
+                                    </div>
+                                    <div className="font-normal text-gray-500">
+                                      {company.sector}
                                     </div>
                                   </div>
-                                  {/*<th  scope="col" className="px-6 py-4">*/}
-                                  {/*  <p>{symbol}</p>*/}
-                                  {/*  <p>{company.company_name}</p>*/}
-                                  {/*  <p>{company.sector}</p>*/}
-                                  {/*  <img src={company.company_logo} alt="Company Logo" />*/}
-                                  {/*</th>*/}
-                                  {/*<td className="px-6 py-4">*/}
-                                  {/*  {company.ticker}*/}
-                                  {/*</td>*/}
-                                </td>
-                              </tr>
-                            )
-                          )}
+                                </div>
+                                {/*<th  scope="col" className="px-6 py-4">*/}
+                                {/*  <p>{symbol}</p>*/}
+                                {/*  <p>{company.company_name}</p>*/}
+                                {/*  <p>{company.sector}</p>*/}
+                                {/*  <img src={company.company_logo} alt="Company Logo" />*/}
+                                {/*</th>*/}
+                                {/*<td className="px-6 py-4">*/}
+                                {/*  {company.ticker}*/}
+                                {/*</td>*/}
+                              </td>
+                            </tr>
+                          )
+                        )}
                         </tbody>
                       </table>
                     </div>
                   </div>
                 </div>
               </section>
-              
+
               <section>
                 <h3 className="text-3xl font-semibold">
                   Performance Attribution
@@ -491,7 +491,7 @@ const NewPortfolioAnalysisResults = ({ portfolio, id }) => {
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                   <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                      {renderTableHeader()}
+                    {renderTableHeader()}
                     </thead>
                     <tbody>{renderTableRows()}</tbody>
                   </table>
@@ -499,120 +499,6 @@ const NewPortfolioAnalysisResults = ({ portfolio, id }) => {
               </section>
             </div>
           </div>
-          {/*End Content*/}
-          {/*Footer*/}
-          {/*<section className="flex">*/}
-          {/*  /!*card*!/*/}
-          {/*  <div*/}
-          {/*    className="m-5 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">*/}
-          {/*    <a href="#">*/}
-          {/*      <img className="rounded-t-lg"*/}
-          {/*           src="https://e3.365dm.com/23/08/2048x1152/skynews-apple-logo_6267788.jpg?20230830122917"*/}
-          {/*           alt="" />*/}
-          {/*    </a>*/}
-          {/*    <div className="p-5">*/}
-          {/*      <a href="#">*/}
-          {/*        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy*/}
-          {/*          technology acquisitions 2021</h5>*/}
-          {/*      </a>*/}
-          {/*      <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise*/}
-          {/*        technology acquisitions of 2021 so far, in reverse chronological order.</p>*/}
-          {/*    </div>*/}
-          {/*  </div>*/}
-          {/*  /!*End card*!/*/}
-          {/*  /!*card*!/*/}
-          {/*  <div*/}
-          {/*    className="m-5 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">*/}
-          {/*    <a href="#">*/}
-          {/*      <img className="rounded-t-lg"*/}
-          {/*           src="https://e3.365dm.com/23/08/2048x1152/skynews-apple-logo_6267788.jpg?20230830122917"*/}
-          {/*           alt="" />*/}
-          {/*    </a>*/}
-          {/*    <div className="p-5">*/}
-          {/*      <a href="#">*/}
-          {/*        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy*/}
-          {/*          technology acquisitions 2021</h5>*/}
-          {/*      </a>*/}
-          {/*      <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise*/}
-          {/*        technology acquisitions of 2021 so far, in reverse chronological order.</p>*/}
-          {/*    </div>*/}
-          {/*  </div>*/}
-          {/*  /!*End card*!/*/}
-          {/*  /!*card*!/*/}
-          {/*  <div*/}
-          {/*    className="m-5 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">*/}
-          {/*    <a href="#">*/}
-          {/*      <img className="rounded-t-lg"*/}
-          {/*           src="https://e3.365dm.com/23/08/2048x1152/skynews-apple-logo_6267788.jpg?20230830122917"*/}
-          {/*           alt="" />*/}
-          {/*    </a>*/}
-          {/*    <div className="p-5">*/}
-          {/*      <a href="#">*/}
-          {/*        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy*/}
-          {/*          technology acquisitions 2021</h5>*/}
-          {/*      </a>*/}
-          {/*      <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise*/}
-          {/*        technology acquisitions of 2021 so far, in reverse chronological order.</p>*/}
-          {/*    </div>*/}
-          {/*  </div>*/}
-          {/*  /!*End card*!/*/}
-          {/*  /!*card*!/*/}
-          {/*  <div*/}
-          {/*    className="m-5 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">*/}
-          {/*    <a href="#">*/}
-          {/*      <img className="rounded-t-lg"*/}
-          {/*           src="https://e3.365dm.com/23/08/2048x1152/skynews-apple-logo_6267788.jpg?20230830122917"*/}
-          {/*           alt="" />*/}
-          {/*    </a>*/}
-          {/*    <div className="p-5">*/}
-          {/*      <a href="#">*/}
-          {/*        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy*/}
-          {/*          technology acquisitions 2021</h5>*/}
-          {/*      </a>*/}
-          {/*      <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise*/}
-          {/*        technology acquisitions of 2021 so far, in reverse chronological order.</p>*/}
-          {/*    </div>*/}
-          {/*  </div>*/}
-          {/*  /!*End card*!/*/}
-          {/*  /!*card*!/*/}
-          {/*  <div*/}
-          {/*    className="m-5 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">*/}
-          {/*    <a href="#">*/}
-          {/*      <img className="rounded-t-lg"*/}
-          {/*           src="https://e3.365dm.com/23/08/2048x1152/skynews-apple-logo_6267788.jpg?20230830122917"*/}
-          {/*           alt="" />*/}
-          {/*    </a>*/}
-          {/*    <div className="p-5">*/}
-          {/*      <a href="#">*/}
-          {/*        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy*/}
-          {/*          technology acquisitions 2021</h5>*/}
-          {/*      </a>*/}
-          {/*      <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise*/}
-          {/*        technology acquisitions of 2021 so far, in reverse chronological order.</p>*/}
-          {/*    </div>*/}
-          {/*  </div>*/}
-          {/*  /!*End card*!/*/}
-          {/*  /!*card*!/*/}
-          {/*  <div*/}
-          {/*    className="m-5 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">*/}
-          {/*    <a href="#">*/}
-          {/*      <img className="rounded-t-lg"*/}
-          {/*           src="https://e3.365dm.com/23/08/2048x1152/skynews-apple-logo_6267788.jpg?20230830122917"*/}
-          {/*           alt="" />*/}
-          {/*    </a>*/}
-          {/*    <div className="p-5">*/}
-          {/*      <a href="#">*/}
-          {/*        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy*/}
-          {/*          technology acquisitions 2021</h5>*/}
-          {/*      </a>*/}
-          {/*      <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise*/}
-          {/*        technology acquisitions of 2021 so far, in reverse chronological order.</p>*/}
-          {/*    </div>*/}
-          {/*  </div>*/}
-          {/*  /!*End card*!/*/}
-
-          {/*</section>*/}
-          {/*End Footer*/}
         </Container>
       </main>
     </>

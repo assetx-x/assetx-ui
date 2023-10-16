@@ -2,29 +2,19 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Header } from "../../components/Header.jsx";
 import { Container } from "../../components/Container.jsx";
-import Tabs from "../../components/Tabs.jsx";
-import DetailView from "../stockMarketDetails/components/DetailView.jsx";
 import BlockUi from "@availity/block-ui";
 import { useMain } from "../../store/context/MainContext.jsx";
 import { useQuery } from "react-query";
 import fetchTickerDetails from "../../store/models/details/fetchTickerDetails.jsx";
 import fetchTickerPrice from "../../store/models/details/fetchTickerPrice.jsx";
-import StackedView from "../stockMarketDetails/components/StackedView.jsx";
-import { WaterfallChart } from "../../components/WaterfallChart.jsx";
 import { Loader } from "react-loaders";
-import Placeholder01 from "../../assets/images/placeholder-01.png";
-import { AsymmetricErrorBarsWithConstantOffsetChart } from "../../components/AsymmetricErrorBarsWithConstantOffsetChart.jsx";
-import { BasicWaterfallChart } from "../../components/BasicWaterfallChart.jsx";
-import ResultsTable from "../stockMarketDetails/components/ResultsTable.jsx";
 import { formatDateToDashFormat } from "../../utils/index.js";
-import { CombinedLinearChart } from "../../components/CombinatedLinearChart.jsx";
-import { EarningsChart } from "../../components/EarnningsChart.jsx";
-import PerformanceAttributionTable from "../../components/PerformanceAttributionTable.jsx";
 import HistoricalPricePerformance from "./components/historicalPricePerformance.jsx";
 import FactorContribution from "./components/factorContribution.jsx";
 import AISelectedComparables from "./components/aiSelectedComparables.jsx";
 import PerformanceAttribution from "./components/performanceAttribution.jsx";
 import PerformanceDetails from "./components/performanceDetails.jsx";
+import fetchTickerDetailsV2 from "../../store/models/details/fetchTickerDetailsV2.jsx";
 
 const TickerDetail = () => {
   const navigate = useNavigate();
@@ -43,9 +33,19 @@ const TickerDetail = () => {
   );
 
   const {
+    data: dataV2,
+    error: errorV2,
+    isLoading: isLoadingV2
+  } = useQuery(
+    ["details_v2", { ticker }],
+    fetchTickerDetailsV2
+  );
+
+
+  const {
     data: priceData,
     error: priceError,
-    isLoading: priceIsLoading,
+    isLoading: priceIsLoading
   } = useQuery(["priceData", { ticker }], fetchTickerPrice);
 
   // Handle Errors
@@ -57,7 +57,7 @@ const TickerDetail = () => {
 
   useEffect(() => {
     if (!isLoading) {
-      const featureImportanceGraph = data?.[selector]?.feature_importance_graph;
+      const featureImportanceGraph = dataV2?.[selector]?.[context.featureImportance];
 
       if (featureImportanceGraph) {
         const _featureImportanceGraphKeys = Object.keys(featureImportanceGraph);
@@ -65,12 +65,14 @@ const TickerDetail = () => {
         const _overall = _featureImportanceGraphKeys.splice(_indexOverall, 1);
 
         setKeywords([..._overall, ..._featureImportanceGraphKeys]);
+
+
       }
     }
-  }, [isLoading, selector]);
+  }, [isLoading, selector, dataV2, context.featureImportance]);
 
   // TODO: Add skeleton
-  if (!data)
+  if (!data || !dataV2)
     return (
       <>
         <Header />
@@ -104,7 +106,7 @@ const TickerDetail = () => {
       "Current Contribution",
       "Historical Contribution",
       "Sector Current Contribution",
-      "Sector Historical Contribution",
+      "Sector Historical Contribution"
     ];
     return headers.map((header, index) => (
       <th key={index} className="px-6 py-4">
@@ -207,7 +209,6 @@ const TickerDetail = () => {
                     {data?.[selector]?.header_info.company_name}
                   </h1>
                   <div className="p-4 flex justify-between ">
-                    {/*Investment Horizon*/}
                     <div className="ml-6">
                       <div
                         className="inline-flex rounded-md shadow-sm"
@@ -266,9 +267,7 @@ const TickerDetail = () => {
                         </button>
                       </div>
                     </div>
-                    {/*End Investment Horizon*/}
                     {/*TODO: this should be hidden on forecast tab*/}
-                    {/*Objective Function*/}
                     <div className="ml-2 hidden">
                       <div
                         className="inline-flex rounded-md shadow-sm"
@@ -310,7 +309,6 @@ const TickerDetail = () => {
                         </button>
                       </div>
                     </div>
-                    {/*End Objective Function*/}
                   </div>
                   <BlockUi
                     blocking={priceIsLoading}
@@ -340,22 +338,19 @@ const TickerDetail = () => {
                 </div>
               </div>
             </div>
-            {/*Tabs*/}
-            {/*Content  */}
-            <div className="grid grid-cols-6 gap-4 sm:col">
-              <div className="col-span-6 md:col-span-3 lg:grid-cols-6 xl:col-span-4">
-
-                <HistoricalPricePerformance data={data} handleTimeScope={handleTimeScope} selector={selector} />
-
-                <PerformanceDetails data={data} selector={selector} keywords={keywords} />
-
-                {/*Factor Contribution*/}
-                <FactorContribution  renderTableHeader={renderTableHeader} renderTableRows={renderTableRows}/>
-                {/*Factor Contribution*/}
+            <div className="grid grid-cols-10 gap-4">
+              <div className="col-span-8">
+                {dataV2 &&
+                  <>
+                    <HistoricalPricePerformance data={dataV2} handleTimeScope={handleTimeScope} selector={selector} />
+                    <PerformanceDetails data={dataV2} selector={selector} keywords={keywords} />
+                  </>
+                }
+                <FactorContribution renderTableHeader={renderTableHeader} renderTableRows={renderTableRows} />
               </div>
-              <div className="col-span-6 md:col-span-3 lg:grid-cols-6 xl:col-span-2">
+              <div className="col-span-2">
                 {/*AI Selected Comparables*/}
-                <AISelectedComparables data={data} selector={selector} />
+                <AISelectedComparables data={dataV2} selector={selector} />
                 {/*End AI Selected Comparables*/}
 
                 {/*Performance Attribution*/}
@@ -372,8 +367,9 @@ const TickerDetail = () => {
                       </p>
                       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                            {renderStatsTableHeader()}
+                          <thead
+                            className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                          {renderStatsTableHeader()}
                           </thead>
                           <tbody>{renderStatsTableRows()}</tbody>
                         </table>
@@ -384,120 +380,6 @@ const TickerDetail = () => {
                 {/*End Return Summary*/}
               </div>
             </div>
-            {/*End Content*/}
-            {/*Footer*/}
-            {/*<section className="flex">*/}
-            {/*  /!*card*!/*/}
-            {/*  <div*/}
-            {/*    className="m-5 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">*/}
-            {/*    <a href="#">*/}
-            {/*      <img className="rounded-t-lg"*/}
-            {/*           src="https://e3.365dm.com/23/08/2048x1152/skynews-apple-logo_6267788.jpg?20230830122917"*/}
-            {/*           alt="" />*/}
-            {/*    </a>*/}
-            {/*    <div className="p-5">*/}
-            {/*      <a href="#">*/}
-            {/*        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy*/}
-            {/*          technology acquisitions 2021</h5>*/}
-            {/*      </a>*/}
-            {/*      <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise*/}
-            {/*        technology acquisitions of 2021 so far, in reverse chronological order.</p>*/}
-            {/*    </div>*/}
-            {/*  </div>*/}
-            {/*  /!*End card*!/*/}
-            {/*  /!*card*!/*/}
-            {/*  <div*/}
-            {/*    className="m-5 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">*/}
-            {/*    <a href="#">*/}
-            {/*      <img className="rounded-t-lg"*/}
-            {/*           src="https://e3.365dm.com/23/08/2048x1152/skynews-apple-logo_6267788.jpg?20230830122917"*/}
-            {/*           alt="" />*/}
-            {/*    </a>*/}
-            {/*    <div className="p-5">*/}
-            {/*      <a href="#">*/}
-            {/*        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy*/}
-            {/*          technology acquisitions 2021</h5>*/}
-            {/*      </a>*/}
-            {/*      <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise*/}
-            {/*        technology acquisitions of 2021 so far, in reverse chronological order.</p>*/}
-            {/*    </div>*/}
-            {/*  </div>*/}
-            {/*  /!*End card*!/*/}
-            {/*  /!*card*!/*/}
-            {/*  <div*/}
-            {/*    className="m-5 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">*/}
-            {/*    <a href="#">*/}
-            {/*      <img className="rounded-t-lg"*/}
-            {/*           src="https://e3.365dm.com/23/08/2048x1152/skynews-apple-logo_6267788.jpg?20230830122917"*/}
-            {/*           alt="" />*/}
-            {/*    </a>*/}
-            {/*    <div className="p-5">*/}
-            {/*      <a href="#">*/}
-            {/*        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy*/}
-            {/*          technology acquisitions 2021</h5>*/}
-            {/*      </a>*/}
-            {/*      <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise*/}
-            {/*        technology acquisitions of 2021 so far, in reverse chronological order.</p>*/}
-            {/*    </div>*/}
-            {/*  </div>*/}
-            {/*  /!*End card*!/*/}
-            {/*  /!*card*!/*/}
-            {/*  <div*/}
-            {/*    className="m-5 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">*/}
-            {/*    <a href="#">*/}
-            {/*      <img className="rounded-t-lg"*/}
-            {/*           src="https://e3.365dm.com/23/08/2048x1152/skynews-apple-logo_6267788.jpg?20230830122917"*/}
-            {/*           alt="" />*/}
-            {/*    </a>*/}
-            {/*    <div className="p-5">*/}
-            {/*      <a href="#">*/}
-            {/*        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy*/}
-            {/*          technology acquisitions 2021</h5>*/}
-            {/*      </a>*/}
-            {/*      <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise*/}
-            {/*        technology acquisitions of 2021 so far, in reverse chronological order.</p>*/}
-            {/*    </div>*/}
-            {/*  </div>*/}
-            {/*  /!*End card*!/*/}
-            {/*  /!*card*!/*/}
-            {/*  <div*/}
-            {/*    className="m-5 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">*/}
-            {/*    <a href="#">*/}
-            {/*      <img className="rounded-t-lg"*/}
-            {/*           src="https://e3.365dm.com/23/08/2048x1152/skynews-apple-logo_6267788.jpg?20230830122917"*/}
-            {/*           alt="" />*/}
-            {/*    </a>*/}
-            {/*    <div className="p-5">*/}
-            {/*      <a href="#">*/}
-            {/*        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy*/}
-            {/*          technology acquisitions 2021</h5>*/}
-            {/*      </a>*/}
-            {/*      <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise*/}
-            {/*        technology acquisitions of 2021 so far, in reverse chronological order.</p>*/}
-            {/*    </div>*/}
-            {/*  </div>*/}
-            {/*  /!*End card*!/*/}
-            {/*  /!*card*!/*/}
-            {/*  <div*/}
-            {/*    className="m-5 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">*/}
-            {/*    <a href="#">*/}
-            {/*      <img className="rounded-t-lg"*/}
-            {/*           src="https://e3.365dm.com/23/08/2048x1152/skynews-apple-logo_6267788.jpg?20230830122917"*/}
-            {/*           alt="" />*/}
-            {/*    </a>*/}
-            {/*    <div className="p-5">*/}
-            {/*      <a href="#">*/}
-            {/*        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy*/}
-            {/*          technology acquisitions 2021</h5>*/}
-            {/*      </a>*/}
-            {/*      <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise*/}
-            {/*        technology acquisitions of 2021 so far, in reverse chronological order.</p>*/}
-            {/*    </div>*/}
-            {/*  </div>*/}
-            {/*  /!*End card*!/*/}
-            {/*</section>*/}
-            {/*End Footer*/}
-            {/*End Tabs*/}
           </Container>
         </main>
       </BlockUi>

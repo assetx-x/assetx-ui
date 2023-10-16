@@ -52,23 +52,12 @@ export function EarningsChart({ data, onClick }) {
   }, [data]);
 
 
-
-
-
-
-
-
-
-
-
-
-
   let config = { responsive: true };
 
   return <Plot
     data={[settings.trace1, settings.trace2]}
     layout={settings.layout}
-    style={{ width: "100%" }}
+    style={{ width: "100%", height: "780px" }}
     config={config}
     onClick={onClick}
   />;

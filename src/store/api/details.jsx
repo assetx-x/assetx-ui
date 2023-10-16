@@ -9,6 +9,14 @@ export const getDetails = async (ticker) => {
   });
 };
 
+export const getDetailsV2 = async (ticker) => {
+  const token = JSON.parse(localStorage.getItem("token"));
+
+  return await get(`${API_URL.DETAILS_V2}?ticker=${ticker}`, {
+    headers: { Authorization: `Bearer ${token?.access}` }
+  });
+};
+
 
 export const getDeepInsightDetails = async (data) =>
   await post(`${API_URL.DEEP_INSIGHTS}`, { data });

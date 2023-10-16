@@ -3,7 +3,7 @@ import PerformanceAttributionTable from "../../../components/PerformanceAttribut
 
 const PerformanceAttribution = ({data, selector}) => {
     return (
-        <section>
+        <section className="mt-40">
             <h3 className="text-3xl font-semibold">
             Performance Attribution
             </h3>

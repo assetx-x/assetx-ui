@@ -1,19 +1,20 @@
 const AISelectedComparables = ({data, selector}) => {
     return (
-        <section className="mb-20">
-            <h3 className="text-3xl font-semibold">
-            AI Selected Comparables
-            </h3>
+        <section className="mb-20 mt-6">
 
-            <p className="text-gray-500 font-light mt-4 mb-4">
-            Here are some other names to consider in your portfolio that
-            I am currently bullish on based on your selected forecast
-            horizon.
-            </p>
 
-            <div className="mt-10">
+            <div className="mt-6">
             <div className="relative overflow-x ">
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg p-3 h-[780px]">
+                  <h3 className="text-xl font-semibold">
+                    AI Selected Comparables
+                  </h3>
+
+                  <p className="text-gray-500 font-light mt-4 mb-4">
+                    Here are some other names to consider in your portfolio that
+                    I am currently bullish on based on your selected forecast
+                    horizon.
+                  </p>
                 <table className="w-full text-sm text-left text-gray-500">
                     <thead className=" sticky  text-xs text-gray-700 uppercase bg-gray-50 "></thead>
                     {data?.[selector] && (

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useMain } from "../store/context/MainContext.jsx";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const Tabs = (props) => {
   const context = useMain();
-  const { tabs, type, isMain } = props.config;
+  const { tabs, type, isMain, isCentered } = props.config;
 
   const [activeTab, setActiveTab] = useState(0);
   const handleTabClick = (tabNumber) => {
@@ -33,7 +33,7 @@ const Tabs = (props) => {
   return (
     <>
       <div className={themeSwitch(type).container}>
-        <ul className="flex flex-wrap -mb-px">
+        <ul className={`flex flex-wrap -mb-px ${isCentered && 'justify-around'}`}>
           {tabs.map((tab, index) => {
             return (
               <li className="mr-2" key={index}>
@@ -52,7 +52,8 @@ const Tabs = (props) => {
                       : themeSwitch(type).normal
                   }
                 >
-                  {tab.name}
+                  {tab.icon && tab.name}
+                  <FontAwesomeIcon icon={tab.icon} className="h-7"/>
                 </div>
               </li>
             );

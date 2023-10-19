@@ -5,10 +5,7 @@ const HistoricalPricePerformance = ({ data, handleTimeScope, selector }) => {
   console.log(selector);
   return (
     <>
-      <section className="pt-10">
-        {selector === "returns" ? <p>{data?.[selector]?.summary_stats?.overview.sentence}</p> :
-          <p>{data?.[selector]?.sentence}</p>}
-      </section>
+
       <section>
         <div
           className="mt-10"
@@ -56,7 +53,7 @@ const HistoricalPricePerformance = ({ data, handleTimeScope, selector }) => {
                   className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
                   htmlFor="returns"
                 >
-                  Returns Model
+                  1M Returns Model
                 </label>
               </button>
             </div>

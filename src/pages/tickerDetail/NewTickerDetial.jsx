@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { Header } from "../../components/Header.jsx";
 import { Container } from "../../components/Container.jsx";
 import BlockUi from "@availity/block-ui";
@@ -9,15 +9,24 @@ import fetchTickerDetails from "../../store/models/details/fetchTickerDetails.js
 import fetchTickerPrice from "../../store/models/details/fetchTickerPrice.jsx";
 import { Loader } from "react-loaders";
 import { formatDateToDashFormat } from "../../utils/index.js";
-import HistoricalPricePerformance from "./components/historicalPricePerformance.jsx";
-import FactorContribution from "./components/factorContribution.jsx";
-import AISelectedComparables from "./components/aiSelectedComparables.jsx";
-import PerformanceAttribution from "./components/performanceAttribution.jsx";
-import PerformanceDetails from "./components/performanceDetails.jsx";
+import HistoricalPricePerformance from "./components/HistoricalPricePerformance.jsx";
+import FactorContribution from "./components/FactorContribution.jsx";
+import AISelectedComparables from "./components/AiSelectedComparables.jsx";
+import PerformanceAttribution from "./components/PerformanceAttribution.jsx";
+import PerformanceDetails from "./components/PerformanceDetails.jsx";
 import fetchTickerDetailsV2 from "../../store/models/details/fetchTickerDetailsV2.jsx";
+import Tabs from "../../components/Tabs.jsx";
+import {
+  faMoneyBillTrendUp,
+  faNewspaper,
+  faEye,
+  faChartSimple
+} from "@fortawesome/free-solid-svg-icons";
+import AssetxInsights from "./components/AssetxInsights.jsx";
+import News from "./components/News.jsx";
+import KeyValues from "./components/KeyValues.jsx";
 
 const TickerDetail = () => {
-  const navigate = useNavigate();
   const context = useMain();
   const { ticker } = useParams();
   const [keywords, setKeywords] = useState([]);
@@ -41,12 +50,35 @@ const TickerDetail = () => {
     fetchTickerDetailsV2
   );
 
-
   const {
     data: priceData,
     error: priceError,
     isLoading: priceIsLoading
   } = useQuery(["priceData", { ticker }], fetchTickerPrice);
+
+  const tabsConfig = {
+    isMain: true,
+    type: "underline",
+    isCentered:true,
+    tabs: [
+      {
+        icon: faMoneyBillTrendUp,
+        content: <AssetxInsights data={dataV2} selector={selector} />
+      },
+      {
+        icon: faNewspaper,
+        content:<News data={dataV2} selector={selector} />
+      },
+      {
+        icon: faChartSimple,
+        content: <KeyValues data={dataV2} selector={selector} />
+      },
+      {
+        icon: faEye,
+        content:<AISelectedComparables data={dataV2} selector={selector} />
+      }
+    ]
+  };
 
   // Handle Errors
   useEffect(() => {
@@ -349,10 +381,9 @@ const TickerDetail = () => {
                 <FactorContribution renderTableHeader={renderTableHeader} renderTableRows={renderTableRows} />
               </div>
               <div className="col-span-2">
-                {/*AI Selected Comparables*/}
-                <AISelectedComparables data={dataV2} selector={selector} />
-                {/*End AI Selected Comparables*/}
 
+
+                <Tabs config={tabsConfig} />
                 {/*Performance Attribution*/}
                 <PerformanceAttribution data={data} selector={selector} />
                 {/*Performance Attribution*/}

@@ -59,7 +59,7 @@ const TickerDetail = () => {
   const tabsConfig = {
     isMain: true,
     type: "underline",
-    isCentered:true,
+    isCentered: true,
     tabs: [
       {
         icon: faMoneyBillTrendUp,
@@ -67,7 +67,7 @@ const TickerDetail = () => {
       },
       {
         icon: faNewspaper,
-        content:<News data={dataV2} selector={selector} />
+        content: <News data={dataV2} selector={selector} />
       },
       {
         icon: faChartSimple,
@@ -75,7 +75,7 @@ const TickerDetail = () => {
       },
       {
         icon: faEye,
-        content:<AISelectedComparables data={dataV2} selector={selector} />
+        content: <AISelectedComparables data={dataV2} selector={selector} />
       }
     ]
   };
@@ -240,128 +240,43 @@ const TickerDetail = () => {
                   <h1 className="text-4xl pl-6">
                     {data?.[selector]?.header_info.company_name}
                   </h1>
-                  <div className="p-4 flex justify-between ">
-                    <div className="ml-6">
-                      <div
-                        className="inline-flex rounded-md shadow-sm"
-                        role="group"
-                      >
-                        <button type="button">
-                          <input
-                            className="hidden"
-                            type="radio"
-                            id="1D"
-                            name="investingHorizons"
-                            value="1D"
-                            checked={investingHorizonOption === "1D"}
-                            // onChange={handleInvestingHorizonsChange}
-                          />
-                          <label
-                            className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
-                            htmlFor="1D"
-                          >
-                            Daily
-                          </label>
-                        </button>
-                        <button type="button">
-                          <input
-                            className="hidden"
-                            type="radio"
-                            id="21D"
-                            name="investingHorizons"
-                            value="21D"
-                            checked={investingHorizonOption === "21D"}
-                            // onChange={handleInvestingHorizonsChange}
-                          />
-                          <label
-                            className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 "
-                            htmlFor="21D"
-                          >
-                            Monthly
-                          </label>
-                        </button>
-                        <button type="button" className="">
-                          <input
-                            className="hidden"
-                            type="radio"
-                            id="42D"
-                            name="investingHorizons"
-                            value="42D"
-                            checked={investingHorizonOption === "42D"}
-                            // onChange={handleInvestingHorizonsChange}
-                          />
-                          <label
-                            className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 "
-                            htmlFor="42D"
-                          >
-                            Bi-Monthly
-                          </label>
-                        </button>
-                      </div>
-                    </div>
-                    {/*TODO: this should be hidden on forecast tab*/}
-                    <div className="ml-2 hidden">
-                      <div
-                        className="inline-flex rounded-md shadow-sm"
-                        role="group"
-                      >
-                        <button type="button">
-                          <input
-                            className="hidden"
-                            type="radio"
-                            id="min_variance"
-                            name="objectiveFunction"
-                            value="min_variance"
-                            // checked={objectiveFunctionOption === "min_variance"}
-                            // onChange={handleObjectiveFunctionChange}
-                          />
-                          <label
-                            className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 "
-                            htmlFor="min_variance"
-                          >
-                            Relative
-                          </label>
-                        </button>
-                        <button type="button" className="">
-                          <input
-                            className="hidden"
-                            type="radio"
-                            id="max_sharpe"
-                            name="objectiveFunction"
-                            value="max_sharpe"
-                            // checked={objectiveFunctionOption === "max_sharpe"}
-                            // onChange={handleObjectiveFunctionChange}
-                          />
-                          <label
-                            className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
-                            htmlFor="max_sharpe"
-                          >
-                            Absolute
-                          </label>
-                        </button>
-                      </div>
-                    </div>
+
+                  <div className="ml-3 p-3">
+                    <select
+                      onChange={handleTimeScope}
+                      id="countries"
+                      className="px-6 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 ">
+                      <option value="returns" selected>1M Returns</option>
+                      <option value="earnings">Earnings Model</option>
+                    </select>
                   </div>
+
+
                   <BlockUi
                     blocking={priceIsLoading}
                     loader={<Loader active type="ball-scale" color="#0248C7" />}
                   >
                     <h2 className="pl-6">
                       <span className="text-5xl font-bold">
-                        {priceData?.current_price}
+                        {dataV2?.[selector]?.price_data?.['Terminal Price']}
                       </span>
                       <span className="ml-1 text-l">USD</span>
-                      <span className="ml-4 text-xl text-green-600">
-                        {priceData?.ytd}{" "}
+                      <span className={
+                        isNegativeNumber(dataV2?.[selector]?.price_data?.['MTD Return Difference'])
+                        ? "ml-4 text-xl text-red-600"
+                        : "ml-4 text-xl text-green-600"
+                      }>
+                        {dataV2?.[selector]?.price_data?.['MTD Return Difference']}{" "}
                       </span>
                       {/*TODO: color should change based on the value*/}
                       <span
                         className={
-                          isNegativeNumber(priceData?.mtd)
+                          isNegativeNumber(dataV2?.[selector]?.price_data?.['Daily Return Difference'])
                             ? "text-xl text-red-600 "
                             : "text-xl text-green-600 "
                         }
                       >
+                        {dataV2?.[selector]?.price_data?.['Daily Return Difference']}
                         %
                       </span>
                     </h2>

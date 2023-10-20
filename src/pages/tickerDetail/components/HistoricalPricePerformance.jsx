@@ -20,44 +20,44 @@ const HistoricalPricePerformance = ({ data, handleTimeScope, selector }) => {
               Historical Performance
             </h3>
           </div>
-          <div>
-            <div role="group">
-              <button type="button">
-                <input
-                  id="earnings"
-                  name="model"
-                  className="hidden"
-                  type="radio"
-                  value="earnings"
-                  checked={selector === "earnings"}
-                  onChange={handleTimeScope}
-                />
-                <label
-                  className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 "
-                  htmlFor="earnings"
-                >
-                  Earnings Model
-                </label>
-              </button>
-              <button type="button">
-                <input
-                  id="returns"
-                  name="model"
-                  className="hidden"
-                  type="radio"
-                  value="returns"
-                  checked={selector === "returns"}
-                  onChange={handleTimeScope}
-                />
-                <label
-                  className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
-                  htmlFor="returns"
-                >
-                  1M Returns Model
-                </label>
-              </button>
-            </div>
-          </div>
+          {/*<div>*/}
+          {/*  <div role="group">*/}
+          {/*    <button type="button">*/}
+          {/*      <input*/}
+          {/*        id="earnings"*/}
+          {/*        name="model"*/}
+          {/*        className="hidden"*/}
+          {/*        type="radio"*/}
+          {/*        value="earnings"*/}
+          {/*        checked={selector === "earnings"}*/}
+          {/*        onChange={handleTimeScope}*/}
+          {/*      />*/}
+          {/*      <label*/}
+          {/*        className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 "*/}
+          {/*        htmlFor="earnings"*/}
+          {/*      >*/}
+          {/*        Earnings Model*/}
+          {/*      </label>*/}
+          {/*    </button>*/}
+          {/*    <button type="button">*/}
+          {/*      <input*/}
+          {/*        id="returns"*/}
+          {/*        name="model"*/}
+          {/*        className="hidden"*/}
+          {/*        type="radio"*/}
+          {/*        value="returns"*/}
+          {/*        checked={selector === "returns"}*/}
+          {/*        onChange={handleTimeScope}*/}
+          {/*      />*/}
+          {/*      <label*/}
+          {/*        className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"*/}
+          {/*        htmlFor="returns"*/}
+          {/*      >*/}
+          {/*        1M Returns Model*/}
+          {/*      </label>*/}
+          {/*    </button>*/}
+          {/*  </div>*/}
+          {/*</div>*/}
           <div>
             {/*<span className="text-xs font-medium">Forecast Horizon</span>*/}
             {/*<span*/}

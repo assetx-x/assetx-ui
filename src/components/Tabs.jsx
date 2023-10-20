@@ -52,7 +52,7 @@ const Tabs = (props) => {
                       : themeSwitch(type).normal
                   }
                 >
-                  {tab.icon && tab.name}
+                  {tab.name}
                   <FontAwesomeIcon icon={tab.icon} className="h-7"/>
                 </div>
               </li>

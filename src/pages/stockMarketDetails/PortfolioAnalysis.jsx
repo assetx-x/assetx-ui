@@ -1,10 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Papa from "papaparse";
-import { Header } from "../../components/Header.jsx";
 import { Container } from "../../components/Container.jsx";
-import usFlag from "../../assets/images/us.png";
 import { Button } from "../../components/Button.jsx";
-import Tabs from "../../components/Tabs.jsx";
 import Table, { StatusPill } from "../../components/Table.jsx";
 import { useNavigate } from "react-router-dom";
 import BlockUi from "@availity/block-ui";
@@ -18,10 +15,12 @@ import {
   formatDataForTickerTable,
   formatDataToSendOptimization,
   formatDateToDashFormat,
+  classNames
 } from "../../utils/index.js";
 import fetchPredictions from "../../store/models/predicton/fetchPredictions.jsx";
 import fetchValidations from "../../store/models/holdings/fetchValidations.jsx";
 import { Loader } from "react-loaders";
+import { BetaChart } from "../../components/BetaChart.jsx";
 
 const PortfolioAnalysis = () => {
   const navigate = useNavigate();
@@ -33,22 +32,6 @@ const PortfolioAnalysis = () => {
   const [jsonData, setJsonData] = useState([]);
   const [jsonFinalData, setJsonFinalData] = useState([]);
   const [validatedResponse, setValidatedResponse] = useState(null);
-  const tabsConfig = {
-    isMain: true,
-    type: "underline",
-    tabs: [
-      {
-        name: "A.I. Driven insights",
-        // onClickHandler: () => navigate("/us/ai-driven-insights")
-      },
-      { name: "Regime Analysis" },
-      {
-        name: "Portfolio Analysis",
-        onClickHandler: () => {},
-        selected: true,
-      },
-    ],
-  };
 
   // Optimize data
   const [investingHorizonOption, setInvestingHorizonsOption] = useState("1D");
@@ -247,69 +230,145 @@ const PortfolioAnalysis = () => {
     []
   );
 
+
   const listPortfolioColumns = useMemo(
     () => [
-      {
-        Header: "Portfolio ID",
-        accessor: "id",
-      },
-      // {
-      //   Header: "Sharpe Ratio (Recommendations)",
-      //   accessor: "sharpe_ratio",
-      //   Cell: (props) =>
-      //     props.value !== "NaN" ? (props.value * 1).toFixed(2) : 0.0,
-      // },
-      // {
-      //   Header: "Annualized Return",
-      //   accessor: "annual_return",
-      //   Cell: (props) =>
-      //     props.value !== "NaN"
-      //       ? (props.value * 100).toFixed(2) + "%"
-      //       : 0.0 + "%",
-      // },
-      // {
-      //   Header: "Annualized Vol.",
-      //   accessor: "annual_volatility",
-      //   Cell: (props) =>
-      //     props.value !== "NaN" ? (props.value * 1).toFixed(2) : 0.0,
-      // },
-      {
-        Header: "Actions",
+      { 
+        Header: " ",
         Cell: (props) => (
-          <div
-            style={{
-              textAlign:"right",
-              paddingRight:20
-            }}
-          >
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                console.log("clicked", props.row.original.id);
-                handleNewPorfolioButtonClick(props.row.original.id);
-              }}
-            >
-              <svg
-                className="h-8 w-8 text-blue-700"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
-                fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path stroke="none" d="M0 0h24v24H0z" />
-                <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />
-                <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />
-                <line x1="16" y1="5" x2="19" y2="8" />
-              </svg>
-            </button>
+          <div className="max-w-sm">
+            {props.row.original.holdings?.['1M'].sentence}
           </div>
-        ),
+        )
       },
+      {
+        Header: "  ",
+        Cell: (props) => (
+          <div className="flex items-center flex-col gap-4">
+            <h5 className="font-bold text-xs uppercase underline">Biggest Movers</h5>
+            <div className="flex flex-col gap-3">
+              {props.row.original.holdings?.['1M'].ticker_contribution.map(((ticker) => (
+                <span
+                  key={`${ticker.ticker}-${ticker.Value}-${ticker.Growth}-${ticker.Macro}`}
+                  className={classNames(
+                    "px-3 py-1 uppercase leading-wide font-bold text-center	 text-xs rounded-full shadow-sm bg-green-100 text-green-700"
+                    )
+                  }
+                  // className={classNames(
+                  //   "px-3 py-1 uppercase leading-wide font-bold text-xs rounded-full shadow-sm",
+                  //   ticker.startsWith("B") ? "bg-green-100 text-green-700" : null,
+                  //   ticker.startsWith("A") ? "bg-red-100 text-red-700" : null,
+                  //   )
+                  // }
+                >
+                  {ticker.ticker}
+                </span>
+              )))}
+            </div>
+          </div>
+        )
+      },
+      {
+        Header: "   ",
+        Cell: (props) => (
+          <div className="flex items-center flex-col gap-4">
+            <h5 className="font-bold text-xs uppercase underline">Contributing factors</h5>
+            {props.row.original.holdings?.['1M'].ticker_contribution.map(((ticker) => (
+              <div className="flex gap-3" key={`${ticker.Value}-${ticker.Growth}-${ticker.Macro}`}>
+                <span
+                  className={classNames(
+                    "px-3 py-1 uppercase leading-wide font-bold text-xs rounded-full shadow-sm",
+                    parseFloat(ticker.Value) > 0 ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700",
+                    )
+                  }
+                >
+                  Value
+                </span>
+                <span
+                  className={classNames(
+                    "px-3 py-1 uppercase leading-wide font-bold text-xs rounded-full shadow-sm",
+                    parseFloat(ticker.Growth) > 0 ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700",
+                    )
+                  }
+                >
+                  Growth
+                </span>
+                <span
+                  className={classNames(
+                    "px-3 py-1 uppercase leading-wide font-bold text-xs rounded-full shadow-sm",
+                    parseFloat(ticker.Macro) > 0 ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700",
+                    )
+                  }
+                >
+                  Macro
+                </span>
+              </div>
+            )))}
+          </div>
+        )
+      },
+      {
+        Header:"    ",
+        Cell: (props) => (
+          <>
+            {props.row.original?.holdings?.['1M']?.portfolio &&
+              <BetaChart
+                data={[{
+                  x: props.row.original?.holdings?.['1M']?.portfolio?.benchmark?.index,
+                  y: props.row.original?.holdings?.['1M']?.portfolio?.benchmark?.series,
+                }]}
+                layoutParameters={{legend: {"orientation": "h"}, autosize: true}}
+              />
+            }
+          </>
+        )
+      }
     ],
     []
   );
+  // const listPortfolioColumns = useMemo(
+  //   () => [
+  //     {
+  //       Header: "Portfolio ID",
+  //       accessor: "id",
+  //     },
+  //     {
+  //       Header: "Actions",
+  //       Cell: (props) => (
+  //         <div
+  //           style={{
+  //             textAlign:"right",
+  //             paddingRight:20
+  //           }}
+  //         >
+  //           <button
+  //             onClick={(e) => {
+  //               e.stopPropagation();
+  //               console.log("clicked", props.row.original.id);
+  //               handleNewPorfolioButtonClick(props.row.original.id);
+  //             }}
+  //           >
+  //             <svg
+  //               className="h-8 w-8 text-blue-700"
+  //               viewBox="0 0 24 24"
+  //               stroke-width="2"
+  //               stroke="currentColor"
+  //               fill="none"
+  //               stroke-linecap="round"
+  //               stroke-linejoin="round"
+  //             >
+  //               <path stroke="none" d="M0 0h24v24H0z" />
+  //               <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />
+  //               <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />
+  //               <line x1="16" y1="5" x2="19" y2="8" />
+  //             </svg>
+  //           </button>
+  //         </div>
+  //       ),
+  //     },
+  //   ],
+  //   []
+  // );
 
   const handleReset = () => {
     navigate(0);
@@ -436,7 +495,7 @@ const PortfolioAnalysis = () => {
                       />
                       {/*End Sample Portfolio*/}
                       {/*Objective Function*/}
-                      <div>
+                      <div hidden>
                         <div
                           className="inline-flex rounded-md shadow-sm"
                           role="group"
@@ -481,7 +540,7 @@ const PortfolioAnalysis = () => {
                       </div>
                       {/*End Objective Function*/}
                       {/*Investment Horizon*/}
-                      <div>
+                      <div hidden>
                         <div
                           className="inline-flex rounded-md shadow-sm"
                           role="group"
@@ -682,7 +741,7 @@ const PortfolioAnalysis = () => {
                         New Portfolio
                       </Button>
                     </div>
-                    {holdingsData && <Table
+                    {holdingsData && <Table 
                       data={holdingsData?.results}
                       columns={listPortfolioColumns}
                       paginated={true}
@@ -691,7 +750,7 @@ const PortfolioAnalysis = () => {
                         navigate(`/us/portfolio-analysis/${id}`, {
                           replace: true
                         })
-                      }
+                      } 
                     />}
                   </div>
                   {/*</BlockUi>)}*/}

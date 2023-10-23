@@ -317,7 +317,7 @@ const PortfolioAnalysis = () => {
                   x: props.row.original?.holdings?.['1M']?.portfolio?.benchmark?.index,
                   y: props.row.original?.holdings?.['1M']?.portfolio?.benchmark?.series,
                 }]}
-                layoutParameters={{legend: {"orientation": "h"}, autosize: true, height: 250}}
+                layoutParameters={{legend: {"orientation": "h"}, autosize: true, width:400, height: 250}}
               />
             }
           </>

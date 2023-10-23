@@ -300,7 +300,9 @@ const TickerDetail = () => {
 
                 <Tabs config={tabsConfig} />
                 {/*Performance Attribution*/}
-                <PerformanceAttribution data={data} selector={selector} />
+                <div hidden>
+                  <PerformanceAttribution data={data} selector={selector} />
+                </div>
                 {/*Performance Attribution*/}
 
                 {/*Return Summary*/}

@@ -53,7 +53,9 @@ const Tabs = (props) => {
                   }
                 >
                   {tab.name}
-                  <FontAwesomeIcon icon={tab.icon} className="h-7"/>
+                  {tab.icon &&
+                    <FontAwesomeIcon icon={tab.icon} className="h-7"/>
+                  }
                 </div>
               </li>
             );

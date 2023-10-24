@@ -25,11 +25,13 @@ import {
 import AssetxInsights from "./components/AssetxInsights.jsx";
 import News from "./components/News.jsx";
 import KeyValues from "./components/KeyValues.jsx";
+import fetchSearchGTP from "../../store/models/details/fetchSearchGTP.jsx";
 
 const TickerDetail = () => {
   const context = useMain();
   const { ticker } = useParams();
   const [keywords, setKeywords] = useState([]);
+  const [search, setSearch] = useState("");
   const [investingHorizonOption, setInvestingHorizonsOption] = useState("21D");
   const [headerData, setHeaderData] = useState({});
   const [scope, setScope] = useState("categories");
@@ -48,6 +50,19 @@ const TickerDetail = () => {
   } = useQuery(
     ["details_v2", { ticker }],
     fetchTickerDetailsV2
+  );
+
+  const {
+    data: searchResult,
+    error: searchError,
+    isLoading: searchIsLoading,
+    refetch: searchRefetch
+  } = useQuery(
+    ["search", { ticker,search }],
+    fetchSearchGTP,
+    {
+      enabled: false
+    }
   );
 
   const {
@@ -102,6 +117,18 @@ const TickerDetail = () => {
       }
     }
   }, [isLoading, selector, dataV2, context.featureImportance]);
+
+  const handleKeyDown = (event) => {
+    if (event.keyCode === 13) {
+      // Enter key is pressed
+      searchRefetch();
+    }
+  };
+
+  const handleSearch = (event) => {
+    setSearch(event.target.value);
+  };
+
 
   // TODO: Add skeleton
   if (!data || !dataV2)
@@ -258,25 +285,25 @@ const TickerDetail = () => {
                   >
                     <h2 className="pl-6">
                       <span className="text-5xl font-bold">
-                        {dataV2?.[selector]?.price_data?.['Terminal Price']}
+                        {dataV2?.[selector]?.price_data?.["Terminal Price"]}
                       </span>
                       <span className="ml-1 text-l">USD</span>
                       <span className={
-                        isNegativeNumber(dataV2?.[selector]?.price_data?.['MTD Return Difference'])
-                        ? "ml-4 text-xl text-red-600"
-                        : "ml-4 text-xl text-green-600"
+                        isNegativeNumber(dataV2?.[selector]?.price_data?.["MTD Return Difference"])
+                          ? "ml-4 text-xl text-red-600"
+                          : "ml-4 text-xl text-green-600"
                       }>
-                        {dataV2?.[selector]?.price_data?.['MTD Return Difference']}{" "}
+                        {dataV2?.[selector]?.price_data?.["MTD Return Difference"]}{" "}
                       </span>
                       {/*TODO: color should change based on the value*/}
                       <span
                         className={
-                          isNegativeNumber(dataV2?.[selector]?.price_data?.['Daily Return Difference'])
+                          isNegativeNumber(dataV2?.[selector]?.price_data?.["Daily Return Difference"])
                             ? "text-xl text-red-600 "
                             : "text-xl text-green-600 "
                         }
                       >
-                        {dataV2?.[selector]?.price_data?.['Daily Return Difference']}
+                        {dataV2?.[selector]?.price_data?.["Daily Return Difference"]}
                         %
                       </span>
                     </h2>
@@ -286,6 +313,34 @@ const TickerDetail = () => {
               </div>
             </div>
             <div className="grid grid-cols-10 gap-4">
+              <div className="col-span-10">
+                {/*Search Input*/}
+                <div className="col-span-4 mt-10">
+                  <div className="relative w-[300px]">
+                    <input
+                      className="w-full px-4 py-3 text-sm text-gray-700 placeholder-gray-400 bg-white border border-gray-300 rounded-lg shadow-sm appearance-none focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                      type="text"
+                      placeholder="Ask us anything"
+                      onChange={handleSearch}
+                      onKeyDown={handleKeyDown}
+                    />
+                    <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                      <svg className="pointer-events-none absolute right-4 top-3 h-6 w-6 fill-slate-400"
+                           xmlns="http://www.w3.org/2000/svg">
+                        <path
+                          d="M20.47 21.53a.75.75 0 1 0 1.06-1.06l-1.06 1.06Zm-9.97-4.28a6.75 6.75 0 0 1-6.75-6.75h-1.5a8.25 8.25 0 0 0 8.25 8.25v-1.5ZM3.75 10.5a6.75 6.75 0 0 1 6.75-6.75v-1.5a8.25 8.25 0 0 0-8.25 8.25h1.5Zm6.75-6.75a6.75 6.75 0 0 1 6.75 6.75h1.5a8.25 8.25 0 0 0-8.25-8.25v1.5Zm11.03 16.72-5.196-5.197-1.061 1.06 5.197 5.197 1.06-1.06Zm-4.28-9.97c0 1.864-.755 3.55-1.977 4.773l1.06 1.06A8.226 8.226 0 0 0 18.75 10.5h-1.5Zm-1.977 4.773A6.727 6.727 0 0 1 10.5 17.25v1.5a8.226 8.226 0 0 0 5.834-2.416l-1.061-1.061Z"></path>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+                {/*End Search Input*/}
+                <BlockUi
+                  className={`w-full  ${!!searchResult ? 'min-h-[70px] mt-10': ''}`}
+                  blocking={searchIsLoading}
+                  loader={<Loader active type="ball-scale" color="#0248C7" />}
+                >
+                  <p>{searchResult}</p></BlockUi>
+              </div>
               <div className="col-span-8">
                 {dataV2 &&
                   <>

@@ -2,7 +2,6 @@ import { EarningsChart } from "../../../components/EarnningsChart.jsx";
 import { SimpleLinearChart } from "../../../components/SimpleLinearChart.jsx";
 
 const HistoricalPricePerformance = ({ data, handleTimeScope, selector }) => {
-  console.log(selector);
   return (
     <>
 

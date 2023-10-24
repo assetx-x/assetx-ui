@@ -34,3 +34,7 @@ export const getSearch = async (data) => {
 
   return await get(`${API_URL.TICKER_SEARCH}?symbol=${data}`);
 }
+export const getSearchGTP = async (search, ticker) => {
+
+  return await get(`${API_URL.GTP_SEARCH}?ticker=${ticker}&prompt=${search}`);
+}

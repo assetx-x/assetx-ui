@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Plot from "react-plotly.js";
 
 
-export function AsymmetricErrorBarsWithConstantOffsetChart({data}) {
+export function AsymmetricErrorBarsWithConstantOffsetChart({data, layoutParameters={}}) {
   // console.log('data', data)
   useEffect(() => {
 
@@ -39,7 +39,8 @@ export function AsymmetricErrorBarsWithConstantOffsetChart({data}) {
     font: {
       family: 'NunitoSans-ExtraBold',
       color: '#537FA0'
-    }
+    },
+    ...layoutParameters
   };
 
   return <Plot data={finalData}  style={{width:"100%"}} layout={layout}/>;

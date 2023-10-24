@@ -21,6 +21,7 @@ import fetchPredictions from "../../store/models/predicton/fetchPredictions.jsx"
 import fetchValidations from "../../store/models/holdings/fetchValidations.jsx";
 import { Loader } from "react-loaders";
 import { BetaChart } from "../../components/BetaChart.jsx";
+import { AsymmetricErrorBarsWithConstantOffsetChart } from "../../components/AsymmetricErrorBarsWithConstantOffsetChart.jsx";
 
 const PortfolioAnalysis = () => {
   const navigate = useNavigate();
@@ -31,6 +32,7 @@ const PortfolioAnalysis = () => {
   const [isFinalTableVisible, setIsFinalTableVisible] = useState(false);
   const [jsonData, setJsonData] = useState([]);
   const [jsonFinalData, setJsonFinalData] = useState([]);
+  const [biggestMoversData, setBiggestMoversData] = useState([]);
   const [validatedResponse, setValidatedResponse] = useState(null);
 
   // Optimize data
@@ -230,6 +232,10 @@ const PortfolioAnalysis = () => {
     []
   );
 
+  const getFirsts5BiggestMoversEntries = (biggestMovers) => {
+    console.log(Object.entries(biggestMovers)[1][1][0])
+    return Object.entries(biggestMovers).slice(0,5)
+  }
 
   const listPortfolioColumns = useMemo(
     () => [
@@ -245,23 +251,18 @@ const PortfolioAnalysis = () => {
         Header: "  ",
         Cell: (props) => (
           <div className="flex items-center flex-col gap-4">
-            <h5 className="font-bold text-xs uppercase underline">Biggest Movers</h5>
+            <h5 className="font-bold text-xs uppercase underline text-center">Biggest Movers</h5>
             <div className="flex flex-col gap-3">
-              {props.row.original.holdings?.['1M'].ticker_contribution.map(((ticker) => (
+              {getFirsts5BiggestMoversEntries(props.row.original.holdings?.['1M'].biggest_movers).map(((ticker) => (
                 <span
-                  key={`${ticker.ticker}-${ticker.Value}-${ticker.Growth}-${ticker.Macro}`}
+                  key={`${ticker[0]}`}
                   className={classNames(
-                    "px-3 py-1 uppercase leading-wide font-bold text-center	 text-xs rounded-full shadow-sm bg-green-100 text-green-700"
+                    "px-3 py-1 uppercase leading-wide font-bold text-xs rounded-full shadow-sm text-center",
+                    ticker[1].slice(-1) == 'green' ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700",
                     )
                   }
-                  // className={classNames(
-                  //   "px-3 py-1 uppercase leading-wide font-bold text-xs rounded-full shadow-sm",
-                  //   ticker.startsWith("B") ? "bg-green-100 text-green-700" : null,
-                  //   ticker.startsWith("A") ? "bg-red-100 text-red-700" : null,
-                  //   )
-                  // }
                 >
-                  {ticker.ticker}
+                  {ticker[0]}
                 </span>
               )))}
             </div>
@@ -272,36 +273,20 @@ const PortfolioAnalysis = () => {
         Header: "   ",
         Cell: (props) => (
           <div className="flex items-center flex-col gap-4">
-            <h5 className="font-bold text-xs uppercase underline">Contributing factors</h5>
-            {props.row.original.holdings?.['1M'].ticker_contribution.map(((ticker) => (
-              <div className="flex gap-3" key={`${ticker.Value}-${ticker.Growth}-${ticker.Macro}`}>
-                <span
-                  className={classNames(
-                    "px-3 py-1 uppercase leading-wide font-bold text-xs rounded-full shadow-sm",
-                    parseFloat(ticker.Value) > 0 ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700",
-                    )
-                  }
-                >
-                  Value
-                </span>
-                <span
-                  className={classNames(
-                    "px-3 py-1 uppercase leading-wide font-bold text-xs rounded-full shadow-sm",
-                    parseFloat(ticker.Growth) > 0 ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700",
-                    )
-                  }
-                >
-                  Growth
-                </span>
-                <span
-                  className={classNames(
-                    "px-3 py-1 uppercase leading-wide font-bold text-xs rounded-full shadow-sm",
-                    parseFloat(ticker.Macro) > 0 ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700",
-                    )
-                  }
-                >
-                  Macro
-                </span>
+            <h5 className="font-bold text-xs uppercase underline text-center">Contributing factors</h5>
+            {getFirsts5BiggestMoversEntries(props.row.original.holdings?.['1M'].biggest_movers).map(((ticker) => (
+              <div className="flex gap-1" key={`${ticker}`}>
+                {ticker[1][0].map((contribFactors) => (
+                  <span
+                    className={classNames(
+                      "px-3 py-1 uppercase leading-wide font-bold text-xs text-center rounded-full shadow-sm",
+                      ticker[1].slice(-1) == 'green' ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700",
+                      )
+                    }
+                  >
+                    {contribFactors}
+                  </span>
+                ))}
               </div>
             )))}
           </div>
@@ -309,18 +294,22 @@ const PortfolioAnalysis = () => {
       },
       {
         Header:"    ",
+        width:350,
         Cell: (props) => (
-          <>
+          <div className="w-[400px]">
             {props.row.original?.holdings?.['1M']?.portfolio &&
-              <BetaChart
-                data={[{
-                  x: props.row.original?.holdings?.['1M']?.portfolio?.benchmark?.index,
-                  y: props.row.original?.holdings?.['1M']?.portfolio?.benchmark?.series,
-                }]}
-                layoutParameters={{legend: {"orientation": "h"}, autosize: true, width:400, height: 250}}
+              <AsymmetricErrorBarsWithConstantOffsetChart
+                layoutParameters={{
+                  height: 200,
+                  margin: {
+                    t:10, b:10, r:10, l:30
+                  },
+                  paper_bgcolor: 'transparent'
+                }}
+                data={props.row.original?.holdings?.['1M']?.portfolio}
               />
             }
-          </>
+          </div>
         )
       }
     ],

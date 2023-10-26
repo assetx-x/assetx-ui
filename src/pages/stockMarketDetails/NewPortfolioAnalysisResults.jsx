@@ -477,7 +477,7 @@ const NewPortfolioAnalysisResults = ({ portfolio, id }) => {
                   </div>
                 </div>
               </section>
-
+              
               {/*<section>*/}
               {/*  <h3 className="text-3xl font-semibold">*/}
               {/*    Performance Attribution*/}
@@ -497,6 +497,7 @@ const NewPortfolioAnalysisResults = ({ portfolio, id }) => {
               {/*    </table>*/}
               {/*  </div>*/}
               {/*</section>*/}
+
             </div>
           </div>
         </Container>

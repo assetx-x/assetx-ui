@@ -4,12 +4,15 @@ import { Container } from "../../components/Container.jsx";
 import { RecommendationPill } from "../../components/Table.jsx";
 import ResultsTable from "./components/ResultsTable.jsx";
 import { useMain } from "../../store/context/MainContext.jsx";
-import { formatDateToDashFormat } from "../../utils/index.js";
 import {
   AsymmetricErrorBarsWithConstantOffsetChart
 } from "../../components/AsymmetricErrorBarsWithConstantOffsetChart.jsx";
 import { BasicWaterfallChart } from "../../components/BasicWaterfallChart.jsx";
 import { BetaChart } from "../../components/BetaChart.jsx";
+import Tabs from "../../components/Tabs.jsx";
+import { faChartSimple, faEye, faMoneyBillTrendUp, faNewspaper } from "@fortawesome/free-solid-svg-icons";
+import KeyValues from "./components/KeyValues.jsx";
+import AISelectedComparables from "../tickerDetail/components/AiSelectedComparables.jsx";
 
 const NewPortfolioAnalysisResults = ({ portfolio, id }) => {
   if (!id) setPortfolioData(context.predictionData?.holdings);
@@ -142,48 +145,82 @@ const NewPortfolioAnalysisResults = ({ portfolio, id }) => {
     ));
   };
 
-  const renderTableRows = () => {
-    const factorContribution =
-      portfolioData?.["1M"]?.factor_contribution;
-    if (!factorContribution) {
-      return null;
-    }
-
-    const { current_contribution, average_contribution } = factorContribution;
-    const keys = Object.keys(current_contribution);
-
-    return keys.map((key, index) => (
-      <tr
-        key={index}
-        className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-      >
-        <td className="px-6 py-4">{key}</td>
-        <td className="px-6 py-4">{current_contribution[key]}</td>
-        <td className="px-6 py-4">{average_contribution[key]}</td>
-      </tr>
-    ));
+  const tabsConfig = {
+    isMain: true,
+    type: "underline",
+    isCentered: true,
+    tabs: [
+      {
+        icon: faMoneyBillTrendUp,
+        content: <ResultsTable
+          columns={resultColumns}
+          data={portfolioData?.current_trading_book}
+        />
+      },
+      {
+        icon: faEye,
+        content: <div className="relative overflow-x">
+          <div className="relative overflow-x-auto shadow-md sm:rounded-lg p-3 h-{600}">
+            <table className="w-full text-sm text-left text-gray-500">
+              <thead className=" sticky  text-xs text-gray-700 uppercase bg-gray-50 "></thead>
+              <tbody>
+              {portfolioData?.["1M"]?.ai_alternatives.map(
+                ([symbol, company]) => (
+                  <tr
+                    key={symbol}
+                    className="bg-white border-b  hover:bg-gray-50 "
+                  >
+                    <td className="px-6 py-4">
+                      <div
+                        className="flex items-center"
+                        onClick={() => console.log}
+                      >
+                        <img
+                          className="w-10 h-10 rounded-full"
+                          src={
+                            company.company_logo ||
+                            "https://www.ortodonciasyv.cl/wp-content/uploads/2016/10/orionthemes-placeholder-image-2.png"
+                          }
+                          alt={company.company_name + " image"}
+                        />
+                        <div className="pl-3">
+                          <div className="text-base font-semibold">
+                            {company.company_name}
+                          </div>
+                          <div className="font-normal text-gray-500">
+                            {company.sector}
+                          </div>
+                        </div>
+                      </div>
+                      {/*<th  scope="col" className="px-6 py-4">*/}
+                      {/*  <p>{symbol}</p>*/}
+                      {/*  <p>{company.company_name}</p>*/}
+                      {/*  <p>{company.sector}</p>*/}
+                      {/*  <img src={company.company_logo} alt="Company Logo" />*/}
+                      {/*</th>*/}
+                      {/*<td className="px-6 py-4">*/}
+                      {/*  {company.ticker}*/}
+                      {/*</td>*/}
+                    </td>
+                  </tr>
+                )
+              )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      },
+      {
+        icon: faChartSimple,
+        content: <KeyValues data={portfolioData}  selector='1M' />
+      },
+    ]
   };
 
-  const getLastMonthDate = () => {
-    const today = new Date();
-    const lastMonth = new Date(
-      today.getFullYear(),
-      today.getMonth() - 1,
-      today.getDate()
-    );
-    return formatDateToDashFormat(lastMonth);
-  };
+
 
   const handleRowClick = (ticker) => {
     window.open(`/us/ticker/${ticker}`, "_blank", "noreferrer");
-  };
-
-  const handleSetScope = (event) => {
-    setScope(event.target.value);
-  };
-
-  const handleTimeScope = (event) => {
-    setTimeScope(event.target.value);
   };
 
   return (
@@ -195,8 +232,8 @@ const NewPortfolioAnalysisResults = ({ portfolio, id }) => {
             <h1 className="text-4xl font-semibold pl-4">Your Portfolio</h1>
           </header>
           {/*Content  */}
-          <div className="grid grid-cols-6 gap-4 sm:col">
-            <div className="col-span-6 md:col-span-3 lg:grid-cols-6 xl:col-span-4">
+          <div className="grid grid-cols-10 gap-4 sm:col">
+            <div className="col-span-6 md:col-span-3 lg:grid-cols-6 xl:col-span-8">
               <section>
                 <div
                   className="mt-10 "
@@ -400,104 +437,8 @@ const NewPortfolioAnalysisResults = ({ portfolio, id }) => {
 
             <div className="col-span-6 md:col-span-3 lg:grid-cols-6 xl:col-span-2">
               <section>
-                <h3 className="text-3xl font-semibold">Current Trading Book</h3>
-
-                <p className="text-gray-500 font-light mt-4 mb-4">
-                  Here is your current trading book and my current outlook on
-                  each individual ticker.
-                </p>
-
-                <ResultsTable
-                  columns={resultColumns}
-                  data={portfolioData?.current_trading_book}
-                />
+                <Tabs config={tabsConfig} />
               </section>
-
-              <section className="mb-20">
-                <h3 className="text-3xl font-semibold">
-                  AI Selected Comparables
-                </h3>
-
-                <p className="text-gray-500 font-light mt-4 mb-4">
-                  Here are some other names to consider in your portfolio that I
-                  am currently bullish on based on your selected forecast
-                  horizon.
-                </p>
-
-                <div className="mt-10">
-                  <div className="relative overflow-x">
-                    <div className="relative overflow-x-auto shadow-md sm:rounded-lg p-3 h-{600}">
-                      <table className="w-full text-sm text-left text-gray-500">
-                        <thead className=" sticky  text-xs text-gray-700 uppercase bg-gray-50 "></thead>
-                        <tbody>
-                        {portfolioData?.["1M"]?.ai_alternatives.map(
-                          ([symbol, company]) => (
-                            <tr
-                              key={symbol}
-                              className="bg-white border-b  hover:bg-gray-50 "
-                            >
-                              <td className="px-6 py-4">
-                                <div
-                                  className="flex items-center"
-                                  onClick={() => console.log}
-                                >
-                                  <img
-                                    className="w-10 h-10 rounded-full"
-                                    src={
-                                      company.company_logo ||
-                                      "https://www.ortodonciasyv.cl/wp-content/uploads/2016/10/orionthemes-placeholder-image-2.png"
-                                    }
-                                    alt={company.company_name + " image"}
-                                  />
-                                  <div className="pl-3">
-                                    <div className="text-base font-semibold">
-                                      {company.company_name}
-                                    </div>
-                                    <div className="font-normal text-gray-500">
-                                      {company.sector}
-                                    </div>
-                                  </div>
-                                </div>
-                                {/*<th  scope="col" className="px-6 py-4">*/}
-                                {/*  <p>{symbol}</p>*/}
-                                {/*  <p>{company.company_name}</p>*/}
-                                {/*  <p>{company.sector}</p>*/}
-                                {/*  <img src={company.company_logo} alt="Company Logo" />*/}
-                                {/*</th>*/}
-                                {/*<td className="px-6 py-4">*/}
-                                {/*  {company.ticker}*/}
-                                {/*</td>*/}
-                              </td>
-                            </tr>
-                          )
-                        )}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </section>
-              
-              {/*<section>*/}
-              {/*  <h3 className="text-3xl font-semibold">*/}
-              {/*    Performance Attribution*/}
-              {/*  </h3>*/}
-
-              {/*  <p className="text-gray-500 font-light mt-4 mb-4">*/}
-              {/*    Here is a breakdown of current factor attribution and based on*/}
-              {/*    the selected forecast horizon.*/}
-              {/*  </p>*/}
-
-              {/*  <div className="relative overflow-x-auto shadow-md sm:rounded-lg">*/}
-              {/*    <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">*/}
-              {/*      <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">*/}
-              {/*      {renderTableHeader()}*/}
-              {/*      </thead>*/}
-              {/*      <tbody>{renderTableRows()}</tbody>*/}
-              {/*    </table>*/}
-              {/*  </div>*/}
-              {/*</section>*/}
-
             </div>
           </div>
         </Container>

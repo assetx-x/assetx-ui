@@ -78,18 +78,22 @@ const TickerDetail = () => {
     tabs: [
       {
         icon: faMoneyBillTrendUp,
+        desc: "Trading Book",
         content: <AssetxInsights data={dataV2} selector={selector} />
       },
       {
         icon: faNewspaper,
+        desc: "News",
         content: <News data={dataV2} selector={selector} />
       },
       {
         icon: faChartSimple,
+        desc: "Key Values",
         content: <KeyValues data={dataV2} selector={selector} />
       },
       {
         icon: faEye,
+        desc: "AI Selected Comparables",
         content: <AISelectedComparables data={dataV2} selector={selector} />
       }
     ]

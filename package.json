@@ -67,6 +67,7 @@
     "react-router-guards": "^1.0.2",
     "react-stars": "^2.2.5",
     "react-table": "^7.8.0",
+    "react-tooltip": "^5.23.0",
     "yup": "^1.1.1"
   }
 }

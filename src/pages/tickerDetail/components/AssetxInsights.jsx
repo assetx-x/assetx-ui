@@ -1,3 +1,5 @@
+import ReactStars from "react-stars/dist/react-stars.js";
+
 const AISelectedComparables = ({ data, selector }) => {
   return (
     <section className="mb-20 mt-6">
@@ -17,7 +19,14 @@ const AISelectedComparables = ({ data, selector }) => {
             <ul className={`w-full text-sm text-left text-gray-500`}>
               <li className="bg-white border-b p-4  hover:bg-gray-50 flex justify-between ">
                 <div>Cross Sectional Ranks</div>
-                <div>{data?.[selector]?.summary_stats?.overview?.cross_sectional_rank}</div>
+                <ReactStars
+                  size={24}
+                  color1="#FFFFFF"
+                  color2="#0284C7"
+                  edit={false}
+                  value={data?.[selector]?.summary_stats?.overview?.cross_sectional_rank}
+                />
+                <div></div>
               </li>
               <li className="bg-white border-b  p-4  hover:bg-gray-50 flex justify-between ">
                 <div>Hit Ratio on Previous Bullish Predictions </div>

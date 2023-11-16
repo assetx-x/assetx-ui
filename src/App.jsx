@@ -11,6 +11,8 @@ import Register from "./pages/register/Register.jsx";
 import DeepInsightDetails from "./pages/deepInsightDetail/DeepInsightDetails.jsx";
 import AiDrivenInsights from "./pages/aiDrivenInsights/AIDrivenInsights.jsx";
 import Market from "./pages/market/Market.jsx";
+import 'react-tooltip/dist/react-tooltip.css'
+
 
 function App() {
   return (

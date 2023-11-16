@@ -152,6 +152,7 @@ const NewPortfolioAnalysisResults = ({ portfolio, id }) => {
     tabs: [
       {
         icon: faMoneyBillTrendUp,
+        desc: "Trading Book",
         content: <ResultsTable
           columns={resultColumns}
           data={portfolioData?.current_trading_book}
@@ -159,12 +160,13 @@ const NewPortfolioAnalysisResults = ({ portfolio, id }) => {
       },
       {
         icon: faEye,
+        desc: "A.I Selected Comparables",
         content: <div className="relative overflow-x">
           <div className="relative overflow-x-auto shadow-md sm:rounded-lg p-3 h-{600}">
             <table className="w-full text-sm text-left text-gray-500">
               <thead className=" sticky  text-xs text-gray-700 uppercase bg-gray-50 "></thead>
               <tbody>
-              {portfolioData?.["1M"]?.ai_alternatives.map(
+              {portfolioData?.[selectedKey]?.ai_alternatives.map(
                 ([symbol, company]) => (
                   <tr
                     key={symbol}
@@ -212,6 +214,7 @@ const NewPortfolioAnalysisResults = ({ portfolio, id }) => {
       },
       {
         icon: faChartSimple,
+        desc: "Values Summary",
         content: <KeyValues data={portfolioData}  selector='1M' />
       },
     ]

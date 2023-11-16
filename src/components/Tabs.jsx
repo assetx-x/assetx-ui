@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useMain } from "../store/context/MainContext.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Tooltip as ReactTooltip } from 'react-tooltip'
+
 const Tabs = (props) => {
   const context = useMain();
   const { tabs, type, isMain, isCentered } = props.config;
@@ -38,6 +40,8 @@ const Tabs = (props) => {
             return (
               <li className="mr-2" key={index}>
                 <div
+                  data-tooltip-id="tooltip"
+                  data-tooltip-content={tab.desc}
                   onClick={() =>
                     tab.onClickHandler?.() || handleTabClick(index)
                   }
@@ -61,6 +65,7 @@ const Tabs = (props) => {
             );
           })}
         </ul>
+        <ReactTooltip id="tooltip" />
       </div>
       <div className="tab-content">
         {tabs.map((object, i) => {

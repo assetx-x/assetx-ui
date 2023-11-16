@@ -72,7 +72,6 @@ const TickerDetail = () => {
   } = useQuery(["priceData", { ticker }], fetchTickerPrice);
 
   const tabsConfig = {
-    isMain: true,
     type: "underline",
     isCentered: true,
     tabs: [

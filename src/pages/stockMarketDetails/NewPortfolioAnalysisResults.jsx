@@ -146,7 +146,6 @@ const NewPortfolioAnalysisResults = ({ portfolio, id }) => {
   };
 
   const tabsConfig = {
-    isMain: true,
     type: "underline",
     isCentered: true,
     tabs: [

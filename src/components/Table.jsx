@@ -22,22 +22,22 @@ export function StatusPill({ value }) {
 
 export function RecommendationPill({ value }) {
   const status = value ? value.toLowerCase() : "unknown";
+  const splt = value.split(" ");
+  const val = splt[splt.length - 1];
 
   return (
     <span
       className={classNames(
         "px-1 py-1 uppercase leading-wide font-bold text-xs rounded-full shadow-sm",
-        status.startsWith("strong buy") ? "bg-green-100 text-green-700" : null,
-        status.startsWith("weak buy") ? "bg-green-100 text-green-700" : null,
-        status.startsWith("strong sell") ? "bg-red-100 text-red-700" : null,
-        status.startsWith("weak sell") ? "bg-red-100 text-red-700" : null,
+        status.startsWith("increase") ? "bg-green-100 text-green-700" : null,
+        status.startsWith("decrease") ? "bg-red-100 text-red-700" : null,
         status.startsWith("neutral")
           ? "bg-yellow-100-100 text-yellow-700"
           : null,
         status.startsWith("none") ? "bg-gray-100 text-gray-700" : null
       )}
     >
-      {status}
+      {val}
     </span>
   );
 }
@@ -59,8 +59,13 @@ const Table = ({ data, columns, paginated, itemsPerPage, handleRowClick }) => {
 
   return (
     <>
-      <div className="mt-10">
+      <div className="">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg p-3 h-{600}">
+          <h3 className="text-xl font-semibold">Current Trading Book</h3>
+          <p className="text-gray-500 font-light mt-4 mb-4">
+            Here is how we would re-weight your current weights based on our
+            recommendation system
+          </p>
           <table
             {...getTableProps()}
             className="w-full text-sm text-left text-gray-500"
@@ -75,8 +80,8 @@ const Table = ({ data, columns, paginated, itemsPerPage, handleRowClick }) => {
                       className="px-6 py-3"
                       key={i}
                       style={{
-                        textAlign: i === 1 ? 'right' : 'center',
-                        paddingRight: 35
+                        textAlign: i === 1 ? "right" : "center",
+                        paddingRight: 35,
                       }}
                     >
                       {column.render("Header")}

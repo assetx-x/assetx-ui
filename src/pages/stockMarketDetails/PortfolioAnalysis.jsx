@@ -15,7 +15,7 @@ import {
   formatDataForTickerTable,
   formatDataToSendOptimization,
   formatDateToDashFormat,
-  classNames
+  classNames,
 } from "../../utils/index.js";
 import fetchPredictions from "../../store/models/predicton/fetchPredictions.jsx";
 import fetchValidations from "../../store/models/holdings/fetchValidations.jsx";
@@ -151,7 +151,6 @@ const PortfolioAnalysis = () => {
             ? parseFloat(obj.nmv / obj.nav).toFixed(2)
             : parseFloat(obj.percentage).toFixed(2),
         }));
-
         setJsonData(finalData);
       },
     });
@@ -233,85 +232,98 @@ const PortfolioAnalysis = () => {
   );
 
   const getFirsts5BiggestMoversEntries = (biggestMovers) => {
-    console.log(Object.entries(biggestMovers)[1][1][0])
-    return Object.entries(biggestMovers).slice(0,5)
-  }
+    console.log(Object.entries(biggestMovers)[1][1][0]);
+    return Object.entries(biggestMovers).slice(0, 5);
+  };
 
   const listPortfolioColumns = useMemo(
     () => [
-      { 
+      {
         Header: " ",
         Cell: (props) => (
           <div className="max-w-sm">
-            {props.row.original.holdings?.['1M'].sentence}
+            {props.row.original.holdings?.["1M"].sentence}
           </div>
-        )
+        ),
       },
       {
         Header: "  ",
         Cell: (props) => (
           <div className="flex items-center flex-col gap-4">
-            <h5 className="font-bold text-xs uppercase underline text-center">Biggest Movers</h5>
+            <h5 className="font-bold text-xs uppercase underline text-center">
+              Biggest Movers
+            </h5>
             <div className="flex flex-col gap-3">
-              {getFirsts5BiggestMoversEntries(props.row.original.holdings?.['1M'].biggest_movers).map(((ticker) => (
+              {getFirsts5BiggestMoversEntries(
+                props.row.original.holdings?.["1M"].biggest_movers
+              ).map((ticker) => (
                 <span
                   key={`${ticker[0]}`}
                   className={classNames(
                     "px-3 py-1 uppercase leading-wide font-bold text-xs rounded-full shadow-sm text-center",
-                    ticker[1].slice(-1) == 'green' ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700",
-                    )
-                  }
+                    ticker[1].slice(-1) == "green"
+                      ? "bg-green-100 text-green-700"
+                      : "bg-red-100 text-red-700"
+                  )}
                 >
                   {ticker[0]}
                 </span>
-              )))}
+              ))}
             </div>
           </div>
-        )
+        ),
       },
       {
         Header: "   ",
         Cell: (props) => (
           <div className="flex items-center flex-col gap-4">
-            <h5 className="font-bold text-xs uppercase underline text-center">Contributing factors</h5>
-            {getFirsts5BiggestMoversEntries(props.row.original.holdings?.['1M'].biggest_movers).map(((ticker) => (
+            <h5 className="font-bold text-xs uppercase underline text-center">
+              Contributing factors
+            </h5>
+            {getFirsts5BiggestMoversEntries(
+              props.row.original.holdings?.["1M"].biggest_movers
+            ).map((ticker) => (
               <div className="flex gap-1" key={`${ticker}`}>
                 {ticker[1][0].map((contribFactors) => (
                   <span
                     className={classNames(
                       "px-3 py-1 uppercase leading-wide font-bold text-xs text-center rounded-full shadow-sm",
-                      ticker[1].slice(-1) == 'green' ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700",
-                      )
-                    }
+                      ticker[1].slice(-1) == "green"
+                        ? "bg-green-100 text-green-700"
+                        : "bg-red-100 text-red-700"
+                    )}
                   >
                     {contribFactors}
                   </span>
                 ))}
               </div>
-            )))}
+            ))}
           </div>
-        )
+        ),
       },
       {
-        Header:"    ",
-        width:350,
+        Header: "    ",
+        width: 350,
         Cell: (props) => (
           <div className="w-[400px]">
-            {props.row.original?.holdings?.['1M']?.portfolio &&
+            {props.row.original?.holdings?.["1M"]?.portfolio && (
               <AsymmetricErrorBarsWithConstantOffsetChart
                 layoutParameters={{
                   height: 200,
                   margin: {
-                    t:10, b:10, r:10, l:30
+                    t: 10,
+                    b: 10,
+                    r: 10,
+                    l: 30,
                   },
-                  paper_bgcolor: 'transparent'
+                  paper_bgcolor: "transparent",
                 }}
-                data={props.row.original?.holdings?.['1M']?.portfolio}
+                data={props.row.original?.holdings?.["1M"]?.portfolio}
               />
-            }
+            )}
           </div>
-        )
-      }
+        ),
+      },
     ],
     []
   );
@@ -449,6 +461,15 @@ const PortfolioAnalysis = () => {
     if (id) setEditID(id);
     setShowUploader(true);
   };
+
+  React.useEffect(() => {
+    if (optimizationsParams) {
+      localStorage.setItem(
+        "optimizationsParams",
+        JSON.stringify(optimizationsParams)
+      );
+    }
+  }, [optimizationsParams]);
 
   return (
     <>
@@ -725,22 +746,24 @@ const PortfolioAnalysis = () => {
                     <div className="flex flex-row-reverse">
                       <Button
                         variant="outline"
-                        onClick={()=>handleNewPorfolioButtonClick()}
+                        onClick={() => handleNewPorfolioButtonClick()}
                       >
                         New Portfolio
                       </Button>
                     </div>
-                    {holdingsData && <Table 
-                      data={holdingsData?.results}
-                      columns={listPortfolioColumns}
-                      paginated={true}
-                      itemsPerPage={10}
-                      handleRowClick={(id) =>
-                        navigate(`/us/portfolio-analysis/${id}`, {
-                          replace: true
-                        })
-                      } 
-                    />}
+                    {holdingsData && (
+                      <Table
+                        data={[]}
+                        columns={listPortfolioColumns}
+                        paginated={true}
+                        itemsPerPage={10}
+                        handleRowClick={(id) =>
+                          navigate(`/us/portfolio-analysis/${id}`, {
+                            replace: true,
+                          })
+                        }
+                      />
+                    )}
                   </div>
                   {/*</BlockUi>)}*/}
                 </section>

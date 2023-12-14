@@ -11,8 +11,8 @@ import Register from "./pages/register/Register.jsx";
 import DeepInsightDetails from "./pages/deepInsightDetail/DeepInsightDetails.jsx";
 import AiDrivenInsights from "./pages/aiDrivenInsights/AIDrivenInsights.jsx";
 import Market from "./pages/market/Market.jsx";
-import 'react-tooltip/dist/react-tooltip.css'
-
+import "react-tooltip/dist/react-tooltip.css";
+import StockMarket from "./pages/stockMarket/stockMarket.jsx";
 
 function App() {
   return (
@@ -36,6 +36,7 @@ function App() {
             path="/:market/ticker/:ticker/deep-insight/:x"
             element={<DeepInsightDetails />}
           />
+          <Route path="/stock-market" element={<StockMarket />} />
         </Route>
         <Route exact path="/login" element={<Login />} />
       </Routes>

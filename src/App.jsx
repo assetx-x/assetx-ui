@@ -11,8 +11,8 @@ import Register from "./pages/register/Register.jsx";
 import DeepInsightDetails from "./pages/deepInsightDetail/DeepInsightDetails.jsx";
 import AiDrivenInsights from "./pages/aiDrivenInsights/AIDrivenInsights.jsx";
 import Market from "./pages/market/Market.jsx";
-import 'react-tooltip/dist/react-tooltip.css'
-
+import "react-tooltip/dist/react-tooltip.css";
+import Holding from "./pages/holding/Holding.jsx";
 
 function App() {
   return (
@@ -20,6 +20,7 @@ function App() {
       <Routes>
         <Route exact path="/" element={<Home />} />
         <Route exact path="/register" element={<Register />} />
+        <Route path="/holding" element={<Holding />} />
         <Route exact path="/" element={<PrivateRoute />}>
           <Route path="/:market/ticker/:ticker" element={<NewTickerDetial />} />
           {/*TODO: stop using magic strings*/}

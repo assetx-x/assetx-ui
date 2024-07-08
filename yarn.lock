@@ -4269,6 +4269,11 @@ react-refresh@^0.14.0:
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.14.0.tgz#4e02825378a5f227079554d4284889354e5f553e"
   integrity sha512-wViHqhAd8OHeLS/IRMJjTSDHF3U9eWi62F/MledQGPdJGDhodXJ9PBLNGr6WWL7qlH12Mt3TyTpbS+hGXMjCzQ==
 
+react-resizable-layout@^0.7.2:
+  version "0.7.2"
+  resolved "https://registry.yarnpkg.com/react-resizable-layout/-/react-resizable-layout-0.7.2.tgz#347bf17d5a12a29376166225aafae2457c949f16"
+  integrity sha512-GrVzAecB6+osdAx5PPP3G8R9n7A2uDd3NL+PyrHWNRaVBivZmW/o0+yFjQdS5Bo016A2fIP11fAhefsknWN4aw==
+
 react-router-dom@6.11.2:
   version "6.11.2"
   resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-6.11.2.tgz#324d55750ffe2ecd54ca4ec6b7bc7ab01741f170"

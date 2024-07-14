@@ -1,12 +1,13 @@
 import React from "react";
 import { useResizable } from "react-resizable-layout";
+import ChartBottom from "./ChartBottom/ChartBottom";
 
 function Chart() {
   const { position, separatorProps } = useResizable({
     axis: "y",
-    initial: 50,
+    initial: 450,
     min: 50,
-    max: 400,
+    max: 600,
     reverse: true,
   });
 
@@ -21,14 +22,14 @@ function Chart() {
         style={{ borderRadius: 5 }}
       />
       <div
-        className="bg-white"
+        className="bg-white flex flex-col"
         style={{
           height: position,
           borderTopRightRadius: 5,
           borderTopLeftRadius: 5,
         }}
       >
-        Bottom
+        <ChartBottom />
       </div>
     </div>
   );

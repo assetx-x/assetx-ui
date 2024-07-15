@@ -14,10 +14,10 @@ export function BetaChart({data, layoutParameters}) {
       family: 'NunitoSans-ExtraBold',
       color: '#1E8FCC'
     },
-    yaxis: {
-      title: '(%) Risk Contribution',
-      zeroline: false
-    },
+    // yaxis: {
+    //   title: '(%) Risk Contribution',
+    //   zeroline: false
+    // },
       ...layoutParameters
   };
 

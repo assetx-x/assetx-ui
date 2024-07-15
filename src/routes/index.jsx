@@ -5,32 +5,31 @@ import Login from "../pages/login/Login.jsx";
 import Home from "../pages/home/Home.jsx";
 import NewPortfolioAnalysisResults from "../pages/stockMarketDetails/NewPortfolioAnalysisResults.jsx";
 
-
 const routes = [
   // Private Routes
   {
-    path: '/:market/ticker/:ticker',
+    path: "/:market/ticker/:ticker",
     component: TickerDetail,
     isPrivate: true,
   },
   {
-    path: '/:market/portfolio-analysis',
+    path: "/:market/portfolio-analysis",
     component: PortfolioAnalysis,
     isPrivate: true,
   },
   {
-    path: '/:market/portfolio-analysis/results',
+    path: "/:market/portfolio-analysis/results",
     component: NewPortfolioAnalysisResults,
     isPrivate: true,
   },
   // Public Routes
   {
-    path: '/',
+    path: "/",
     component: Home,
     isPrivate: false,
   },
   {
-    path: '/login',
+    path: "/login",
     component: Login,
     isPrivate: false,
   },

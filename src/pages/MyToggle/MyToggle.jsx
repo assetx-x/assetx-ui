@@ -1,5 +1,9 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye } from '@fortawesome/free-regular-svg-icons';
+
 import { Container } from "../../components/Container.jsx";
 import { PlusIcon } from "@heroicons/react/20/solid";
 import { useQuery } from "react-query";
@@ -10,11 +14,10 @@ import Table from '../../components/Table.jsx';
 
 
 const tdata = [
-  { date: "Name1", percentage: 23, ticker: "ticker1"},
-  { date: "Name2", percentage: 22, ticker: "true"},
-  { date: "Name3", percentage: 25, ticker: "false"},
-  { date: "Name4", percentage: 21, ticker: "true"},
-  { date: "Name5", percentage: 20, ticker: "false"},
+  { date: "Name5", percentage: 20, ticker: {title: "Large Cap Value", description: "Russel 1000"}, alpha: "XX.X", beta: "XX.X", sharp: "XX.X", viewed: true},
+  { date: "Name5", percentage: 20, ticker: {title: "Large Cap Growth", description: "Russel 1000"}, alpha: "XX.X", beta: "XX.X", sharp: "XX.X", viewed: true},
+  { date: "Name5", percentage: 20, ticker: {title: "RTK Growth", description: "Russel 1000"}, alpha: "XX.X", beta: "XX.X", sharp: "XX.X", viewed: false},
+  { date: "Name5", percentage: 20, ticker: {title: "RTK Value", description: "Russel 1000"}, alpha: "XX.X", beta: "XX.X", sharp: "XX.X", viewed: false},
 ]
 
 const MyToggle = () => {
@@ -42,20 +45,39 @@ const MyToggle = () => {
       //   ),
       // },
       {
-        Header: "Ticker",
+        Header: "Strategy",
         accessor: "ticker",
         Cell: ({ row }) => (
-          <span style={{color: "greenyellow"}}>{row.original.ticker}</span>
+          <div>
+            <div style={{color: "black", fontWeight: "bolder"}}>{row.original.ticker.title}</div>
+            <div style={{color: "lightgray"}}>{row.original.ticker.description}</div>
+          </div>
         ),
       },
       {
-        Header: "Percentage %",
-        accessor: "percentage",
+        Header: "ALPHA",
+        accessor: "alpha",
+        Cell: ({ row }) => "X.XX",
       },
       {
-        Header: "Date",
-        accessor: "date",
-        Cell: ({ row }) => row.original.date + "Changed",
+        Header: "BETA",
+        accessor: "beta",
+        Cell: ({ row }) => "X.XX",
+      },
+      {
+        Header: "SHARP RATIO",
+        accessor: "ratio",
+        Cell: ({ row }) => "X.XX",
+      },
+      {
+        Header: "Action",
+        accessor: "viewed",
+        Cell: ({ row }) => (<div>
+
+           { row.original.viewed && <span style={{color: "black", fontSize: 30}}><FontAwesomeIcon icon={faEye} /></span>}
+          <button style={{background: "blue", borderRadius: 4, width: 100, padding: "10px 4px", color: "white", float: 'right'}}>Subscribe</button>
+        </div>
+      ),
       },
     ],
     []

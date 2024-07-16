@@ -75,8 +75,8 @@ const Table = ({ data, columns, paginated, itemsPerPage, handleRowClick }) => {
                       className="px-6 py-3"
                       key={i}
                       style={{
-                        textAlign: i === 1 ? 'right' : 'center',
-                        paddingRight: 35
+                        textAlign: i === 0 ? 'left' : 'center', width: column.width
+                        // paddingRight: 35
                       }}
                     >
                       {column.render("Header")}

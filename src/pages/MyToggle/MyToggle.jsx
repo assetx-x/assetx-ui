@@ -14,10 +14,10 @@ import Table from '../../components/Table.jsx';
 
 
 const tdata = [
-  { date: "Name5", percentage: 20, ticker: {title: "Large Cap Value", description: "Russel 1000"}, alpha: "XX.X", beta: "XX.X", sharp: "XX.X", viewed: true},
-  { date: "Name5", percentage: 20, ticker: {title: "Large Cap Growth", description: "Russel 1000"}, alpha: "XX.X", beta: "XX.X", sharp: "XX.X", viewed: true},
-  { date: "Name5", percentage: 20, ticker: {title: "RTK Growth", description: "Russel 1000"}, alpha: "XX.X", beta: "XX.X", sharp: "XX.X", viewed: false},
-  { date: "Name5", percentage: 20, ticker: {title: "RTK Value", description: "Russel 1000"}, alpha: "XX.X", beta: "XX.X", sharp: "XX.X", viewed: false},
+  { date: "Name5", percentage: 20, ticker: {title: "Large Cap Value", description: "Russel 1000"}, alpha: "XX.X", beta: "XX.X", sharp: "XX.X", viewed: true, drawdown: "dd"},
+  { date: "Name5", percentage: 20, ticker: {title: "Large Cap Growth", description: "Russel 1000"}, alpha: "XX.X", beta: "XX.X", sharp: "XX.X", viewed: true, drawdown: "dd"},
+  { date: "Name5", percentage: 20, ticker: {title: "RTK Growth", description: "Russel 1000"}, alpha: "XX.X", beta: "XX.X", sharp: "XX.X", viewed: false, drawdown: "dd"},
+  { date: "Name5", percentage: 20, ticker: {title: "RTK Value", description: "Russel 1000"}, alpha: "XX.X", beta: "XX.X", sharp: "XX.X", viewed: false, drawdown: "dd"},
 ]
 
 const MyToggle = () => {
@@ -47,6 +47,7 @@ const MyToggle = () => {
       {
         Header: "Strategy",
         accessor: "ticker",
+        headerClassName: 'left-align-theader',
         Cell: ({ row }) => (
           <div>
             <div style={{color: "black", fontWeight: "bolder"}}>{row.original.ticker.title}</div>
@@ -57,25 +58,30 @@ const MyToggle = () => {
       {
         Header: "ALPHA",
         accessor: "alpha",
-        Cell: ({ row }) => "X.XX",
+        Cell: ({ row }) => <div style={{textAlign: "center"}}>X.XX</div>,
       },
       {
         Header: "BETA",
         accessor: "beta",
-        Cell: ({ row }) => "X.XX",
+        Cell: ({ row }) => <div style={{textAlign: "center"}}>X.XX</div>,
       },
       {
         Header: "SHARP RATIO",
         accessor: "ratio",
-        Cell: ({ row }) => "X.XX",
+        Cell: ({ row }) => <div style={{textAlign: "center"}}>X.XX</div>,
       },
       {
-        Header: "Action",
+        Header: "MAX DRAWDOWN",
+        accessor: "drawdown",
+        Cell: ({ row }) => <div style={{textAlign: "center"}}>X.XX</div>,
+      },
+      {
+        Header: "",
         accessor: "viewed",
-        Cell: ({ row }) => (<div>
-
-           { row.original.viewed && <span style={{color: "black", fontSize: 30}}><FontAwesomeIcon icon={faEye} /></span>}
-          <button style={{background: "blue", borderRadius: 4, width: 100, padding: "10px 4px", color: "white", float: 'right'}}>Subscribe</button>
+        size: 200,
+        Cell: ({ row }) => (<div style={{width: 160}}>
+          <button style={{background: "#0284C7", borderRadius: 4, width: 100, padding: "10px 4px", color: "white", float: 'right', fontWeight: 600}}>Subscribe</button>
+           { row.original.viewed && <span style={{color: "black", fontSize: 30, float: "right", marginRight: 20}}><FontAwesomeIcon icon={faEye} /></span>}
         </div>
       ),
       },

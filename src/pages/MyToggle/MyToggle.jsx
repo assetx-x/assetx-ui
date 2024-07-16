@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container } from "../../components/Container.jsx";
 import { PlusIcon } from "@heroicons/react/20/solid";
@@ -6,9 +6,16 @@ import { useQuery } from "react-query";
 import fetchInsightsDash from "../../store/models/details/fetchInsightsDash.jsx";
 import { Loader } from "react-loaders";
 import BlockUi from "@availity/block-ui";
-import { CombinedLinearChart } from "../../components/CombinatedLinearChart.jsx";
-import ReactPaginate from "react-paginate";
+import Table from '../../components/Table.jsx';
 
+
+const tdata = [
+  { date: "Name1", percentage: 23, ticker: "ticker1"},
+  { date: "Name2", percentage: 22, ticker: "true"},
+  { date: "Name3", percentage: 25, ticker: "false"},
+  { date: "Name4", percentage: 21, ticker: "true"},
+  { date: "Name5", percentage: 20, ticker: "false"},
+]
 
 const MyToggle = () => {
   const navigate = useNavigate();
@@ -18,6 +25,41 @@ const MyToggle = () => {
   const [totalItems, setTotalItems] = useState(0);
   const itemsPerPage = 6;
   const [selectedFilters, setSelectedFilters] = useState({});
+
+  const columns = useMemo(
+    () => [
+      // {
+      //   Header: "Ticker",
+      //   accessor: "ticker",
+      //   Cell: ({ row }) => (
+      //     <div className="flex items-center">
+      //       <div className="pl-3">
+      //         <div className="font-normal text-gray-500">
+      //           {row.original.ticker}
+      //         </div>
+      //       </div>
+      //     </div>
+      //   ),
+      // },
+      {
+        Header: "Ticker",
+        accessor: "ticker",
+        Cell: ({ row }) => (
+          <span style={{color: "greenyellow"}}>{row.original.ticker}</span>
+        ),
+      },
+      {
+        Header: "Percentage %",
+        accessor: "percentage",
+      },
+      {
+        Header: "Date",
+        accessor: "date",
+        Cell: ({ row }) => row.original.date + "Changed",
+      },
+    ],
+    []
+  );
 
 
   const { data, error, isLoading } = useQuery(
@@ -102,9 +144,7 @@ const MyToggle = () => {
             <div>
               <h3>My Securities</h3>
               <section>
-                <table>
-
-                </table>
+                <Table data={tdata} columns={columns} paginated={true} itemsPerPage={10} handleRowClick={handlePageClick} />
               </section>
             </div>
           </Container>

@@ -9,9 +9,9 @@ import "react-perfect-scrollbar/dist/css/styles.css";
 function Holding() {
   const { position, separatorProps } = useResizable({
     axis: "x",
-    initial: 1200,
-    min: 950,
-    max: 1400,
+    initial: 1500,
+    min: 850,
+    max: 1600,
   });
 
   return (

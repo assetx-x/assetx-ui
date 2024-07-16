@@ -6,7 +6,7 @@ function Button({ children, ...props }) {
   return (
     <button
       {...props}
-      className={`px-3 py-1 border border-gray-200 text-gray-600 rounded-sm font-semibold text-sm hover:bg-gray-100 hover:text-gray-800 transition-colors ${
+      className={`px-3 py-1.5 border border-gray-200 text-gray-600 rounded-sm font-semibold text-sm hover:bg-gray-100 hover:text-gray-800 transition-colors ${
         props.className ?? ""
       }`}
     >
@@ -19,6 +19,7 @@ export function ButtonSelect({
   children,
   value,
   positionH = "left",
+  dropdownIcon = null,
   showDropdownIcon = true,
   ...props
 }) {
@@ -66,7 +67,7 @@ export function ButtonSelect({
   return (
     <div className="relative inline-block" ref={popoverRef}>
       <button
-        className={`flex gap-2 items-center justify-between px-3 py-1 border border-gray-200 text-gray-600 rounded-sm text-sm hover:bg-gray-100 hover:text-gray-800 transition-all ${
+        className={`flex gap-2 items-center justify-between px-3 py-1.5 border border-gray-200 text-gray-600 rounded-sm text-sm hover:bg-gray-100 hover:text-gray-800 transition-all ${
           props.className ?? ""
         }`}
         ref={buttonRef}
@@ -75,9 +76,12 @@ export function ButtonSelect({
         <span className="block text-ellipsis overflow-hidden whitespace-nowrap">
           {value}
         </span>
-        {showDropdownIcon && (
-          <FontAwesomeIcon className="-translate-y-1/4" icon={faSortDown} />
-        )}
+        {showDropdownIcon &&
+          (dropdownIcon ? (
+            dropdownIcon
+          ) : (
+            <FontAwesomeIcon className="-translate-y-1/4" icon={faSortDown} />
+          ))}
       </button>
       {open ? (
         <div

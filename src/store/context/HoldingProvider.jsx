@@ -15,7 +15,6 @@ const defaultState = {
     screener: SCREENERS[0],
     screen: SCREENS[0],
     timeInterval: TIMEINTERVALS.stock[0],
-    groups: [],
   },
 };
 

@@ -49,10 +49,11 @@ export const ChartComponent = (props) => {
       });
 
       const candleSeries = chart.addCandlestickSeries({
-        upColor: "#4bffb5",
-        downColor: "#ff4976",
-        wickDownColor: "#838ca1",
-        wickUpColor: "#838ca1",
+        upColor: "#26a69a",
+        downColor: "#ef5350",
+        borderVisible: false,
+        wickUpColor: "#26a69a",
+        wickDownColor: "#ef5350",
       });
 
       const volumeSeries = chart.addHistogramSeries({
@@ -70,8 +71,13 @@ export const ChartComponent = (props) => {
 
       setInterval(() => {
         const bar = nextBar();
+        const histogrambar = {
+          ...bar,
+          color: bar.close < bar.open ? "#f3354550" : "#079a8050",
+        };
+        console.log(bar);
         candleSeries.update(bar);
-        volumeSeries.update(bar);
+        volumeSeries.update(histogrambar);
       }, 3000);
 
       const nextBar = () => {
@@ -111,8 +117,12 @@ export const ChartComponent = (props) => {
 
       for (let i = 0; i < 150; i++) {
         const bar = nextBar();
+        const histogrambar = {
+          ...bar,
+          color: bar.close < bar.open ? "#f3354550" : "#079a8050",
+        };
         candleSeries.update(bar);
-        volumeSeries.update(bar);
+        volumeSeries.update(histogrambar);
       }
 
       if (containerRef.current) {

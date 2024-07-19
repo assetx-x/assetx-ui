@@ -6,6 +6,7 @@ import Tabs from "../../components/Tabs.jsx";
 import { Loader } from "react-loaders";
 import { useNavigate } from "react-router-dom";
 import AiDrivenInsights from "../aiDrivenInsights/AIDrivenInsights.jsx";
+import MyToggle from "../MyToggle/MyToggle.jsx";
 import PortfolioAnalysis from "../stockMarketDetails/PortfolioAnalysis.jsx";
 
 const Market = () => {
@@ -17,6 +18,7 @@ const Market = () => {
     tabs: [
       // { name: "A.I. Driven insights" , onClickHandler: () => navigate("/us/ai-driven-insights", {replace: true}) },
       { name: "A.I. Driven insights", content: <AiDrivenInsights /> },
+      { name: "MyToggle", content: <MyToggle /> },
       {
         name: "Portfolio Analysis",
         content: <PortfolioAnalysis />,

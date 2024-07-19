@@ -1,5 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "react-query";
+
 import Home from "./pages/home/Home.jsx";
 import Login from "./pages/login/Login.jsx";
 import ErrorBoundary from "./components/ErrorBoundary.jsx";
@@ -15,34 +17,41 @@ import "react-tooltip/dist/react-tooltip.css";
 import StockMarket from "./pages/stockMarket/stockMarket.jsx";
 import Holding from "./pages/holding/Holding.jsx";
 
+const client = new QueryClient();
+
 function App() {
   return (
-    <ErrorBoundary>
-      <Routes>
-        <Route exact path="/" element={<Home />} />
-        <Route exact path="/register" element={<Register />} />
-        <Route path="/holding" element={<Holding />} />
-        <Route exact path="/" element={<PrivateRoute />}>
-          <Route path="/:market/ticker/:ticker" element={<NewTickerDetial />} />
-          {/*TODO: stop using magic strings*/}
-          <Route path="/:market" element={<Market />} />
-          <Route
-            path="/:market/portfolio-analysis/:id"
-            element={
-              <PortfolioAnalysisResultsContainer
-                selected={"portfolio-analysis"}
-              />
-            }
-          />
-          <Route
-            path="/:market/ticker/:ticker/deep-insight/:x"
-            element={<DeepInsightDetails />}
-          />
-          <Route path="/stock-market" element={<StockMarket />} />
-        </Route>
-        <Route exact path="/login" element={<Login />} />
-      </Routes>
-    </ErrorBoundary>
+    <QueryClientProvider client={client}>
+      <ErrorBoundary>
+        <Routes>
+          <Route exact path="/" element={<Home />} />
+          <Route exact path="/register" element={<Register />} />
+          <Route path="/holding" element={<Holding />} />
+          <Route exact path="/" element={<PrivateRoute />}>
+            <Route
+              path="/:market/ticker/:ticker"
+              element={<NewTickerDetial />}
+            />
+            {/*TODO: stop using magic strings*/}
+            <Route path="/:market" element={<Market />} />
+            <Route
+              path="/:market/portfolio-analysis/:id"
+              element={
+                <PortfolioAnalysisResultsContainer
+                  selected={"portfolio-analysis"}
+                />
+              }
+            />
+            <Route
+              path="/:market/ticker/:ticker/deep-insight/:x"
+              element={<DeepInsightDetails />}
+            />
+            <Route path="/stock-market" element={<StockMarket />} />
+          </Route>
+          <Route exact path="/login" element={<Login />} />
+        </Routes>
+      </ErrorBoundary>
+    </QueryClientProvider>
   );
 }
 

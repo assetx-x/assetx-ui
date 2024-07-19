@@ -1,7 +1,7 @@
 import React from "react";
 import { useResizable } from "react-resizable-layout";
 
-function WatchList() {
+function WatchList({ bodyHeight }) {
   const { position, separatorProps } = useResizable({
     axis: "y",
     initial: 50,
@@ -12,7 +12,10 @@ function WatchList() {
 
   return (
     <div className="flex grow flex-col w-full h-full">
-      <div className="bg-white grow" style={{ borderTopLeftRadius: 5 }}>
+      <div
+        className="bg-white"
+        style={{ borderTopLeftRadius: 5, height: bodyHeight - (position + 5) }}
+      >
         Whatchlist
       </div>
       <div

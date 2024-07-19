@@ -10,9 +10,9 @@ function FavoriteTabs({ tabs, handleTab }) {
   const prevWidthRef = useRef(0);
   const [width, setWidth] = useState(0);
   const [indexShow, setIndexShow] = useState(0);
-  const [direction, setDirection] = useState("");
+  const [direction, setDirection] = useState("decreased");
 
-  useEffect(() => {
+  const handleShowedItems = () => {
     const container = containerRef.current;
     if (container) {
       const children = container.children;
@@ -33,6 +33,10 @@ function FavoriteTabs({ tabs, handleTab }) {
         setIndexShow(indexShow - 1);
       }
     }
+  };
+
+  useEffect(() => {
+    handleShowedItems();
   }, [width]);
 
   useEffect(() => {
@@ -47,7 +51,7 @@ function FavoriteTabs({ tabs, handleTab }) {
           if (prevWidth !== 0) {
             if (newWidth > prevWidth) {
               setDirection("increased");
-            } else if (newWidth < prevWidth) {
+            } else if (newWidth <= prevWidth) {
               setDirection("decreased");
             }
           }

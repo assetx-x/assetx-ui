@@ -3587,10 +3587,10 @@ levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-lightweight-charts@^4.0.1:
-  version "4.0.1"
-  resolved "https://registry.npmjs.org/lightweight-charts/-/lightweight-charts-4.0.1.tgz"
-  integrity sha512-p+j6w41PVzf9Vn7IrmpmCJacunpN0kKsl0IZoxMOySSkDcSagZ7Is9pb6pclIfN/usHdta0aYm9FktkYpAQe0g==
+lightweight-charts@^4.1.7:
+  version "4.1.7"
+  resolved "https://registry.yarnpkg.com/lightweight-charts/-/lightweight-charts-4.1.7.tgz#07e544b8d9d164493a442f466549d0508f91307e"
+  integrity sha512-/np9mQ8GXThrvJvxx4iSTZl/PvIhqG0bVQe7V+N0SO9E7e25VLglHf5M6eQFGDmwcOWNTLztH2fF0PmZ/sVq9g==
   dependencies:
     fancy-canvas "2.1.0"
 

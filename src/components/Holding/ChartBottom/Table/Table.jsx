@@ -67,7 +67,7 @@ const ColumnHead = ({ children, width, onClose }) => {
 function Table({ columns, rows }) {
   return (
     <PerfectScrollbar>
-      <div className="flex flex-col w-full grow relative text-xs">
+      <div className="flex flex-col w-full h-full relative text-xs">
         {/* Head */}
         <div className="flex sticky top-0 left-0 z-10">
           <div className="w-full bg-white min-w-[250px] text-gray-500 border border-gray-100">

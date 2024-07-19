@@ -1,13 +1,8 @@
-version: "3.7"
-
 services:
-  frontend:
+  server:
     build:
       context: .
-      dockerfile: Dockerfile
-    container_name: dcm-ui
-    expose:
-      - "5173"
+    environment:
+      NODE_ENV: production
     ports:
-      - "5173:5173"
-    command: npm run host
+      - 5173:5173

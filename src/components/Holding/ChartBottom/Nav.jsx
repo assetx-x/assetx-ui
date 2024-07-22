@@ -1,7 +1,13 @@
 import React from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChevronDown,
+  faChevronUp,
+  faCompress,
+  faExpand,
+  faWindowMinimize,
+} from "@fortawesome/free-solid-svg-icons";
 import { BottomScreenActions, SCREENERS } from "../../../constants/holding";
 import { useHolding } from "../../../store/context/HoldingProvider";
 
@@ -89,7 +95,7 @@ const NavButton = ({ isActive, label, onClick }) => (
   </button>
 );
 
-function NavBottom({}) {
+function NavBottom({ expand, minimize, isExpand, isMinimize }) {
   const { state, dispatch } = useHolding();
 
   const handleTab = (tab) => {
@@ -132,8 +138,19 @@ function NavBottom({}) {
           />
         </li>
       </ul>
-      <div>
-        <button>Test</button>
+      <div className="flex items-center gap-2">
+        <button
+          className="px-2 py-1 text-gray-700 hover:bg-gray-100 rounded text-sm"
+          onClick={() => minimize()}
+        >
+          <FontAwesomeIcon icon={isMinimize ? faChevronUp : faWindowMinimize} />
+        </button>
+        <button
+          className="px-2 py-1 text-gray-700 hover:bg-gray-100 rounded text-sm"
+          onClick={() => expand()}
+        >
+          <FontAwesomeIcon icon={isExpand ? faCompress : faExpand} />
+        </button>
       </div>
     </div>
   );

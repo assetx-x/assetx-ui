@@ -11,7 +11,7 @@ import { useHolding } from "../../../store/context/HoldingProvider";
 import Table from "./Table/Table";
 import { stockRowsFormat } from "../../../utils/holding";
 
-function ChartBottom() {
+function ChartBottom({ expand, minimize, isMinimize, isExpand }) {
   const { state, dispatch } = useHolding();
   const [filterTab, setFilterTab] = React.useState(FILTERTABS.stock[0]);
   const [groups, setGroups] = React.useState([]);
@@ -35,7 +35,12 @@ function ChartBottom() {
 
   return (
     <>
-      <NavBottom />
+      <NavBottom
+        expand={expand}
+        minimize={minimize}
+        isMinimize={isMinimize}
+        isExpand={isExpand}
+      />
       <Toolbar
         tab={filterTab}
         handleTab={handleFilterTab}

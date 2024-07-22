@@ -4,13 +4,38 @@ import ChartBottom from "./ChartBottom/ChartBottom";
 import Graph from "./Chart/Graph";
 
 function Chart({ bodyHeight }) {
-  const { position, separatorProps, isDragging } = useResizable({
+  const { position, separatorProps, isDragging, setPosition } = useResizable({
     axis: "y",
     initial: 450,
     min: 50,
     max: 600,
     reverse: false,
   });
+  const [isExpand, setExpand] = React.useState(false);
+  const [isMinimize, setMinimize] = React.useState(false);
+  const [lastPosition, setLastPosition] = React.useState(position);
+
+  const toggleExpand = () => {
+    const _expand = isExpand;
+    if (_expand) {
+      setPosition(lastPosition);
+    } else {
+      setLastPosition(position);
+      setPosition(0);
+    }
+    setExpand(!isExpand);
+  };
+
+  const toggleMinimize = () => {
+    const _minimize = isMinimize;
+    if (_minimize) {
+      setPosition(lastPosition);
+    } else {
+      setLastPosition(position);
+      setPosition(bodyHeight - 46);
+    }
+    setMinimize(!isMinimize);
+  };
 
   return (
     <>
@@ -33,7 +58,12 @@ function Chart({ bodyHeight }) {
           borderTopLeftRadius: 5,
         }}
       >
-        <ChartBottom />
+        <ChartBottom
+          expand={toggleExpand}
+          isExpand={isExpand}
+          minimize={toggleMinimize}
+          isMinimize={isMinimize}
+        />
       </div>
     </>
   );

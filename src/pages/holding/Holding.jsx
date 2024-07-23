@@ -3,6 +3,7 @@ import { useResizable } from "react-resizable-layout";
 import Chart from "../../components/Holding/Chart";
 import WatchList from "../../components/Holding/WatchList";
 import { HoldingProvider } from "../../store/context/HoldingProvider";
+import { Button } from "../../components/Button";
 
 import "react-perfect-scrollbar/dist/css/styles.css";
 
@@ -31,6 +32,9 @@ function Holding() {
 
   return (
     <HoldingProvider>
+      <a href="/strategies">
+        <Button variant="outline" className={`p-3`}>Check Strategies</Button>
+      </a>
       <div
         className="flex bg-gray-200 flex-col w-screen h-screen gap-[5px] overflow-hidden select-none"
         style={{

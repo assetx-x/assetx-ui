@@ -20,7 +20,7 @@ const tdata = [
   { date: "Name5", percentage: 20, ticker: {title: "RTK Value", description: "Russel 1000"}, alpha: "XX.X", beta: "XX.X", sharp: "XX.X", viewed: false, drawdown: "dd"},
 ]
 
-const MyToggle = () => {
+const Strategies = () => {
   const navigate = useNavigate();
 
   const [pageRequestOffset, setPageRequestOffset] = useState(0);
@@ -182,4 +182,4 @@ const MyToggle = () => {
   );
 };
 
-export default MyToggle;
+export default Strategies;

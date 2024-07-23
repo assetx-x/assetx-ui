@@ -16,6 +16,7 @@ import Market from "./pages/market/Market.jsx";
 import "react-tooltip/dist/react-tooltip.css";
 import StockMarket from "./pages/stockMarket/stockMarket.jsx";
 import Holding from "./pages/holding/Holding.jsx";
+import Strategies from "./pages/Strategies";
 
 const client = new QueryClient();
 
@@ -27,6 +28,7 @@ function App() {
           <Route exact path="/" element={<Home />} />
           <Route exact path="/register" element={<Register />} />
           <Route path="/holding" element={<Holding />} />
+          <Route path="/strategies" element={<Strategies />} />
           <Route exact path="/" element={<PrivateRoute />}>
             <Route
               path="/:market/ticker/:ticker"

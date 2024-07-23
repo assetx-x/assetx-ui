@@ -4,35 +4,12 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark, faFilter } from "@fortawesome/free-solid-svg-icons";
 import { ButtonSelect } from "../Button";
-
-const Filter = ({ title, open, onClose }) => {
-  const popoverRef = React.useRef(null);
-
-  const handleClickOutside = (event) => {
-    if (popoverRef.current && !popoverRef.current.contains(event.target)) {
-      onClose && onClose();
-    }
-  };
-
-  return (
-    <div
-      className={`absolute z-20 right-0 top-0 py-1 px-2 bg-white shadow ${
-        open ? "block" : "hidden"
-      }`}
-      ref={popoverRef}
-    >
-      <h5>{title}</h5>
-      <div className="flex">
-        <ButtonSelect value={"Below"}>
-          <></>
-        </ButtonSelect>
-      </div>
-    </div>
-  );
-};
+import { tableHeadFilter } from "../../../../constants/holding";
 
 const ColumnHead = ({ children, width, onClose }) => {
   const [openFilter, setOpenFilter] = React.useState(false);
+  const popoverRef = React.useRef(null);
+  const [filter, setFilter] = React.useState("Below");
 
   const handleOpenFilter = () => {
     setOpenFilter(true);
@@ -42,6 +19,19 @@ const ColumnHead = ({ children, width, onClose }) => {
     setOpenFilter(false);
   };
 
+  const handleClickOutside = (event) => {
+    if (popoverRef.current && !popoverRef.current.contains(event.target)) {
+      handleCloseFilter();
+    }
+  };
+
+  React.useEffect(() => {
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
   return (
     <div
       className={`group w-[${
@@ -50,15 +40,46 @@ const ColumnHead = ({ children, width, onClose }) => {
       style={{ flexBasis: width ?? 100 }}
     >
       {children}
-      <Filter title={children} open={openFilter} onClose={handleCloseFilter} />
-      <div
-        className="absolute z-[11] right-0 top-0 h-full hidden group-hover:flex p-1 border-l border-gray-200 justify-center items-center hover:bg-slate-200"
-        onClick={handleOpenFilter}
-      >
-        <FontAwesomeIcon
-          icon={faFilter}
-          className="h-fulltext-gray-500 text-xs"
-        />
+      <div className="h-full" ref={popoverRef}>
+        <div
+          className="absolute z-[11] right-0 top-0 h-full hidden group-hover:flex p-1 border-l border-gray-200 justify-center items-center hover:bg-slate-200"
+          onClick={handleOpenFilter}
+        >
+          <FontAwesomeIcon
+            icon={faFilter}
+            className="h-fulltext-gray-500 text-xs"
+          />
+        </div>
+        <div
+          className={`absolute z-50 right-0 top-0 py-1 px-2 bg-white shadow ${
+            openFilter ? "block" : "hidden"
+          }`}
+        >
+          <h5>{children}</h5>
+          <div className="flex gap-2 items-center">
+            <ButtonSelect value={filter} className="border-none">
+              <ul className="py-2 max-h-[150px] overflow-y-auto">
+                {tableHeadFilter.map((t, index) => (
+                  <li key={index}>
+                    <button
+                      className="w-full px-3 py-2 text-gray-600 text-sm hover:bg-gray-100 hover:text-gray-800 transition-colors whitespace-nowrap"
+                      onClick={() => setFilter(t)}
+                    >
+                      {t}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </ButtonSelect>
+            <div className="flex gap-1 items-center">
+              <span>Value</span>
+              <input
+                type="text"
+                className="border border-gray-200 px-1 py-1 text-xs w-[150px]"
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -67,7 +88,7 @@ const ColumnHead = ({ children, width, onClose }) => {
 function Table({ columns, rows }) {
   return (
     <PerfectScrollbar>
-      <div className="flex flex-col w-full h-full relative text-xs">
+      <div className="flex flex-col w-full h-full relative text-xs scroll-smooth">
         {/* Head */}
         <div className="flex sticky top-0 left-0 z-10">
           <div className="w-full bg-white min-w-[250px] text-gray-500 border border-gray-100">

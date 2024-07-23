@@ -101,3 +101,7 @@ export const createData = () => {
     }
     return rows;
 };
+
+export const tableHeadFilter = [
+    "Below", "Below or Equal", "Above", "Above or Equal", "Crosses", "Crosses Up", "Crosses down", "Between", "Outside", "Equal", "Not Equal"
+]

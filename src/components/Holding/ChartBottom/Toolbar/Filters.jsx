@@ -5,7 +5,7 @@ import { faFilter } from "@fortawesome/free-solid-svg-icons";
 
 function Filters({}) {
   return (
-    <Button className="rounded-l-none">
+    <Button>
       <span className="flex gap-2 items-center">
         <span>Filters</span>
         <FontAwesomeIcon icon={faFilter} />

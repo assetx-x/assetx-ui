@@ -9,8 +9,6 @@ import Button, { ButtonSelect } from "../Button";
 import TabSelect from "./TabSelect";
 import { TIMEINTERVALS } from "../../../../constants/holding";
 import { useHolding } from "../../../../store/context/HoldingProvider";
-import GroupSelect from "./GroupSelect";
-import ScreenSelect from "./ScreenSelect";
 import Filters from "./Filters";
 
 function Toolbar({}) {
@@ -32,39 +30,33 @@ function Toolbar({}) {
   }, [state.bottomState.screener]);
 
   return (
-    <div className="flex justify-between items-center w-full py-2 px-4 border-b-gray-200 border-b">
-      <div className="flex gap-3 items-center">
-        <div className="flex items-center">
-          <Button className="rounded-r-none border-r-0">
-            <FontAwesomeIcon
-              icon={faArrowsRotate}
-              className={
-                state.bottomState.autoRefresh
-                  ? "text-blue-500"
-                  : "text-gray-500"
-              }
-            />
-          </Button>
-          <Button className="rounded-l-none">
-            <FontAwesomeIcon icon={faEllipsisV} />
-          </Button>
-        </div>
+    <div className="flex justify-between items-center w-full gap-2 py-2 px-4 border-b-gray-200 border-b">
+      <div className="flex items-center w-full">
+        <Button className="rounded-r-none border-r-0">
+          <FontAwesomeIcon
+            icon={faArrowsRotate}
+            className={
+              state.bottomState.autoRefresh ? "text-blue-500" : "text-gray-500"
+            }
+          />
+        </Button>
+        <Button className="rounded-l-none mr-3">
+          <FontAwesomeIcon icon={faEllipsisV} />
+        </Button>
         <TabSelect />
-      </div>
-      <div className="flex gap-2 items-center">
-        <Button className="">
+        <Button className="mr-3">
           <FontAwesomeIcon icon={faDownload} />
         </Button>
         <ButtonSelect
           value={
-            <span className="font-semibold">
+            <span className="font-medium">
               {timeInterval.match(/\d+/g).join("")}
               <sup className="text-[9px]">
                 {timeInterval.match(/[a-zA-Z]+/g).join("")}
               </sup>
             </span>
           }
-          className="w-[60px]"
+          className="w-[60px] mr-3"
         >
           <ul className="py-2">
             {intervals.map((t, index) => (
@@ -74,7 +66,7 @@ function Toolbar({}) {
                   onClick={() => setTimeInterval(t)}
                 >
                   <span
-                    className={`font-semibold${
+                    className={`font-medium text-xs${
                       t === timeInterval ? " text-blue-500" : ""
                     }`}
                   >
@@ -88,11 +80,7 @@ function Toolbar({}) {
             ))}
           </ul>
         </ButtonSelect>
-        <GroupSelect />
-        <div className="flex items-center">
-          <ScreenSelect />
-          <Filters />
-        </div>
+        <Filters />
       </div>
     </div>
   );

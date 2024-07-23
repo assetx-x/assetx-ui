@@ -1,20 +1,24 @@
 import React from "react";
 import { useResizable } from "react-resizable-layout";
 import ChartBottom from "./ChartBottom/ChartBottom";
+import Graph from "./Chart/Graph";
 
-function Chart() {
-  const { position, separatorProps } = useResizable({
+function Chart({ bodyHeight }) {
+  const { position, separatorProps, isDragging } = useResizable({
     axis: "y",
     initial: 450,
     min: 50,
     max: 600,
-    reverse: true,
+    reverse: false,
   });
 
   return (
-    <div className="flex grow flex-col w-full h-full">
-      <div className="grow bg-white" style={{ borderRadius: 5 }}>
-        Chart
+    <>
+      <div
+        className="bg-white shrink-0"
+        style={{ height: position, borderRadius: 5 }}
+      >
+        <Graph />
       </div>
       <div
         {...separatorProps}
@@ -24,14 +28,14 @@ function Chart() {
       <div
         className="bg-white flex flex-col"
         style={{
-          height: position,
+          height: bodyHeight - 5 - position,
           borderTopRightRadius: 5,
           borderTopLeftRadius: 5,
         }}
       >
         <ChartBottom />
       </div>
-    </div>
+    </>
   );
 }
 

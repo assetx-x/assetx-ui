@@ -7,15 +7,15 @@ export const BottomScreenActions = {
 export const SCREENERS = ["stock", "forex", "crypto pairs"];
 
 export const FILTERTABS = {
-    stock: ["Overview", "Extended Hours", "Valuation", "Dividends", "Margins", "Income Statements", "Balance Sheet", "Oscillators", "Trend-Following"],
-    forex: ["Oscillators", "Trend-Following", "Overview"],
-    crypto_pairs: ["Overview", "Performance", "Oscillators", "Trend-Following"],
+    stock: ["Overall", "Macro", "Value", "Growth", "Quality", "Momentum Fast", "Momentum Slow", "Other Factors", "Trend Following"],
+    forex: ["Overall", "Macro", "Value", "Growth", "Quality", "Momentum Fast", "Momentum Slow", "Other Factors", "Trend Following"],
+    crypto_pairs: ["Overall", "Macro", "Value", "Growth", "Quality", "Momentum Fast", "Momentum Slow", "Other Factors", "Trend Following"],
 };
 
 export const TIMEINTERVALS = {
-    stock: ["1m", "5m", "15m", "30m", "1h", "2h", "4h", "1D", "1W", "1M"],
-    forex: ["1m", "5m", "15m", "30m", "1h", "2h", "4h", "1D", "1W", "1M"],
-    crypto_pairs: ["1m", "5m", "15m", "30m", "1h", "2h", "4h", "1D", "1W", "1M"],
+    stock: ["1W", "1M"],
+    forex: ["1W", "1M"],
+    crypto_pairs: ["1W", "1M"],
 };
 
 export const GROUPS = ["All", "Exotic", "Major", "Minor"];
@@ -43,7 +43,7 @@ export const COLUMNS = [
     {
         name: "Technical Rating",
         key: "technical_rating",
-        width: 150,
+        width: 120,
     },
     {
         name: "Vol",
@@ -89,7 +89,7 @@ export const createData = () => {
             price: getRandomNumber(0, 100),
             chg_percent: getRandomNumber(0, 100),
             chg: getRandomNumber(-100, 100),
-            technical_rating: "Strong Buy",
+            technical_rating: "Buy",
             vol: getRandomNumber(-100000, 100000),
             volume_price: getRandomNumber(-100000, 100000),
             mkt_cap: getRandomNumber(-100000, 100000),

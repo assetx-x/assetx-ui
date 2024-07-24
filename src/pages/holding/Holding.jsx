@@ -6,6 +6,12 @@ import { HoldingProvider } from "../../store/context/HoldingProvider";
 import { Button } from "../../components/Button";
 
 import "react-perfect-scrollbar/dist/css/styles.css";
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+
+const client = new ApolloClient({
+  uri: "https://apiv3-2dywgqiasq-uk.a.run.app/",
+  cache: new InMemoryCache(),
+});
 
 function Holding() {
   const navRef = React.useRef(null);
@@ -31,40 +37,44 @@ function Holding() {
   }, []);
 
   return (
-    <HoldingProvider>
-      <a href="/strategies">
-        <Button variant="outline" className={`p-3`}>Check Strategies</Button>
-      </a>
-      <div
-        className="flex bg-gray-200 flex-col w-screen h-screen gap-[5px] overflow-hidden select-none"
-        style={{
-          fontFamily:
-            "-apple-system,BlinkMacSystemFont,Trebuchet MS,Roboto,Ubuntu,sans-serif",
-        }}
-      >
-        <nav className="bg-white" ref={navRef}>
-          Nav
-        </nav>
-        <div className="flex h-full w-full">
-          <div
-            className="shrink-0 flex flex-col w-full h-full max-h-screen"
-            style={{
-              width: position,
-            }}
-          >
-            <Chart bodyHeight={bodyHeight} />
-          </div>
-          <div
-            {...separatorProps}
-            className="w-[5px] shrink-0 basis-[5px] grow-0 cursor-col-resize hover:bg-gray-300 transition-colors"
-            style={{ borderRadius: 5 }}
-          />
-          <div className="h-full w-full max-h-screen">
-            <WatchList bodyHeight={bodyHeight} />
+    <ApolloProvider client={client}>
+      <HoldingProvider>
+        <a href="/strategies">
+          <Button variant="outline" className={`p-3`}>
+            Check Strategies
+          </Button>
+        </a>
+        <div
+          className="flex bg-gray-200 flex-col w-screen h-screen gap-[5px] overflow-hidden select-none"
+          style={{
+            fontFamily:
+              "-apple-system,BlinkMacSystemFont,Trebuchet MS,Roboto,Ubuntu,sans-serif",
+          }}
+        >
+          <nav className="bg-white" ref={navRef}>
+            Nav
+          </nav>
+          <div className="flex h-full w-full">
+            <div
+              className="shrink-0 flex flex-col w-full h-full max-h-screen"
+              style={{
+                width: position,
+              }}
+            >
+              <Chart bodyHeight={bodyHeight} />
+            </div>
+            <div
+              {...separatorProps}
+              className="w-[5px] shrink-0 basis-[5px] grow-0 cursor-col-resize hover:bg-gray-300 transition-colors"
+              style={{ borderRadius: 5 }}
+            />
+            <div className="h-full w-full max-h-screen">
+              <WatchList bodyHeight={bodyHeight} />
+            </div>
           </div>
         </div>
-      </div>
-    </HoldingProvider>
+      </HoldingProvider>
+    </ApolloProvider>
   );
 }
 

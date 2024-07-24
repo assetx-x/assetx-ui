@@ -1,8 +1,24 @@
+import { useQuery } from "@apollo/client";
 import { createChart, CrosshairMode } from "lightweight-charts";
 import React, { useEffect, useRef } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
+import { GET_HISTORICAL_DATA } from "../../../services/graphql/historicalData";
 
 export const ChartComponent = (props) => {
+  // const { loading, error, data } = useQuery(GET_HISTORICAL_DATA, {
+  //   variables: {
+  //     endTime: "2024-07-16",
+  //     startTime: "2024-01-07",
+  //     ticker: "AAPL",
+  //     multiplier: 10,
+  //     timespan: "week",
+  //   },
+  // });
+
+  // if (loading) return <p>Loading...</p>;
+
+  // if (error) return <p>Error</p>;
+
   const {
     data,
     colors: {
@@ -49,10 +65,11 @@ export const ChartComponent = (props) => {
       });
 
       const candleSeries = chart.addCandlestickSeries({
-        upColor: "#4bffb5",
-        downColor: "#ff4976",
-        wickDownColor: "#838ca1",
-        wickUpColor: "#838ca1",
+        upColor: "#26a69a",
+        downColor: "#ef5350",
+        borderVisible: false,
+        wickUpColor: "#26a69a",
+        wickDownColor: "#ef5350",
       });
 
       const volumeSeries = chart.addHistogramSeries({
@@ -70,8 +87,12 @@ export const ChartComponent = (props) => {
 
       setInterval(() => {
         const bar = nextBar();
+        const histogrambar = {
+          ...bar,
+          color: bar.close < bar.open ? "#f3354550" : "#079a8050",
+        };
         candleSeries.update(bar);
-        volumeSeries.update(bar);
+        volumeSeries.update(histogrambar);
       }, 3000);
 
       const nextBar = () => {
@@ -111,8 +132,12 @@ export const ChartComponent = (props) => {
 
       for (let i = 0; i < 150; i++) {
         const bar = nextBar();
+        const histogrambar = {
+          ...bar,
+          color: bar.close < bar.open ? "#f3354550" : "#079a8050",
+        };
         candleSeries.update(bar);
-        volumeSeries.update(bar);
+        volumeSeries.update(histogrambar);
       }
 
       if (containerRef.current) {

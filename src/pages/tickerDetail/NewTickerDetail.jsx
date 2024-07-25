@@ -27,7 +27,7 @@ import News from "./components/News.jsx";
 import KeyValues from "./components/KeyValues.jsx";
 import fetchSearchGTP from "../../store/models/details/fetchSearchGTP.jsx";
 
-const TickerDetail = () => {
+const NewTickerDetail = () => {
   const context = useMain();
   const { ticker } = useParams();
   const [keywords, setKeywords] = useState([]);
@@ -393,4 +393,4 @@ const TickerDetail = () => {
   );
 };
 
-export default TickerDetail;
+export default NewTickerDetail;

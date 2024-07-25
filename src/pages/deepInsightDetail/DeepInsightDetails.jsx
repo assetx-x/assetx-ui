@@ -16,7 +16,7 @@ import ReturnSummaryTable from "../../components/ReturnSummaryTable.jsx";
 import { IsolationReturnChart } from "../../components/IsolationReturnChart.jsx";
 import { ReactionChart } from "../../components/ReactionChart.jsx";
 
-const TickerDetail = () => {
+const DeepInsightDetails = () => {
   const navigate = useNavigate();
   const { ticker, x } = useParams();
   const keywords = [
@@ -628,4 +628,4 @@ const TickerDetail = () => {
   );
 };
 
-export default TickerDetail;
+export default DeepInsightDetails;

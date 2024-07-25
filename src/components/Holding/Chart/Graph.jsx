@@ -1,181 +1,10 @@
-import { useQuery } from "@apollo/client";
-import { createChart, CrosshairMode } from "lightweight-charts";
-import React, { useEffect, useRef } from "react";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import { GET_HISTORICAL_DATA } from "../../../services/graphql/historicalData";
+import React from "react";
+import { graphTimespan } from "../../../constants/holding";
+import { ChartComponent } from "./ChartComponent";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 
-export const ChartComponent = (props) => {
-  // const { loading, error, data } = useQuery(GET_HISTORICAL_DATA, {
-  //   variables: {
-  //     endTime: "2024-07-16",
-  //     startTime: "2024-01-07",
-  //     ticker: "AAPL",
-  //     multiplier: 10,
-  //     timespan: "week",
-  //   },
-  // });
-
-  // if (loading) return <p>Loading...</p>;
-
-  // if (error) return <p>Error</p>;
-
-  const {
-    data,
-    colors: {
-      backgroundColor = "white",
-      lineColor = "#2962FF",
-      textColor = "black",
-      areaTopColor = "#2962FF",
-      areaBottomColor = "rgba(41, 98, 255, 0.28)",
-    } = {},
-  } = props;
-
-  const containerRef = useRef();
-  const chartContainerRef = useRef();
-
-  useEffect(() => {
-    if (chartContainerRef.current) {
-      const chart = createChart(chartContainerRef.current, {
-        width: containerRef.current.offsetWidth,
-        height: containerRef.current.offsetHeight,
-        layout: {
-          background: {
-            type: "solid",
-            color: backgroundColor,
-          },
-          textColor,
-        },
-        grid: {
-          vertLines: {
-            color: "#eee",
-          },
-          horzLines: {
-            color: "#eee",
-          },
-        },
-        crosshair: {
-          mode: CrosshairMode.Normal,
-        },
-        priceScale: {
-          borderColor: "#485c7b",
-        },
-        timeScale: {
-          borderColor: "#485158",
-        },
-      });
-
-      const candleSeries = chart.addCandlestickSeries({
-        upColor: "#26a69a",
-        downColor: "#ef5350",
-        borderVisible: false,
-        wickUpColor: "#26a69a",
-        wickDownColor: "#ef5350",
-      });
-
-      const volumeSeries = chart.addHistogramSeries({
-        color: "#385263",
-        lineWidth: 2,
-        priceFormat: {
-          type: "volume",
-        },
-        overlay: true,
-        scaleMargins: {
-          top: 0.9,
-          bottom: 0,
-        },
-      });
-
-      setInterval(() => {
-        const bar = nextBar();
-        const histogrambar = {
-          ...bar,
-          color: bar.close < bar.open ? "#f3354550" : "#079a8050",
-        };
-        candleSeries.update(bar);
-        volumeSeries.update(histogrambar);
-      }, 3000);
-
-      const nextBar = () => {
-        if (!nextBar.date) nextBar.date = new Date(2020, 0, 0);
-        if (!nextBar.bar)
-          nextBar.bar = { open: 100, high: 104, low: 98, close: 103 };
-
-        nextBar.date.setDate(nextBar.date.getDate() + 1);
-        nextBar.bar.time = {
-          year: nextBar.date.getFullYear(),
-          month: nextBar.date.getMonth() + 1,
-          day: nextBar.date.getDate(),
-        };
-
-        let old_price = nextBar.bar.close;
-        let volatility = 0.1;
-        let rnd = Math.random();
-        let change_percent = 2 * volatility * rnd;
-
-        if (change_percent > volatility) change_percent -= 2 * volatility;
-
-        let change_amount = old_price * change_percent;
-        nextBar.bar.open = nextBar.bar.close;
-        nextBar.bar.close = old_price + change_amount;
-        nextBar.bar.high =
-          Math.max(nextBar.bar.open, nextBar.bar.close) +
-          Math.abs(change_amount) * Math.random();
-        nextBar.bar.low =
-          Math.min(nextBar.bar.open, nextBar.bar.close) -
-          Math.abs(change_amount) * Math.random();
-        nextBar.bar.value = Math.random() * 100;
-        nextBar.bar.color =
-          nextBar.bar.close < nextBar.bar.open ? "#f33545" : "#079a80";
-
-        return nextBar.bar;
-      };
-
-      for (let i = 0; i < 150; i++) {
-        const bar = nextBar();
-        const histogrambar = {
-          ...bar,
-          color: bar.close < bar.open ? "#f3354550" : "#079a8050",
-        };
-        candleSeries.update(bar);
-        volumeSeries.update(histogrambar);
-      }
-
-      if (containerRef.current) {
-        const resizeObserver = new ResizeObserver((entries) => {
-          for (let entry of entries) {
-            const h = entry.contentRect.height;
-            chart.applyOptions({
-              width: entry.contentRect.width,
-              height: h > 300 ? h : 300,
-            });
-            setTimeout(() => chart.timeScale().fitContent(), 0);
-          }
-        });
-
-        resizeObserver.observe(containerRef.current);
-
-        return () => {
-          resizeObserver.unobserve(containerRef.current);
-          chart.remove();
-        };
-      }
-    }
-  }, [
-    containerRef,
-    data,
-    backgroundColor,
-    lineColor,
-    textColor,
-    areaTopColor,
-    areaBottomColor,
-  ]);
-
-  return (
-    <div className="w-full h-full overflow-y-auto" ref={containerRef}>
-      <div ref={chartContainerRef} />
-    </div>
-  );
-};
+dayjs.extend(utc);
 
 const initialData = [
   { time: "2018-12-22", value: 32.51 },
@@ -191,10 +20,40 @@ const initialData = [
 ];
 
 function Graph(props) {
+  const [currentTime, setCurrentTime] = React.useState("");
+
+  React.useEffect(() => {
+    const handleTime = () => {
+      setCurrentTime(dayjs().utc().format("HH:mm:ss"));
+    };
+    setInterval(handleTime, 1000);
+
+    return () => {
+      clearInterval(handleTime);
+    };
+  }, []);
+
   return (
-    <PerfectScrollbar>
+    <div className="flex flex-col h-full">
       <ChartComponent {...props} data={initialData}></ChartComponent>
-    </PerfectScrollbar>
+      <div className="flex items-center justify-between gap-3 py-1 px-3 border-t border-gray-200">
+        <div className="flex items-center gap-1">
+          {graphTimespan.map((time, index) => (
+            <button
+              className="px-1 py-2 rounded text-xs font-semibold text-gray-700 hover:bg-gray-100"
+              key={index}
+            >
+              {time.label}
+            </button>
+          ))}
+        </div>
+        <div className="flex items-center gap-1">
+          <button className="px-1 py-2 rounded text-sm font-medium text-gray-700 hover:bg-gray-100">
+            {currentTime} (UTC)
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
 

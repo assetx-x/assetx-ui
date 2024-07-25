@@ -105,3 +105,22 @@ export const createData = () => {
 export const tableHeadFilter = [
     "Below", "Below or Equal", "Above", "Above or Equal", "Crosses", "Crosses Up", "Crosses down", "Between", "Outside", "Equal", "Not Equal"
 ]
+
+export const graphTimespan = [
+    {
+        label : "1D",
+        value: "day",
+    },
+    {
+        label : "1W",
+        value: "week",
+    },
+    {
+        label : "1M",
+        value: "month",
+    },
+    {
+        label : "1Y",
+        value: "year",
+    },
+]

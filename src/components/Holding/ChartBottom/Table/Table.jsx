@@ -2,7 +2,11 @@ import React from "react";
 import PropTypes from "prop-types";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBookmark, faFilter } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBookmark,
+  faFilter,
+  faSearch,
+} from "@fortawesome/free-solid-svg-icons";
 import { ButtonSelect } from "../Button";
 import { tableHeadFilter } from "../../../../constants/holding";
 
@@ -58,18 +62,20 @@ const ColumnHead = ({ children, width, onClose }) => {
           <h5>{children}</h5>
           <div className="flex gap-2 items-center">
             <ButtonSelect value={filter} className="border-none">
-              <ul className="py-2 max-h-[150px] overflow-y-auto">
-                {tableHeadFilter.map((t, index) => (
-                  <li key={index}>
-                    <button
-                      className="w-full px-3 py-2 text-gray-600 text-sm hover:bg-gray-100 hover:text-gray-800 transition-colors whitespace-nowrap"
-                      onClick={() => setFilter(t)}
-                    >
-                      {t}
-                    </button>
-                  </li>
-                ))}
-              </ul>
+              <PerfectScrollbar>
+                <ul className="py-2 max-h-[150px]">
+                  {tableHeadFilter.map((t, index) => (
+                    <li key={index}>
+                      <button
+                        className="w-full px-3 py-2 text-gray-600 text-sm hover:bg-gray-100 hover:text-gray-800 transition-colors whitespace-nowrap"
+                        onClick={() => setFilter(t)}
+                      >
+                        {t}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </PerfectScrollbar>
             </ButtonSelect>
             <div className="flex gap-1 items-center">
               <span>Value</span>
@@ -92,7 +98,7 @@ function Table({ columns, rows }) {
         {/* Head */}
         <div className="flex sticky top-0 left-0 z-10">
           <div className="w-full bg-white min-w-[250px] text-gray-500 border border-gray-100">
-            <div className="flex">
+            <div className="flex w-full">
               <div className="pt-1 pr-1 w-4">
                 <FontAwesomeIcon
                   icon={faBookmark}
@@ -101,9 +107,12 @@ function Table({ columns, rows }) {
               </div>
               <div className="px-2 flex flex-col gap-0 text-[11px] py-1">
                 <span className="uppercase" style={{ lineHeight: "normal" }}>
-                  Ticket
+                  Ticker
                 </span>
-                <span className="uppercase" style={{ lineHeight: "normal" }}>
+                <span
+                  className="uppercase whitespace-nowrap"
+                  style={{ lineHeight: "normal" }}
+                >
                   {rows.length} Matches
                 </span>
                 <span
@@ -112,6 +121,15 @@ function Table({ columns, rows }) {
                 >
                   3 Items
                 </span>
+              </div>
+              <div className="py-1 px-2">
+                <div className="flex gap-2 items-center border rounded border-gray-200 w-full px-2 py-1">
+                  <FontAwesomeIcon icon={faSearch} className="text-gray-500" />
+                  <input
+                    type="text"
+                    className="border-none p-0 outline-offset-0 w-full"
+                  />
+                </div>
               </div>
             </div>
           </div>

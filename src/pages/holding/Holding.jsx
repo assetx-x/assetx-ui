@@ -3,13 +3,16 @@ import { useResizable } from "react-resizable-layout";
 import Chart from "../../components/Holding/Chart";
 import WatchList from "../../components/Holding/WatchList";
 import { HoldingProvider } from "../../store/context/HoldingProvider";
-import { Button } from "../../components/Button";
 
 import "react-perfect-scrollbar/dist/css/styles.css";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 
 const client = new ApolloClient({
-  uri: "https://apiv3-2dywgqiasq-uk.a.run.app/",
+  uri: "https://apiv3-2dywgqiasq-uk.a.run.app/graphql/",
+  headers: {
+    Authorization:
+      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzIyMDEwMDk2LCJpYXQiOjE3MjE5MjcyOTYsImp0aSI6ImNjMDdjN2JiNTE0NDQ3MDFhZjBiZWZmZWQyOTgwOGNhIiwidXNlcl9pZCI6NzJ9.YXaUsLhZR3I2dgsOqzPcagWeJNGTK_zNqdVOuqiqWAg",
+  },
   cache: new InMemoryCache(),
 });
 
@@ -39,11 +42,6 @@ function Holding() {
   return (
     <ApolloProvider client={client}>
       <HoldingProvider>
-        <a href="/strategies">
-          <Button variant="outline" className={`p-3`}>
-            Check Strategies
-          </Button>
-        </a>
         <div
           className="flex bg-gray-200 flex-col w-screen h-screen gap-[5px] overflow-hidden select-none"
           style={{
@@ -51,8 +49,19 @@ function Holding() {
               "-apple-system,BlinkMacSystemFont,Trebuchet MS,Roboto,Ubuntu,sans-serif",
           }}
         >
-          <nav className="bg-white" ref={navRef}>
-            Nav
+          <nav
+            className="bg-white px-4 py-2 w-full flex items-start justify-between"
+            ref={navRef}
+          >
+            <span>Nav</span>
+            <div>
+              <a
+                href="/strategies"
+                className="bg-blue-600 text-white px-4 py-2 rounded-full text-sm hover:bg-blue-700"
+              >
+                Check Strategies
+              </a>
+            </div>
           </nav>
           <div className="flex h-full w-full">
             <div

@@ -85,7 +85,7 @@ export function ButtonSelect({
       </button>
       {open ? (
         <div
-          className={`bg-white shadow-lg rounded absolute top-0 ${positionH}-0 z-50${
+          className={`bg-white shadow-lg border border-gray-100 rounded absolute top-0 ${positionH}-0 z-50${
             popoverPosition === "top" ? " -translate-y-full" : ""
           }`}
           onClick={() => onClose()}
